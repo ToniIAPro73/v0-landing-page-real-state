@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
-@custom-variant dark (&:is(.dark *));
+/* Dark mode variant for Tailwind v4 - handled through CSS custom properties */
 
 :root {
   --background: oklch(0.98 0.01 85);
@@ -49,6 +49,52 @@
   --beige-light: #eae4d8;
   --taupe-warm: #8e7f6a;
   --brown-dark: #3d3528;
+
+  /* Font variables */
+  --font-sans: "Inter", "Geist", "Geist Fallback", system-ui, -apple-system,
+    sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-arabic: "Cinzel", serif;
+
+  /* Enhanced radius variables */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Additional color mappings for consistency */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Sidebar color mappings */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom color utilities for luxury theme */
+  --color-turquoise: var(--taupe-medium);
+  --color-gold: var(--gold-warm);
+  --color-sand: var(--beige-light);
+  --color-sand-dark: var(--brown-dark);
+  --color-ocean: var(--taupe-medium);
 }
 
 .dark {
@@ -86,74 +132,15 @@
   --sidebar-ring: oklch(0.439 0 0);
 }
 
-@theme inline {
-  --font-sans: "Inter", "Geist", "Geist Fallback", system-ui, -apple-system, sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
-
-  /* Adding Arabic-inspired font for hero title */
-  --font-arabic: "Cinzel", serif;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  /* Custom color utilities for luxury theme */
-  --color-turquoise: var(--turquoise);
-  --color-gold: var(--gold);
-  --color-sand: var(--sand);
-  --color-sand-dark: var(--sand-dark);
-  --color-ocean: var(--ocean);
-
-  /* Custom color utilities for mandatory palette */
-  --color-gold-warm: var(--gold-warm);
-  --color-taupe-medium: var(--taupe-medium);
-  --color-olive-brown: var(--olive-brown);
-  --color-olive-dark: var(--olive-dark);
-  --color-cream-light: var(--cream-light);
-  --color-cream-white: var(--cream-white);
-  --color-beige-light: var(--beige-light);
-  --color-taupe-warm: var(--taupe-warm);
-  --color-brown-dark: var(--brown-dark);
+/* Base layer styles for Tailwind v4 */
+* {
+  border-color: var(--border);
+  outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+body {
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 /* Custom utility classes for Playa Viva theme */
@@ -162,35 +149,35 @@
 }
 
 .text-gold {
-  color: var(--gold);
+  color: var(--gold-warm);
 }
 
 .bg-gold {
-  background-color: var(--gold);
+  background-color: var(--gold-warm);
 }
 
 .border-gold {
-  border-color: var(--gold);
+  border-color: var(--gold-warm);
 }
 
 .text-sand {
-  color: var(--sand);
+  color: var(--beige-light);
 }
 
 .text-sand-dark {
-  color: var(--sand-dark);
+  color: var(--brown-dark);
 }
 
 .text-turquoise {
-  color: var(--turquoise);
+  color: var(--taupe-medium);
 }
 
 .bg-turquoise {
-  background-color: var(--turquoise);
+  background-color: var(--taupe-medium);
 }
 
 .text-ocean {
-  color: var(--ocean);
+  color: var(--taupe-medium);
 }
 
 /* Custom utility classes for mandatory color palette */
