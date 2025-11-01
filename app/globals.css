@@ -1,8 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 /* Dark mode variant for Tailwind v4 - handled through CSS custom properties */
+
+/* Base layer styles for Tailwind v4 */
+* {
+  border-color: var(--border);
+  outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+}
 
 :root {
   --background: oklch(0.98 0.01 85);
@@ -130,12 +135,6 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
-}
-
-/* Base layer styles for Tailwind v4 */
-* {
-  border-color: var(--border);
-  outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
 }
 
 body {
