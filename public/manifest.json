@@ -1,0 +1,16 @@
+{
+  "name": "Playa Viva - Investment Property",
+  "short_name": "PlayaViva",
+  "description": "Exclusive beachfront luxury property investment in Al Marjan Island, Ras Al Khaimah",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ece8dd",
+  "theme_color": "#a29060",
+  "icons": [
+    {
+      "src": "/logo-playa-viva.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}
