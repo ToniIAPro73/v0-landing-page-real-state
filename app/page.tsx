@@ -1,25 +1,26 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Globe } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Globe } from "lucide-react";
 
 export default function PlayaVivaLanding() {
-  const [language, setLanguage] = useState<"es" | "en">("es")
-  const [scrollY, setScrollY] = useState(0)
+  const [language, setLanguage] = useState<"es" | "en">("es");
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const content = {
     es: {
       hero: {
         title: "Playa Viva",
         subtitle: "Al Marjan Island, Ras Al Khaimah",
-        description: "Un santuario exclusivo frente al mar diseñado para la vida de lujo moderna",
+        description:
+          "Un santuario exclusivo frente al mar diseñado para la vida de lujo moderna",
         price: "Desde £150,000",
         payment: "Pague solo 1% mensual durante 5 años",
         handover: "Entrega Junio 2026",
@@ -31,7 +32,8 @@ export default function PlayaVivaLanding() {
       hero: {
         title: "Playa Viva",
         subtitle: "Al Marjan Island, Ras Al Khaimah",
-        description: "An exclusive beachfront sanctuary designed for modern luxury living",
+        description:
+          "An exclusive beachfront sanctuary designed for modern luxury living",
         price: "Starting from £150,000",
         payment: "Pay Just 1% Per Month for 5 Years",
         handover: "Handover June 2026",
@@ -39,17 +41,17 @@ export default function PlayaVivaLanding() {
         cta2: "Book Now",
       },
     },
-  }
+  };
 
-  const t = content[language].hero
+  const t = content[language].hero;
 
-  const logoOpacity = Math.min(scrollY / 100, 1)
+  const logoOpacity = Math.min(scrollY / 100, 1);
   // Stage 2: Logo sharpens (100-300px scroll) - blur goes from 20px to 0px
-  const logoBlur = Math.max(20 - (scrollY - 100) / 10, 0)
+  const logoBlur = Math.max(20 - (scrollY - 100) / 10, 0);
   // Stage 3: Content appears after logo is sharp (300px+ scroll)
-  const contentOpacity = Math.min(Math.max((scrollY - 300) / 200, 0), 1)
+  const contentOpacity = Math.min(Math.max((scrollY - 300) / 200, 0), 1);
   // Overlay appears with scroll
-  const overlayOpacity = Math.min(scrollY / 300, 1)
+  const overlayOpacity = Math.min(scrollY / 300, 1);
 
   return (
     <div className="bg-cream-light">
@@ -97,7 +99,7 @@ export default function PlayaVivaLanding() {
               >
                 <div className="flex justify-center mb-8">
                   <img
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/flux-1-kontext-pro_b_quiero_una_imagen_qu-4YEADjdDbtXNTjoVNEqpobFNFnQiGb.png"
+                    src="/logo-playa-viva.png"
                     alt="Playa Viva Logo"
                     className="w-auto h-64 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] drop-shadow-[0_0_50px_rgba(236,232,221,1)] filter brightness-110"
                   />
@@ -108,7 +110,10 @@ export default function PlayaVivaLanding() {
                 </p>
               </div>
 
-              <div className="space-y-8 transition-opacity duration-700" style={{ opacity: contentOpacity }}>
+              <div
+                className="space-y-8 transition-opacity duration-700"
+                style={{ opacity: contentOpacity }}
+              >
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-b from-brown-dark/30 to-brown-dark/50 blur-2xl" />
                   <p className="relative text-cream-light text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light [text-shadow:_0_2px_12px_rgb(90_82_63_/_90%),_0_4px_24px_rgb(90_82_63_/_70%)]">
@@ -163,10 +168,14 @@ export default function PlayaVivaLanding() {
 
       <section className="relative z-20 bg-cream-light py-24">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-light text-brown-dark mb-6">Próxima Sección</h2>
-          <p className="text-taupe-warm text-lg">El contenido adicional aparecerá aquí...</p>
+          <h2 className="text-4xl font-light text-brown-dark mb-6">
+            Próxima Sección
+          </h2>
+          <p className="text-taupe-warm text-lg">
+            El contenido adicional aparecerá aquí...
+          </p>
         </div>
       </section>
     </div>
-  )
+  );
 }
