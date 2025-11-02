@@ -1,15 +1,51 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Globe, MapPin, Home, Star, Users, Phone } from "lucide-react";
 
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
   const [scrollY, setScrollY] = useState(0);
+  const [visibleSections, setVisibleSections] = useState({
+    features: false,
+    investment: false,
+    location: false,
+    footer: false,
+  });
+
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const investmentRef = useRef<HTMLDivElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      setScrollY(currentScroll);
+
+      // Check section visibility
+      const checkSectionVisibility = (
+        ref: React.RefObject<HTMLDivElement | null>,
+        sectionKey: keyof typeof visibleSections
+      ) => {
+        if (ref.current) {
+          const rect = ref.current.getBoundingClientRect();
+          const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+          setVisibleSections((prev) => ({
+            ...prev,
+            [sectionKey]: isVisible || currentScroll > 300, // Show after scrolling past hero
+          }));
+        }
+      };
+
+      checkSectionVisibility(featuresRef, "features");
+      checkSectionVisibility(investmentRef, "investment");
+      checkSectionVisibility(locationRef, "location");
+      checkSectionVisibility(footerRef, "footer");
+    };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -132,14 +168,11 @@ export default function PlayaVivaLanding() {
 
   const t = content[language];
 
-  const logoOpacity = Math.min(scrollY / 100, 1);
-  const logoBlur = Math.max(20 - (scrollY - 100) / 10, 0);
-  const contentOpacity = Math.min(Math.max((scrollY - 300) / 200, 0), 1);
+  // Hero section animations (slowed down for better logo visibility)
+  const logoOpacity = Math.min(scrollY / 200, 1); // Logo fades in over 200px instead of 100px
+  const logoBlur = Math.max(20 - (scrollY - 200) / 15, 0); // Blur starts later and transitions slower
+  const contentOpacity = Math.min(Math.max((scrollY - 400) / 300, 0), 1); // Content appears much later
   const overlayOpacity = Math.min(scrollY / 300, 1);
-
-  // Section visibility animations
-  const featuresOpacity = Math.min(Math.max((scrollY - 100) / 200, 0), 1);
-  const investmentOpacity = Math.min(Math.max((scrollY - 800) / 400, 0), 1);
 
   return (
     <div className="min-h-screen bg-cream-light">
@@ -255,7 +288,17 @@ export default function PlayaVivaLanding() {
       </section>
 
       {/* Features Section */}
-      <section className="relative py-24 bg-cream-light">
+      <section
+        ref={featuresRef}
+        className="relative py-24 bg-cream-light"
+        style={{
+          opacity: visibleSections.features ? 1 : 0,
+          transform: visibleSections.features
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
@@ -267,8 +310,16 @@ export default function PlayaVivaLanding() {
             {t.features.items.map((item, index) => (
               <div
                 key={index}
-                className="text-center p-6 bg-white/50 rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300"
-                style={{ opacity: featuresOpacity }}
+                className="text-center p-6 bg-white/50 rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+                style={{
+                  opacity: visibleSections.features ? 1 : 0,
+                  transform: visibleSections.features
+                    ? "translateY(0px)"
+                    : "translateY(30px)",
+                  transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+                    index * 0.1
+                  }s`,
+                }}
               >
                 <div className="flex justify-center mb-4">
                   <item.icon className="h-12 w-12 text-gold-warm" />
@@ -286,24 +337,52 @@ export default function PlayaVivaLanding() {
       </section>
 
       {/* Investment Section */}
-      <section className="relative py-24 bg-brown-dark">
+      <section
+        ref={investmentRef}
+        className="relative py-24 bg-brown-dark"
+        style={{
+          opacity: visibleSections.investment ? 1 : 0,
+          transform: visibleSections.investment
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2
               className="text-4xl md:text-5xl font-light text-cream-light mb-6"
-              style={{ opacity: investmentOpacity }}
+              style={{
+                opacity: visibleSections.investment ? 1 : 0,
+                transform: visibleSections.investment
+                  ? "translateY(0px)"
+                  : "translateY(20px)",
+                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
             >
               {t.investment.title}
             </h2>
             <h3
               className="text-2xl text-gold-warm mb-8"
-              style={{ opacity: investmentOpacity }}
+              style={{
+                opacity: visibleSections.investment ? 1 : 0,
+                transform: visibleSections.investment
+                  ? "translateY(0px)"
+                  : "translateY(20px)",
+                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s",
+              }}
             >
               {t.investment.subtitle}
             </h3>
             <p
               className="text-cream-light/90 text-lg leading-relaxed mb-12"
-              style={{ opacity: investmentOpacity }}
+              style={{
+                opacity: visibleSections.investment ? 1 : 0,
+                transform: visibleSections.investment
+                  ? "translateY(0px)"
+                  : "translateY(20px)",
+                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s",
+              }}
             >
               {t.investment.description}
             </p>
@@ -312,8 +391,16 @@ export default function PlayaVivaLanding() {
               {t.investment.benefits.map((benefit, index) => (
                 <div
                   key={index}
-                  className="flex items-center p-4 bg-gold-warm/10 rounded-xl backdrop-blur-sm border border-gold-warm/20"
-                  style={{ opacity: investmentOpacity }}
+                  className="flex items-center p-4 bg-gold-warm/10 rounded-xl backdrop-blur-sm border border-gold-warm/20 hover:bg-gold-warm/15 transition-all duration-300"
+                  style={{
+                    opacity: visibleSections.investment ? 1 : 0,
+                    transform: visibleSections.investment
+                      ? "translateY(0px)"
+                      : "translateY(20px)",
+                    transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${
+                      0.3 + index * 0.1
+                    }s`,
+                  }}
                 >
                   <div className="w-3 h-3 bg-gold-warm rounded-full mr-4 flex-shrink-0" />
                   <span className="text-cream-light text-left">{benefit}</span>
@@ -325,7 +412,17 @@ export default function PlayaVivaLanding() {
       </section>
 
       {/* Location Section */}
-      <section className="relative py-24 bg-white">
+      <section
+        ref={locationRef}
+        className="relative py-24 bg-white"
+        style={{
+          opacity: visibleSections.location ? 1 : 0,
+          transform: visibleSections.location
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
@@ -342,7 +439,17 @@ export default function PlayaVivaLanding() {
       </section>
 
       {/* Footer CTA */}
-      <section className="relative py-16 bg-brown-dark">
+      <section
+        ref={footerRef}
+        className="relative py-16 bg-brown-dark"
+        style={{
+          opacity: visibleSections.footer ? 1 : 0,
+          transform: visibleSections.footer
+            ? "translateY(0px)"
+            : "translateY(30px)",
+          transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-2xl mx-auto space-y-6">
             <h3 className="text-3xl text-gold-warm font-light">
@@ -356,7 +463,7 @@ export default function PlayaVivaLanding() {
             <div className="flex justify-center">
               <Button
                 size="lg"
-                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-8 py-6 text-lg rounded-xl shadow-2xl"
+                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-8 py-6 text-lg rounded-xl shadow-2xl hover:scale-105 transition-all duration-300"
               >
                 <Phone className="mr-2 h-5 w-5" />
                 {language === "es" ? "Contactar Ahora" : "Contact Now"}
