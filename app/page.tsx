@@ -308,7 +308,7 @@ export default function PlayaVivaLanding() {
                 <div className="relative">
                   {/* Glow effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-gold-warm/30 to-yellow-400/20 blur-2xl rounded-full" />
-                  <p className="relative text-gold-warm text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.2em] uppercase bg-gradient-to-r from-yellow-300 via-gold-warm to-yellow-300 bg-clip-text text-transparent [text-shadow:_0_4px_20px_rgb(255_215_0_/_80%)_!important,_0_8px_40px_rgb(255_215_0_/_60%)_!important]">
+                  <p className="relative text-gold-warm text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.2em] uppercase bg-gradient-to-r from-yellow-300 via-gold-warm to-yellow-300 bg-clip-text text-transparent drop-shadow-[0_4px_20px_rgba(255,215,0,0.8)] drop-shadow-[0_8px_40px_rgba(255,215,0,0.6)]">
                     {t.hero.subtitle}
                   </p>
                 </div>
