@@ -6,7 +6,6 @@ import { Globe, MapPin, Home, Star, Users, Phone } from "lucide-react";
 
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
-  const [scrollY, setScrollY] = useState(0);
   const [animationStates, setAnimationStates] = useState({
     backgroundImage: false,
     logo: false,
@@ -15,6 +14,7 @@ export default function PlayaVivaLanding() {
     priceBox: false,
     ctaButtons: false,
     scrollIndicator: false,
+    logoBlur: true,
   });
   const [visibleSections, setVisibleSections] = useState({
     features: false,
@@ -38,6 +38,11 @@ export default function PlayaVivaLanding() {
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, logo: true }));
       }, 500);
+
+      // Logo blur effect starts after logo appears
+      setTimeout(() => {
+        setAnimationStates((prev) => ({ ...prev, logoBlur: false }));
+      }, 1200);
 
       // Subtitle appears after 1 second
       setTimeout(() => {
@@ -72,7 +77,6 @@ export default function PlayaVivaLanding() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
-      setScrollY(currentScroll);
 
       // Check section visibility
       const checkSectionVisibility = (
@@ -107,7 +111,7 @@ export default function PlayaVivaLanding() {
         subtitle: "Al Marjan Island, Ras Al Khaimah",
         description:
           "Un santuario exclusivo frente al mar diseñado para la vida de lujo moderna",
-        price: "Desde £150,000",
+        price: "Desde €150,000",
         payment: "Pague solo 1% mensual durante 5 años",
         handover: "Entrega Junio 2026",
         cta1: "Descargar Brochure",
@@ -164,7 +168,7 @@ export default function PlayaVivaLanding() {
         subtitle: "Al Marjan Island, Ras Al Khaimah",
         description:
           "An exclusive beachfront sanctuary designed for modern luxury living",
-        price: "Starting from £150,000",
+        price: "Starting from €150,000",
         payment: "Pay Just 1% Per Month for 5 Years",
         handover: "Handover June 2026",
         cta1: "Download Brochure",
@@ -244,7 +248,9 @@ export default function PlayaVivaLanding() {
               ? "scale(1)"
               : "scale(1.05)",
             filter: animationStates.logo
-              ? "brightness(0.6) saturate(0.8)"
+              ? animationStates.logoBlur
+                ? "brightness(1) saturate(1)"
+                : "brightness(0.6) saturate(0.8) blur(1px)"
               : "brightness(1) saturate(1)",
           }}
         >
@@ -275,7 +281,7 @@ export default function PlayaVivaLanding() {
         {/* Hero Content */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
           <div className="container max-w-6xl mx-auto">
-            <div className="flex flex-col items-center justify-center text-center space-y-12">
+            <div className="flex flex-col items-center justify-center text-center space-y-16">
               {/* Logo - Centered */}
               <div
                 className="transition-all duration-1000 ease-out"
@@ -290,12 +296,18 @@ export default function PlayaVivaLanding() {
                   <img
                     src="/logo-playa-viva.png"
                     alt="Playa Viva Logo"
-                    className="w-auto h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110"
+                    className="w-auto h-64 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] drop-shadow-[0_0_60px_rgba(255,255,255,0.9)] filter brightness-110 contrast-110"
+                    style={{
+                      filter: `brightness(110%) contrast(110%) ${
+                        animationStates.logoBlur ? "blur(4px)" : "blur(0px)"
+                      }`,
+                      transition: "filter 1.5s ease-out",
+                    }}
                   />
                 </div>
               </div>
 
-              {/* Subtitle - Highlighted */}
+              {/* Subtitle - Enhanced with multiple effects for maximum readability */}
               <div
                 className="transition-all duration-700 ease-out"
                 style={{
@@ -306,9 +318,17 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="relative">
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-gold-warm/30 to-yellow-400/20 blur-2xl rounded-full" />
-                  <p className="relative text-gold-warm text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.2em] uppercase bg-gradient-to-r from-yellow-300 via-gold-warm to-yellow-300 bg-clip-text text-transparent drop-shadow-[0_4px_20px_rgba(255,215,0,0.8)] drop-shadow-[0_8px_40px_rgba(255,215,0,0.6)]">
+                  {/* Multiple layered glow effects */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/60 via-gold-warm/70 to-yellow-400/60 blur-3xl rounded-full" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/40 to-transparent blur-2xl rounded-full" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-300/30 via-gold-warm/50 to-yellow-300/30 blur-xl rounded-full" />
+                  {/* Text with enhanced effects */}
+                  <p
+                    className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-[0.15em] uppercase
+                    bg-gradient-to-r from-yellow-100 via-gold-warm to-yellow-100 bg-clip-text text-transparent
+                    [text-shadow:_3px_3px_6px_rgb(0_0_0_/_95%),_0_0_25px_rgb(0_0_0_/_90%),_0_0_50px_rgb(255_215_0_/_80%),_0_0_75px_rgb(255_215_0_/_60%)]
+                    drop-shadow-[0_0_80px_rgba(255,215,0,0.95)] animate-pulse"
+                  >
                     {t.hero.subtitle}
                   </p>
                 </div>
@@ -325,8 +345,8 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="relative max-w-4xl mx-auto">
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/30 blur-2xl rounded-2xl" />
-                  <p className="relative text-cream-light text-base sm:text-lg md:text-xl max-w-4xl mx-auto leading-relaxed font-light px-8 [text-shadow:_0_2px_12px_rgb(0_0_0_/_80%),_0_4px_24px_rgb(0_0_0_/_60%)]">
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/70 blur-3xl rounded-3xl" />
+                  <p className="relative text-cream-light text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto leading-relaxed font-medium px-8 [text-shadow:_2px_2px_8px_rgb(0_0_0_/_90%),_0_0_20px_rgb(0_0_0_/_70%)]">
                     {t.hero.description}
                   </p>
                 </div>
@@ -345,15 +365,33 @@ export default function PlayaVivaLanding() {
                 <div className="relative max-w-2xl mx-auto">
                   {/* Glow effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-gold-warm/20 to-yellow-400/10 blur-2xl rounded-3xl" />
-                  <div className="relative bg-gradient-to-br from-black/70 via-black/60 to-black/70 backdrop-blur-xl border border-yellow-400/20 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                  <div className="relative bg-gradient-to-br from-black/95 via-black/90 to-black/95 backdrop-blur-xl border border-yellow-400/40 rounded-3xl p-6 sm:p-8 shadow-2xl">
                     <div className="space-y-3 sm:space-y-4">
-                      <div className="text-gold-warm text-3xl sm:text-4xl md:text-5xl font-bold [text-shadow:_0_2px_10px_rgb(255_215_0_/_70%)]">
+                      <div
+                        className="text-gold-warm text-3xl sm:text-4xl md:text-5xl font-bold [text-shadow:_3px_3px_8px_rgb(255_215_0_/_100%),_0_0_25px_rgb(255_215_0_/_90%),_0_0_40px_rgb(255_215_0_/_70%)] drop-shadow-[0_0_60px_rgba(255,215,0,0.8)]"
+                        style={{
+                          filter: "none",
+                          textRendering: "optimizeLegibility",
+                        }}
+                      >
                         {t.hero.price}
                       </div>
-                      <div className="text-cream-light text-sm sm:text-base md:text-lg font-medium [text-shadow:_0_2px_8px_rgb(255_255_255_/_50%)]">
+                      <div
+                        className="text-cream-light text-sm sm:text-base md:text-lg font-medium [text-shadow:_3px_3px_8px_rgb(255_255_255_/_100%),_0_0_20px_rgb(255_255_255_/_90%)] drop-shadow-[0_0_40px_rgba(255,255,255,0.6)]"
+                        style={{
+                          filter: "none",
+                          textRendering: "optimizeLegibility",
+                        }}
+                      >
                         {t.hero.payment}
                       </div>
-                      <div className="text-cream-light/90 text-xs sm:text-sm [text-shadow:_0_2px_8px_rgb(255_255_255_/_40%)]">
+                      <div
+                        className="text-cream-light/90 text-xs sm:text-sm [text-shadow:_3px_3px_8px_rgb(255_255_255_/_90%),_0_0_20px_rgb(255_255_255_/_80%)] drop-shadow-[0_0_40px_rgba(255,255,255,0.5)]"
+                        style={{
+                          filter: "none",
+                          textRendering: "optimizeLegibility",
+                        }}
+                      >
                         {t.hero.handover}
                       </div>
                     </div>
