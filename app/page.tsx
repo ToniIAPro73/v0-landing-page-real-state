@@ -281,14 +281,14 @@ export default function PlayaVivaLanding() {
         {/* Hero Content */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
           <div className="container max-w-6xl mx-auto">
-            <div className="flex flex-col items-center justify-center text-center space-y-8">
-              {/* Logo - Properly positioned */}
+            <div className="flex flex-col items-center justify-center text-center space-y-10 mt-8">
+              {/* Logo - Larger and positioned lower */}
               <div
                 className="transition-all duration-1000 ease-out"
                 style={{
                   opacity: animationStates.logo ? 1 : 0,
                   transform: animationStates.logo
-                    ? "translateY(0px) scale(1)"
+                    ? "translateY(20px) scale(1)"
                     : "translateY(50px) scale(0.9)",
                 }}
               >
@@ -296,7 +296,7 @@ export default function PlayaVivaLanding() {
                   <img
                     src="/logo-playa-viva.png"
                     alt="Playa Viva Logo"
-                    className="w-auto h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110"
+                    className="w-auto h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110"
                     style={{
                       filter: `brightness(110%) contrast(110%) ${
                         animationStates.logoBlur ? "blur(4px)" : "blur(0px)"
@@ -307,7 +307,7 @@ export default function PlayaVivaLanding() {
                 </div>
               </div>
 
-              {/* Subtitle - Clean and professional */}
+              {/* Subtitle - Enhanced typography */}
               <div
                 className="transition-all duration-700 ease-out"
                 style={{
@@ -317,12 +317,12 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <p className="text-cream-light text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium tracking-wide uppercase">
+                <p className="text-cream-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[0.1em] uppercase [text-shadow:_2px_2px_8px_rgba(0,0,0,0.7)]">
                   {t.hero.subtitle}
                 </p>
               </div>
 
-              {/* Description - Enhanced styling */}
+              {/* Description - Sophisticated styling */}
               <div
                 className="transition-all duration-700 ease-out max-w-4xl"
                 style={{
@@ -332,12 +332,15 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <p className="text-cream-light text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto leading-relaxed font-light">
-                  {t.hero.description}
-                </p>
+                <div className="relative max-w-3xl mx-auto">
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 blur-sm rounded-lg" />
+                  <p className="relative text-cream-light text-lg sm:text-xl md:text-2xl lg:text-3xl leading-relaxed font-light px-4 [text-shadow:_1px_1px_4px_rgba(0,0,0,0.8)]">
+                    {t.hero.description}
+                  </p>
+                </div>
               </div>
 
-              {/* Price Card - Clean and professional */}
+              {/* Price Card - Dark brown gradient background */}
               <div
                 className="transition-all duration-700 ease-out"
                 style={{
@@ -348,15 +351,15 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="relative">
-                  <div className="bg-gradient-to-br from-black/80 to-black/90 backdrop-blur-sm border border-gold-warm/30 rounded-2xl p-6 sm:p-8 shadow-xl">
+                  <div className="bg-gradient-to-br from-olive-dark via-brown-dark to-olive-brown backdrop-blur-sm border border-gold-warm/40 rounded-2xl p-6 sm:p-8 shadow-2xl">
                     <div className="space-y-3 sm:space-y-4 text-center">
-                      <div className="text-gold-warm text-2xl sm:text-3xl md:text-4xl font-bold">
+                      <div className="text-gold-warm text-3xl sm:text-4xl md:text-5xl font-bold [text-shadow:_1px_1px_3px_rgba(0,0,0,0.9)]">
                         {t.hero.price}
                       </div>
-                      <div className="text-cream-light text-sm sm:text-base md:text-lg font-medium">
+                      <div className="text-cream-light text-base sm:text-lg md:text-xl font-medium [text-shadow:_1px_1px_2px_rgba(0,0,0,0.8)]">
                         {t.hero.payment}
                       </div>
-                      <div className="text-cream-light/80 text-xs sm:text-sm">
+                      <div className="text-cream-light/90 text-sm sm:text-base [text-shadow:_1px_1px_2px_rgba(0,0,0,0.7)]">
                         {t.hero.handover}
                       </div>
                     </div>
@@ -364,7 +367,7 @@ export default function PlayaVivaLanding() {
                 </div>
               </div>
 
-              {/* CTA Buttons - Properly styled */}
+              {/* CTA Buttons - Enhanced styling */}
               <div
                 className="flex flex-col sm:flex-row gap-4 justify-center items-center"
                 style={{
@@ -376,14 +379,14 @@ export default function PlayaVivaLanding() {
               >
                 <Button
                   size="lg"
-                  className="bg-gold-warm hover:bg-gold-warm/90 text-white font-semibold px-8 py-3 text-base rounded-xl shadow-lg transition-all duration-300 hover:scale-105 min-w-[180px]"
+                  className="bg-gradient-to-r from-gold-warm to-gold-warm/90 hover:from-gold-warm/90 hover:to-gold-warm text-white font-semibold px-10 py-4 text-lg rounded-xl shadow-2xl transition-all duration-300 hover:scale-105 min-w-[200px] [text-shadow:_1px_1px_2px_rgba(0,0,0,0.5)]"
                 >
                   {t.hero.cta1}
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="bg-white/10 backdrop-blur-sm border-2 border-gold-warm text-cream-light hover:bg-gold-warm/10 hover:text-white font-semibold px-8 py-3 text-base rounded-xl shadow-lg transition-all duration-300 hover:scale-105 min-w-[180px]"
+                  className="bg-white/5 backdrop-blur-sm border-2 border-gold-warm text-cream-light hover:bg-gold-warm/20 hover:text-white font-semibold px-10 py-4 text-lg rounded-xl shadow-2xl transition-all duration-300 hover:scale-105 min-w-[200px] [text-shadow:_1px_1px_2px_rgba(0,0,0,0.7)]"
                 >
                   {t.hero.cta2}
                 </Button>
