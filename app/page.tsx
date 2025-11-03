@@ -246,7 +246,7 @@ export default function PlayaVivaLanding() {
           }}
         >
           <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Composicion_hero_transparente-8fGQo64uKeGFpOH2jWX0d2rqfvKtGK.png"
+            src="/fixed-hero-background.png"
             alt="Playa Viva Al Marjan Island"
             className="w-full h-full object-cover"
           />
