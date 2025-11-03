@@ -245,14 +245,45 @@ export default function PlayaVivaLanding() {
               : "scale(1.1)",
           }}
         >
+          {/* Primary Background Image */}
           <img
             src="/Captura.png"
             alt="Playa Viva Al Marjan Island"
             className="w-full h-full object-cover"
+            loading="eager"
+            decoding="sync"
+            crossOrigin="anonymous"
+            onError={(e) => {
+              console.log("Primary background image failed, trying fallback");
+              const target = e.target as HTMLImageElement;
+              // Try alternative sources
+              target.src = "/placeholder.jpg";
+            }}
+            onLoad={() => {
+              console.log("Background image loaded successfully");
+            }}
           />
+
+          {/* Fallback Background - will show if image fails */}
           <div
-            className="absolute inset-0 bg-gradient-to-b from-brown-dark/70 via-brown-dark/50 to-brown-dark/80"
-            style={{ opacity: animationStates.backgroundImage ? 0.3 : 0 }}
+            className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-600"
+            style={{
+              opacity: 1,
+              backgroundImage: `linear-gradient(135deg,
+                rgba(30, 58, 138, 0.9) 0%,
+                rgba(37, 99, 235, 0.8) 50%,
+                rgba(59, 130, 246, 0.7) 100%),
+                url('/Captura.png')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          />
+
+          {/* Overlay for better text readability */}
+          <div
+            className="absolute inset-0 bg-gradient-to-b from-brown-dark/60 via-brown-dark/40 to-brown-dark/70"
+            style={{ opacity: animationStates.backgroundImage ? 0.4 : 0 }}
           />
         </div>
 
