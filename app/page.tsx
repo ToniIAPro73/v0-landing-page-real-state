@@ -247,7 +247,7 @@ export default function PlayaVivaLanding() {
         >
           {/* Primary Background Image */}
           <img
-            src="/Captura.png"
+            src="/hero-background.png"
             alt="Playa Viva Al Marjan Island"
             className="w-full h-full object-cover"
             loading="eager"
@@ -257,7 +257,7 @@ export default function PlayaVivaLanding() {
               console.log("Primary background image failed, trying fallback");
               const target = e.target as HTMLImageElement;
               // Try alternative sources
-              target.src = "/placeholder.jpg";
+              target.src = "/fixed-hero-background.png";
             }}
             onLoad={() => {
               console.log("Background image loaded successfully");
@@ -273,7 +273,7 @@ export default function PlayaVivaLanding() {
                 rgba(30, 58, 138, 0.9) 0%,
                 rgba(37, 99, 235, 0.8) 50%,
                 rgba(59, 130, 246, 0.7) 100%),
-                url('/Captura.png')`,
+                url('/hero-background.png')`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
