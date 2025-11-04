@@ -288,8 +288,8 @@ export default function PlayaVivaLanding() {
                 style={{
                   opacity: animationStates.logo ? 1 : 0,
                   transform: animationStates.logo
-                    ? "translateY(20px) scale(1)"
-                    : "translateY(50px) scale(0.9)",
+                    ? "translateY(80px) scale(1.1)"
+                    : "translateY(100px) scale(1.0)",
                 }}
               >
                 <div className="flex justify-center">
