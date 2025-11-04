@@ -281,15 +281,15 @@ export default function PlayaVivaLanding() {
         {/* Hero Content */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
           <div className="container max-w-6xl mx-auto">
-            <div className="flex flex-col items-center justify-center text-center space-y-10 mt-8">
+            <div className="flex flex-col items-center justify-center text-center space-y-6 mt-4">
               {/* Logo - Larger and positioned lower */}
               <div
                 className="transition-all duration-1000 ease-out"
                 style={{
                   opacity: animationStates.logo ? 1 : 0,
                   transform: animationStates.logo
-                    ? "translateY(80px) scale(1.1)"
-                    : "translateY(100px) scale(1.0)",
+                    ? "translateY(60px) scale(1.1)"
+                    : "translateY(80px) scale(1.0)",
                 }}
               >
                 <div className="flex justify-center">
@@ -351,8 +351,8 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="relative">
-                  <div className="bg-gradient-to-br from-olive-dark via-brown-dark to-olive-brown backdrop-blur-sm border border-gold-warm/40 rounded-2xl p-6 sm:p-8 shadow-2xl">
-                    <div className="space-y-3 sm:space-y-4 text-center">
+                  <div className="bg-gradient-to-br from-olive-dark via-brown-dark to-olive-brown backdrop-blur-sm border border-gold-warm/40 rounded-2xl p-5 sm:p-6 shadow-xl">
+                    <div className="space-y-2 sm:space-y-3 text-center">
                       <div className="text-gold-warm text-3xl sm:text-4xl md:text-5xl font-bold [text-shadow:_1px_1px_3px_rgba(0,0,0,0.9)]">
                         {t.hero.price}
                       </div>
