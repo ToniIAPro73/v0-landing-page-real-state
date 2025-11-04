@@ -317,8 +317,9 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <p className="text-cream-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[0.1em] uppercase [text-shadow:_2px_2px_8px_rgba(0,0,0,0.7)]">
-                  {t.hero.subtitle}
+                <p className="font-arabic text-gold-warm text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-semibold tracking-[0.06em] uppercase [text-shadow:_1px_1px_4px_rgba(0,0,0,0.35)]">
+                  {" "}
+                  {t.hero.subtitle}{" "}
                 </p>
               </div>
 
