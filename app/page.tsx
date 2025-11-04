@@ -317,10 +317,13 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <p className="font-arabic text-gold-warm text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-semibold tracking-[0.06em] uppercase [text-shadow:_1px_1px_4px_rgba(0,0,0,0.35)]">
+                <div className="inline-block bg-black/35 backdrop-blur-sm rounded-lg px-4 py-2 border border-gold-warm/30">
                   {" "}
-                  {t.hero.subtitle}{" "}
-                </p>
+                  <p className="font-arabic text-gold-warm text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-semibold tracking-[0.06em] uppercase [text-shadow:_0_1px_6px_rgba(0,0,0,0.45)]">
+                    {" "}
+                    {t.hero.subtitle}{" "}
+                  </p>{" "}
+                </div>
               </div>
 
               {/* Description - Sophisticated styling */}
