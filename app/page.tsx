@@ -465,7 +465,7 @@ export default function PlayaVivaLanding() {
         </div>
       </section>
 
-      {/* Investment Section */}
+      {/* Inversión Section */}
       <section
         ref={investmentRef}
         className="relative py-24 bg-brown-dark"
