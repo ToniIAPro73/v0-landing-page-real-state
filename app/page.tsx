@@ -403,17 +403,19 @@ export default function PlayaVivaLanding() {
 
         {/* Scroll Indicator */}
         <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce"
+          className="absolute bottom-20 left-1/2 -translate-x-1/2 z-0 animate-bounce pointer-events-none"
           style={{
-            opacity: animationStates.scrollIndicator ? 1 : 0,
+            opacity: animationStates.ctaButtons ? 0 : 1,
             transform: animationStates.scrollIndicator
               ? "translateY(0px)"
               : "translateY(20px)",
           }}
         >
+          {" "}
           <div className="w-6 h-10 border-2 border-yellow-400/70 rounded-full flex items-start justify-center p-2">
-            <div className="w-1.5 h-3 bg-yellow-400/80 rounded-full animate-pulse" />
-          </div>
+            {" "}
+            <div className="w-1.5 h-3 bg-yellow-400/80 rounded-full animate-pulse" />{" "}
+          </div>{" "}
         </div>
       </section>
 
