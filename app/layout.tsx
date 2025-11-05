@@ -1,7 +1,7 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Analytics } from "@vercel/analytics/next"
-import "./globals.css"
+import type React from "react";
+import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Playa Viva - Inversión Inmobiliaria en Al Marjan Island | Uniestate",
@@ -10,19 +10,19 @@ export const metadata: Metadata = {
   generator: "v0.app",
   keywords:
     "inversión inmobiliaria Dubai, Al Marjan Island, Playa Viva, propiedades lujo Emiratos, real estate investment",
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
         {children}
         <Analytics />
       </body>
     </html>
-  )
+  );
 }
