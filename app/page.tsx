@@ -382,14 +382,13 @@ export default function PlayaVivaLanding() {
                 <div className="flex sm:flex-row gap-4 justify-center items-center">
                   <Button
                     size="lg"
-                    className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl ring-1 ring-gold-warm/40 border border-gold-warm/40 transition-all duration-200 min-w-[200px]"
+                    className="bg-gold-warm text-brown-dark font-semibold px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/60 shadow-lg transition-all duration-200 hover:bg-gold-warm/90 hover:-translate-y-0.5 hover:shadow-xl min-w-[220px]"
                   >
                     {t.hero.cta1}
                   </Button>
                   <Button
                     size="lg"
-                    variant="outline"
-                    className="bg-white/5 backdrop-blur-sm border-2 border-gold-warm text-cream-light hover:bg-gold-warm/20 hover:text-white font-semibold px-10 py-4 text-lg rounded-xl shadow-2xl transition-all duration-300 hover:scale-105 min-w-[200px] [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)]"
+                    className="bg-gold-warm text-brown-dark font-semibold px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/60 shadow-lg transition-all duration-200 hover:bg-gold-warm/90 hover:-translate-y-0.5 hover:shadow-xl min-w-[220px]"
                   >
                     {t.hero.cta2}
                   </Button>
