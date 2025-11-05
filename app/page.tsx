@@ -282,14 +282,14 @@ export default function PlayaVivaLanding() {
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
           <div className="container max-w-6xl mx-auto">
             <div className="flex flex-col items-center justify-center text-center space-y-6 mt-4">
-              {/* Logo - Larger and positioned lower */}
+              {/* Logo - Slightly higher and compact */}
               <div
                 className="transition-all duration-1000 ease-out"
                 style={{
                   opacity: animationStates.logo ? 1 : 0,
                   transform: animationStates.logo
-                    ? "translateY(60px) scale(1.1)"
-                    : "translateY(80px) scale(1.0)",
+                    ? "translateY(50px) scale(1.1)"
+                    : "translateY(70px) scale(1.0)",
                 }}
               >
                 <div className="flex justify-center">
@@ -307,7 +307,7 @@ export default function PlayaVivaLanding() {
                 </div>
               </div>
 
-              {/* Subtitle - Enhanced typography */}
+              {/* Subtitle - Arabic elegant with backdrop for legibility */}
               <div
                 className="transition-all duration-700 ease-out"
                 style={{
@@ -318,15 +318,13 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="inline-block bg-black/35 backdrop-blur-sm rounded-lg px-4 py-2 border border-gold-warm/30">
-                  {" "}
                   <p className="font-arabic text-gold-warm text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-semibold tracking-[0.06em] uppercase [text-shadow:0_1px_6px_rgba(0,0,0,0.45)]">
-                    {" "}
-                    {t.hero.subtitle}{" "}
-                  </p>{" "}
+                    {t.hero.subtitle}
+                  </p>
                 </div>
               </div>
 
-              {/* Description - Sophisticated styling */}
+              {/* Description - Sophisticated styling and legibility */}
               <div
                 className="transition-all duration-700 ease-out max-w-4xl"
                 style={{
@@ -337,12 +335,10 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="relative max-w-3xl mx-auto">
-                  {" "}
-                  <div className="absolute inset-0 bg-black/35 blur-[3px] rounded-lg" />{" "}
+                  <div className="absolute inset-0 bg-black/35 blur-[3px] rounded-lg" />
                   <p className="relative text-cream-light text-lg sm:text-xl md:text-2xl lg:text-[1.6rem] leading-relaxed font-light px-4 [text-shadow:0_1px_6px_rgba(0,0,0,0.45)]">
-                    {" "}
-                    {t.hero.description}{" "}
-                  </p>{" "}
+                    {t.hero.description}
+                  </p>
                 </div>
               </div>
 
@@ -373,9 +369,9 @@ export default function PlayaVivaLanding() {
                 </div>
               </div>
 
-              {/* CTA Buttons - Enhanced styling */}
+              {/* CTA Buttons + Scroll Indicator (below and centered) */}
               <div
-                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+                className="flex flex-col gap-4 justify-center items-center"
                 style={{
                   opacity: animationStates.ctaButtons ? 1 : 0,
                   transform: animationStates.ctaButtons
@@ -383,40 +379,41 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <Button
-                  size="lg"
-                  className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl ring-1 ring-gold-warm/40 border border-gold-warm/40 transition-all duration-200 min-w-[200px]"
+                <div className="flex sm:flex-row gap-4 justify-center items-center">
+                  <Button
+                    size="lg"
+                    className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl ring-1 ring-gold-warm/40 border border-gold-warm/40 transition-all duration-200 min-w-[200px]"
+                  >
+                    {t.hero.cta1}
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="bg-white/5 backdrop-blur-sm border-2 border-gold-warm text-cream-light hover:bg-gold-warm/20 hover:text-white font-semibold px-10 py-4 text-lg rounded-xl shadow-2xl transition-all duration-300 hover:scale-105 min-w-[200px] [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)]"
+                  >
+                    {t.hero.cta2}
+                  </Button>
+                </div>
+                {/* Scroll Indicator positioned precisely below and centered */}
+                <div
+                  className="mt-3 flex justify-center pointer-events-none animate-bounce"
+                  style={{
+                    opacity: animationStates.scrollIndicator ? 1 : 0,
+                    transform: animationStates.scrollIndicator
+                      ? "translateY(0px)"
+                      : "translateY(20px)",
+                  }}
                 >
-                  {t.hero.cta1}
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="bg-white/5 backdrop-blur-sm border-2 border-gold-warm text-cream-light hover:bg-gold-warm/20 hover:text-white font-semibold px-10 py-4 text-lg rounded-xl shadow-2xl transition-all duration-300 hover:scale-105 min-w-[200px] [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)]"
-                >
-                  {t.hero.cta2}
-                </Button>
+                  <div className="w-6 h-10 border-2 border-yellow-400/70 rounded-full flex items-start justify-center p-2">
+                    <div className="w-1.5 h-3 bg-yellow-400/80 rounded-full animate-pulse" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div
-          className="absolute bottom-20 left-1/2 -translate-x-1/2 z-0 animate-bounce pointer-events-none"
-          style={{
-            opacity: animationStates.ctaButtons ? 0 : 1,
-            transform: animationStates.scrollIndicator
-              ? "translateY(0px)"
-              : "translateY(20px)",
-          }}
-        >
-          {" "}
-          <div className="w-6 h-10 border-2 border-yellow-400/70 rounded-full flex items-start justify-center p-2">
-            {" "}
-            <div className="w-1.5 h-3 bg-yellow-400/80 rounded-full animate-pulse" />{" "}
-          </div>{" "}
-        </div>
+        {/* Removed absolute Scroll Indicator to prevent overlap */}
       </section>
 
       {/* Features Section */}
