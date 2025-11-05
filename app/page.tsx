@@ -337,10 +337,12 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="relative max-w-3xl mx-auto">
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 blur-sm rounded-lg" />
-                  <p className="relative text-cream-light text-lg sm:text-xl md:text-2xl lg:text-3xl leading-relaxed font-light px-4 [text-shadow:_1px_1px_4px_rgba(0,0,0,0.8)]">
-                    {t.hero.description}
-                  </p>
+                  {" "}
+                  <div className="absolute inset-0 bg-black/35 blur-[3px] rounded-lg" />{" "}
+                  <p className="relative text-cream-light text-lg sm:text-xl md:text-2xl lg:text-[1.6rem] leading-relaxed font-light px-4 [text-shadow:_0_1px_6px_rgba(0,0,0,0.45)]">
+                    {" "}
+                    {t.hero.description}{" "}
+                  </p>{" "}
                 </div>
               </div>
 
@@ -383,7 +385,7 @@ export default function PlayaVivaLanding() {
               >
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-gold-warm to-gold-warm/90 hover:from-gold-warm/90 hover:to-gold-warm text-white font-semibold px-10 py-4 text-lg rounded-xl shadow-2xl transition-all duration-300 hover:scale-105 min-w-[200px] [text-shadow:_1px_1px_2px_rgba(0,0,0,0.5)]"
+                  className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl ring-1 ring-gold-warm/40 border border-gold-warm/40 transition-all duration-200 min-w-[200px]"
                 >
                   {t.hero.cta1}
                 </Button>
