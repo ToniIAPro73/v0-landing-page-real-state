@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Globe, MapPin, Home, Star, Users, Phone } from "lucide-react";
+import { Globe, MapPin, Home, Star, Users, Phone, TrendingUp, Calendar, DollarSign, Award, CheckCircle2, Download, Mail } from "lucide-react";
 
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
@@ -17,11 +17,16 @@ export default function PlayaVivaLanding() {
     logoBlur: true,
   });
   const [visibleSections, setVisibleSections] = useState({
-    features: false,
+    wynnEffect: false,
     investment: false,
+    features: false,
+    leadForm: false,
     location: false,
     footer: false,
   });
+
+  const [showMenu, setShowMenu] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "" });
 
   // Fit hero to viewport height (especially for mobile landscape)
   const heroStackRef = useRef<HTMLDivElement>(null);
@@ -98,8 +103,10 @@ export default function PlayaVivaLanding() {
           }));
         }
       };
-      checkSectionVisibility(featuresRef, "features");
+      checkSectionVisibility(wynnEffectRef, "wynnEffect");
       checkSectionVisibility(investmentRef, "investment");
+      checkSectionVisibility(featuresRef, "features");
+      checkSectionVisibility(leadFormRef, "leadForm");
       checkSectionVisibility(locationRef, "location");
       checkSectionVisibility(footerRef, "footer");
     };
@@ -107,8 +114,10 @@ export default function PlayaVivaLanding() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const featuresRef = useRef<HTMLDivElement>(null);
+  const wynnEffectRef = useRef<HTMLDivElement>(null);
   const investmentRef = useRef<HTMLDivElement>(null);
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const leadFormRef = useRef<HTMLDivElement>(null);
   const locationRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
@@ -118,12 +127,52 @@ export default function PlayaVivaLanding() {
         title: "Playa Viva",
         subtitle: "AL MARJAN ISLAND, RAS AL KHAIMAH",
         description:
-          "Un santuario exclusivo frente al mar diseñado para la vida de lujo moderna",
+          "Invierta en lujo frente al mar junto al nuevo Wynn Casino de $5.1B. Rentabilidades del 7-8%",
         price: "Desde €170.000",
         payment: "Pague solo 1% mensual durante 5 años",
         handover: "Entrega Junio 2026",
         cta1: "Descargar Dossier",
         cta2: "Reservar Ahora",
+      },
+      menu: {
+        wynnEffect: "El Efecto Wynn",
+        investment: "Inversión",
+        features: "Características",
+        dossier: "Dossier",
+        location: "Ubicación",
+        contact: "Contacto",
+      },
+      wynnEffect: {
+        title: "El Efecto Wynn",
+        subtitle: "La oportunidad que está transformando Ras Al Khaimah",
+        description:
+          "El Wynn Resort & Casino de $5.1 mil millones será el primer casino en la historia de los EAU. Su apertura en 2027 está catalizando una revalorización histórica en Al Marjan Island.",
+        stats: [
+          {
+            icon: TrendingUp,
+            value: "+50%",
+            label: "Incremento en alquileres",
+            sublabel: "Q1 2023 - Q1 2025",
+          },
+          {
+            icon: DollarSign,
+            value: "$5.1B",
+            label: "Inversión Wynn Resort",
+            sublabel: "Primer casino de los EAU",
+          },
+          {
+            icon: Calendar,
+            value: "Q2 2027",
+            label: "Apertura del Casino",
+            sublabel: "Momento de máxima revalorización",
+          },
+        ],
+        urgency: {
+          title: "¿Por qué invertir AHORA?",
+          description:
+            "Los inversores sofisticados están posicionándose antes de la apertura del Wynn en 2027. Playa Viva se entrega en Q2 2026, permitiéndole capitalizar el efecto completo.",
+          countdown: "Entrega: Q2 2026 • Wynn apertura: Q2 2027",
+        },
       },
       features: {
         title: "Características Exclusivas",
@@ -153,15 +202,59 @@ export default function PlayaVivaLanding() {
       },
       investment: {
         title: "Oportunidad de Inversión",
-        subtitle: "Una inversión que trasciende el tiempo",
+        subtitle: "Rendimientos reales impulsados por el Efecto Wynn",
         description:
-          "Playa Viva representa una oportunidad única de inversión en uno de los destinos más prometedores del Golfo Pérsico. Con un plan de financiamiento flexible del 1% mensual y una entrega programada para 2026, garantizamos el máximo retorno de su inversión.",
-        benefits: [
-          "Renta garantizada del 8% anual",
-          "Cancelación anticipada disponible",
-          "Gestión profesional incluida",
-          "Potencial de revalorización del 15% anual",
+          "Playa Viva representa una oportunidad única de inversión en Al Marjan Island, epicentro de la transformación inmobiliaria de Ras Al Khaimah. Con un plan de financiamiento flexible del 1% mensual y entrega en Q2 2026, posiciónese antes de la apertura del Wynn.",
+        stats: [
+          {
+            icon: TrendingUp,
+            value: "7-8%",
+            label: "Rendimientos brutos de alquiler",
+            description: "Yields actuales en Al Marjan Island",
+          },
+          {
+            icon: TrendingUp,
+            value: "+50%",
+            label: "Incremento en alquileres",
+            description: "Entre Q1 2023 y Q1 2025",
+          },
+          {
+            icon: Award,
+            value: "Q2 2026",
+            label: "Entrega del proyecto",
+            description: "12 meses antes de la apertura del Wynn",
+          },
+          {
+            icon: DollarSign,
+            value: "1%",
+            label: "Pago mensual durante 5 años",
+            description: "Plan de financiamiento flexible",
+          },
         ],
+        benefits: [
+          "Rendimientos brutos del 7-8% en alquileres",
+          "Proximidad al Wynn Resort ($5.1B)",
+          "Entrega totalmente amueblado y con Smart Home",
+          "Potencial de revalorización post-apertura casino",
+        ],
+      },
+      leadForm: {
+        title: "Dossier de Inversión Exclusivo",
+        subtitle: "Análisis financiero completo y proyecciones del Efecto Wynn",
+        description:
+          "Acceda al análisis detallado de la inversión, incluyendo proyecciones de rentabilidad, planos, especificaciones técnicas y el impacto financiero del Wynn Resort en Al Marjan Island.",
+        features: [
+          "Proyecciones de rentabilidad 2026-2030",
+          "Análisis del Efecto Wynn en precios de alquiler",
+          "Planos y renders de alta resolución",
+          "Plan de pago detallado y opciones de financiamiento",
+        ],
+        form: {
+          namePlaceholder: "Nombre completo",
+          emailPlaceholder: "Email",
+          ctaButton: "Descargar Dossier Exclusivo",
+          privacy: "Sus datos están protegidos. No compartimos información personal.",
+        },
       },
       location: {
         title: "Al Marjan Island",
@@ -175,12 +268,52 @@ export default function PlayaVivaLanding() {
         title: "Playa Viva",
         subtitle: "AL MARJAN ISLAND, RAS AL KHAIMAH",
         description:
-          "An exclusive beachfront sanctuary designed for modern luxury living",
-        price: "Starting from €170.000",
+          "Invest in beachfront luxury next to the new $5.1B Wynn Casino. 7-8% rental yields",
+        price: "Starting from £150,000",
         payment: "Pay Just 1% Per Month for 5 Years",
         handover: "Handover June 2026",
         cta1: "Download Dossier",
         cta2: "Book Now",
+      },
+      menu: {
+        wynnEffect: "The Wynn Effect",
+        investment: "Investment",
+        features: "Features",
+        dossier: "Dossier",
+        location: "Location",
+        contact: "Contact",
+      },
+      wynnEffect: {
+        title: "The Wynn Effect",
+        subtitle: "The opportunity transforming Ras Al Khaimah",
+        description:
+          "The $5.1 billion Wynn Resort & Casino will be the first casino in UAE history. Its 2027 opening is catalyzing historic appreciation in Al Marjan Island.",
+        stats: [
+          {
+            icon: TrendingUp,
+            value: "+50%",
+            label: "Rental increase",
+            sublabel: "Q1 2023 - Q1 2025",
+          },
+          {
+            icon: DollarSign,
+            value: "$5.1B",
+            label: "Wynn Resort Investment",
+            sublabel: "First casino in the UAE",
+          },
+          {
+            icon: Calendar,
+            value: "Q2 2027",
+            label: "Casino Opening",
+            sublabel: "Peak appreciation moment",
+          },
+        ],
+        urgency: {
+          title: "Why invest NOW?",
+          description:
+            "Sophisticated investors are positioning themselves before the Wynn opens in 2027. Playa Viva delivers in Q2 2026, allowing you to capitalize on the full effect.",
+          countdown: "Delivery: Q2 2026 • Wynn opening: Q2 2027",
+        },
       },
       features: {
         title: "Exclusive Features",
@@ -209,15 +342,59 @@ export default function PlayaVivaLanding() {
       },
       investment: {
         title: "Investment Opportunity",
-        subtitle: "An investment that transcends time",
+        subtitle: "Real yields driven by the Wynn Effect",
         description:
-          "Playa Viva represents a unique investment opportunity in one of the most promising destinations in the Persian Gulf. With flexible financing plan of 1% monthly payment and scheduled delivery for 2026, we guarantee maximum return on your investment.",
-        benefits: [
-          "Guaranteed 8% annual rental income",
-          "Early cancellation option available",
-          "Professional management included",
-          "15% annual appreciation potential",
+          "Playa Viva represents a unique investment opportunity in Al Marjan Island, the epicenter of Ras Al Khaimah's real estate transformation. With a flexible 1% monthly financing plan and Q2 2026 delivery, position yourself before the Wynn opening.",
+        stats: [
+          {
+            icon: TrendingUp,
+            value: "7-8%",
+            label: "Gross rental yields",
+            description: "Current yields in Al Marjan Island",
+          },
+          {
+            icon: TrendingUp,
+            value: "+50%",
+            label: "Rental increase",
+            description: "Between Q1 2023 and Q1 2025",
+          },
+          {
+            icon: Award,
+            value: "Q2 2026",
+            label: "Project delivery",
+            description: "12 months before Wynn opening",
+          },
+          {
+            icon: DollarSign,
+            value: "1%",
+            label: "Monthly payment for 5 years",
+            description: "Flexible financing plan",
+          },
         ],
+        benefits: [
+          "7-8% gross rental yields",
+          "Proximity to Wynn Resort ($5.1B)",
+          "Fully furnished delivery with Smart Home",
+          "Post-casino opening appreciation potential",
+        ],
+      },
+      leadForm: {
+        title: "Exclusive Investment Dossier",
+        subtitle: "Complete financial analysis and Wynn Effect projections",
+        description:
+          "Access detailed investment analysis, including profitability projections, floor plans, technical specifications, and the financial impact of Wynn Resort on Al Marjan Island.",
+        features: [
+          "2026-2030 profitability projections",
+          "Wynn Effect analysis on rental prices",
+          "High-resolution floor plans and renders",
+          "Detailed payment plan and financing options",
+        ],
+        form: {
+          namePlaceholder: "Full name",
+          emailPlaceholder: "Email",
+          ctaButton: "Download Exclusive Dossier",
+          privacy: "Your data is protected. We don't share personal information.",
+        },
       },
       location: {
         title: "Al Marjan Island",
@@ -232,10 +409,18 @@ export default function PlayaVivaLanding() {
   const priceString = language === "es" ? "170.000€" : "£150,000";
   const pricePrefix = language === "es" ? "Desde" : "Starting from";
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setShowMenu(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-cream-light">
       {/* Language Toggle */}
-      <div className="fixed top-6 right-6 z-9999">
+      <div className="fixed top-6 right-6 z-[100]">
         <Button
           variant="outline"
           size="sm"
@@ -246,6 +431,114 @@ export default function PlayaVivaLanding() {
           {language === "es" ? "EN" : "ES"}
         </Button>
       </div>
+
+      {/* Sticky Navigation Menu */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-brown-dark/95 backdrop-blur-md border-b border-gold-warm/20 shadow-xl">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <span className="text-gold-warm font-arabic text-xl font-bold tracking-wider">
+                PLAYA VIVA
+              </span>
+            </div>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex space-x-8">
+              <button
+                onClick={() => scrollToSection("wynn-effect")}
+                className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium"
+              >
+                {t.menu.wynnEffect}
+              </button>
+              <button
+                onClick={() => scrollToSection("investment")}
+                className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium"
+              >
+                {t.menu.investment}
+              </button>
+              <button
+                onClick={() => scrollToSection("features")}
+                className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium"
+              >
+                {t.menu.features}
+              </button>
+              <button
+                onClick={() => scrollToSection("dossier")}
+                className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium"
+              >
+                {t.menu.dossier}
+              </button>
+              <button
+                onClick={() => scrollToSection("location")}
+                className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium"
+              >
+                {t.menu.location}
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              className="md:hidden text-cream-light hover:text-gold-warm"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {showMenu ? (
+                  <path d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Mobile Menu Dropdown */}
+          {showMenu && (
+            <div className="md:hidden py-4 border-t border-gold-warm/20">
+              <div className="flex flex-col space-y-4">
+                <button
+                  onClick={() => scrollToSection("wynn-effect")}
+                  className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium text-left"
+                >
+                  {t.menu.wynnEffect}
+                </button>
+                <button
+                  onClick={() => scrollToSection("investment")}
+                  className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium text-left"
+                >
+                  {t.menu.investment}
+                </button>
+                <button
+                  onClick={() => scrollToSection("features")}
+                  className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium text-left"
+                >
+                  {t.menu.features}
+                </button>
+                <button
+                  onClick={() => scrollToSection("dossier")}
+                  className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium text-left"
+                >
+                  {t.menu.dossier}
+                </button>
+                <button
+                  onClick={() => scrollToSection("location")}
+                  className="text-cream-light hover:text-gold-warm transition-colors duration-200 text-sm font-medium text-left"
+                >
+                  {t.menu.location}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </nav>
 
       {/* Hero Section */}
       <section className="relative min-h-svh overflow-hidden">
@@ -440,8 +733,140 @@ export default function PlayaVivaLanding() {
         </div>
       </section>
 
+      {/* The Wynn Effect - CRITICAL SECTION */}
+      <section
+        id="wynn-effect"
+        ref={wynnEffectRef}
+        className="relative py-20 md:py-32 bg-gradient-to-br from-brown-dark via-brown-dark to-olive-brown overflow-hidden"
+        style={{
+          opacity: visibleSections.wynnEffect ? 1 : 0,
+          transform: visibleSections.wynnEffect
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, ${`var(--gold-warm)`} 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }} />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Header */}
+          <div className="text-center mb-16 max-w-4xl mx-auto">
+            <div className="inline-block mb-4">
+              <div className="bg-gold-warm/20 border border-gold-warm/40 rounded-full px-6 py-2">
+                <p className="text-gold-warm text-sm font-semibold tracking-widest uppercase">
+                  {language === "es" ? "Oportunidad Histórica" : "Historic Opportunity"}
+                </p>
+              </div>
+            </div>
+            <h2
+              className="text-4xl md:text-6xl font-light text-cream-light mb-6 font-arabic"
+              style={{
+                opacity: visibleSections.wynnEffect ? 1 : 0,
+                transform: visibleSections.wynnEffect
+                  ? "translateY(0px)"
+                  : "translateY(20px)",
+                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s",
+              }}
+            >
+              {t.wynnEffect.title}
+            </h2>
+            <h3
+              className="text-xl md:text-2xl text-gold-warm mb-8"
+              style={{
+                opacity: visibleSections.wynnEffect ? 1 : 0,
+                transform: visibleSections.wynnEffect
+                  ? "translateY(0px)"
+                  : "translateY(20px)",
+                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s",
+              }}
+            >
+              {t.wynnEffect.subtitle}
+            </h3>
+            <p
+              className="text-cream-light/90 text-base md:text-lg leading-relaxed"
+              style={{
+                opacity: visibleSections.wynnEffect ? 1 : 0,
+                transform: visibleSections.wynnEffect
+                  ? "translateY(0px)"
+                  : "translateY(20px)",
+                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
+              }}
+            >
+              {t.wynnEffect.description}
+            </p>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-16 max-w-6xl mx-auto">
+            {t.wynnEffect.stats.map((stat, index) => (
+              <div
+                key={index}
+                className="bg-gradient-to-br from-gold-warm/10 to-gold-warm/5 backdrop-blur-sm border-2 border-gold-warm/30 rounded-2xl p-8 text-center hover:border-gold-warm/60 hover:shadow-2xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-2"
+                style={{
+                  opacity: visibleSections.wynnEffect ? 1 : 0,
+                  transform: visibleSections.wynnEffect
+                    ? "translateY(0px)"
+                    : "translateY(30px)",
+                  transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+                    0.4 + index * 0.1
+                  }s`,
+                }}
+              >
+                <div className="flex justify-center mb-6">
+                  <div className="bg-gold-warm/20 p-4 rounded-full">
+                    <stat.icon className="h-10 w-10 text-gold-warm" />
+                  </div>
+                </div>
+                <div className="text-5xl md:text-6xl font-bold text-gold-warm mb-3">
+                  {stat.value}
+                </div>
+                <h4 className="text-cream-light text-lg md:text-xl font-semibold mb-2">
+                  {stat.label}
+                </h4>
+                <p className="text-cream-light/70 text-sm">
+                  {stat.sublabel}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Urgency Banner */}
+          <div
+            className="max-w-4xl mx-auto bg-gradient-to-r from-gold-warm/20 via-gold-warm/30 to-gold-warm/20 border-2 border-gold-warm rounded-2xl p-8 md:p-12"
+            style={{
+              opacity: visibleSections.wynnEffect ? 1 : 0,
+              transform: visibleSections.wynnEffect
+                ? "translateY(0px)"
+                : "translateY(30px)",
+              transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.7s",
+            }}
+          >
+            <div className="text-center">
+              <h3 className="text-2xl md:text-3xl font-bold text-cream-light mb-4">
+                {t.wynnEffect.urgency.title}
+              </h3>
+              <p className="text-cream-light/90 text-base md:text-lg leading-relaxed mb-6">
+                {t.wynnEffect.urgency.description}
+              </p>
+              <div className="inline-block bg-brown-dark/50 rounded-lg px-6 py-3 border border-gold-warm/40">
+                <p className="text-gold-warm font-semibold text-sm md:text-base tracking-wide">
+                  {t.wynnEffect.urgency.countdown}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
       <section
+        id="features"
         ref={featuresRef}
         className="relative py-24 bg-cream-light"
         style={{
@@ -490,8 +915,9 @@ export default function PlayaVivaLanding() {
 
       {/* Investment */}
       <section
+        id="investment"
         ref={investmentRef}
-        className="relative py-24 bg-brown-dark"
+        className="relative py-24 bg-white"
         style={{
           opacity: visibleSections.investment ? 1 : 0,
           transform: visibleSections.investment
@@ -501,61 +927,99 @@ export default function PlayaVivaLanding() {
         }}
       >
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2
-              className="text-4xl md:text-5xl font-light text-cream-light mb-6"
-              style={{
-                opacity: visibleSections.investment ? 1 : 0,
-                transform: visibleSections.investment
-                  ? "translateY(0px)"
-                  : "translateY(20px)",
-                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-              }}
-            >
-              {t.investment.title}
-            </h2>
-            <h3
-              className="text-2xl text-gold-warm mb-8"
-              style={{
-                opacity: visibleSections.investment ? 1 : 0,
-                transform: visibleSections.investment
-                  ? "translateY(0px)"
-                  : "translateY(20px)",
-                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s",
-              }}
-            >
-              {t.investment.subtitle}
-            </h3>
-            <p
-              className="text-cream-light/90 text-lg leading-relaxed mb-12"
-              style={{
-                opacity: visibleSections.investment ? 1 : 0,
-                transform: visibleSections.investment
-                  ? "translateY(0px)"
-                  : "translateY(20px)",
-                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s",
-              }}
-            >
-              {t.investment.description}
-            </p>
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-16">
+              <h2
+                className="text-4xl md:text-5xl font-light text-brown-dark mb-6"
+                style={{
+                  opacity: visibleSections.investment ? 1 : 0,
+                  transform: visibleSections.investment
+                    ? "translateY(0px)"
+                    : "translateY(20px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+              >
+                {t.investment.title}
+              </h2>
+              <h3
+                className="text-2xl text-gold-warm mb-8"
+                style={{
+                  opacity: visibleSections.investment ? 1 : 0,
+                  transform: visibleSections.investment
+                    ? "translateY(0px)"
+                    : "translateY(20px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s",
+                }}
+              >
+                {t.investment.subtitle}
+              </h3>
+              <p
+                className="text-taupe-warm text-base md:text-lg leading-relaxed max-w-3xl mx-auto"
+                style={{
+                  opacity: visibleSections.investment ? 1 : 0,
+                  transform: visibleSections.investment
+                    ? "translateY(0px)"
+                    : "translateY(20px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s",
+                }}
+              >
+                {t.investment.description}
+              </p>
+            </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            {/* Stats Grid */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+              {t.investment.stats.map((stat, index) => (
+                <div
+                  key={index}
+                  className="bg-cream-light border-2 border-gold-warm/30 rounded-2xl p-6 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-2"
+                  style={{
+                    opacity: visibleSections.investment ? 1 : 0,
+                    transform: visibleSections.investment
+                      ? "translateY(0px)"
+                      : "translateY(30px)",
+                    transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+                      0.3 + index * 0.1
+                    }s`,
+                  }}
+                >
+                  <div className="flex justify-center mb-4">
+                    <div className="bg-gold-warm/20 p-3 rounded-full">
+                      <stat.icon className="h-8 w-8 text-gold-warm" />
+                    </div>
+                  </div>
+                  <div className="text-4xl font-bold text-gold-warm mb-2 text-center">
+                    {stat.value}
+                  </div>
+                  <h4 className="text-brown-dark font-semibold mb-2 text-center text-sm md:text-base">
+                    {stat.label}
+                  </h4>
+                  <p className="text-taupe-warm text-xs md:text-sm text-center leading-relaxed">
+                    {stat.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Benefits Grid */}
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               {t.investment.benefits.map((benefit, index) => (
                 <div
                   key={index}
-                  className="flex items-center p-4 bg-gold-warm/10 rounded-xl backdrop-blur-sm border border-gold-warm/20 hover:bg-gold-warm/15 transition-all duration-300"
+                  className="flex items-start p-5 bg-cream-light/50 rounded-xl border border-gold-warm/20 hover:bg-cream-light hover:border-gold-warm/40 transition-all duration-300"
                   style={{
                     opacity: visibleSections.investment ? 1 : 0,
                     transform: visibleSections.investment
                       ? "translateY(0px)"
                       : "translateY(20px)",
                     transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${
-                      0.3 + index * 0.1
+                      0.7 + index * 0.1
                     }s`,
                   }}
                 >
-                  <div className="w-3 h-3 bg-gold-warm rounded-full mr-4 shrink-0" />
-                  <span className="text-cream-light text-left">{benefit}</span>
+                  <CheckCircle2 className="h-6 w-6 text-gold-warm mr-3 shrink-0 mt-0.5" />
+                  <span className="text-brown-dark text-left text-sm md:text-base">{benefit}</span>
                 </div>
               ))}
             </div>
@@ -563,10 +1027,174 @@ export default function PlayaVivaLanding() {
         </div>
       </section>
 
+      {/* Lead Magnet - Exclusive Dossier Form */}
+      <section
+        id="dossier"
+        ref={leadFormRef}
+        className="relative py-20 md:py-32 bg-gradient-to-br from-brown-dark via-olive-brown to-brown-dark overflow-hidden"
+        style={{
+          opacity: visibleSections.leadForm ? 1 : 0,
+          transform: visibleSections.leadForm
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        {/* Decorative Background */}
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(45deg, transparent 48%, var(--gold-warm) 49%, var(--gold-warm) 51%, transparent 52%)`,
+              backgroundSize: "20px 20px",
+            }}
+          />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left Column - Value Proposition */}
+              <div>
+                <div className="inline-block mb-6">
+                  <div className="bg-gold-warm/20 border border-gold-warm/40 rounded-full px-6 py-2">
+                    <p className="text-gold-warm text-sm font-semibold tracking-widest uppercase">
+                      {language === "es" ? "Exclusivo para Inversores" : "Exclusive for Investors"}
+                    </p>
+                  </div>
+                </div>
+                <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-6 font-arabic">
+                  {t.leadForm.title}
+                </h2>
+                <p className="text-xl text-gold-warm mb-8">
+                  {t.leadForm.subtitle}
+                </p>
+                <p className="text-cream-light/90 text-base leading-relaxed mb-8">
+                  {t.leadForm.description}
+                </p>
+
+                {/* Features List */}
+                <div className="space-y-4">
+                  {t.leadForm.features.map((feature, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start"
+                      style={{
+                        opacity: visibleSections.leadForm ? 1 : 0,
+                        transform: visibleSections.leadForm
+                          ? "translateX(0px)"
+                          : "translateX(-20px)",
+                        transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${
+                          0.3 + index * 0.1
+                        }s`,
+                      }}
+                    >
+                      <CheckCircle2 className="h-5 w-5 text-gold-warm mr-3 shrink-0 mt-0.5" />
+                      <span className="text-cream-light text-sm md:text-base">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Column - Form */}
+              <div
+                className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-2xl border-2 border-gold-warm/30"
+                style={{
+                  opacity: visibleSections.leadForm ? 1 : 0,
+                  transform: visibleSections.leadForm
+                    ? "translateY(0px)"
+                    : "translateY(30px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
+                }}
+              >
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    // UTM Parameters capture
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const utmData = {
+                      utm_source: urlParams.get('utm_source') || '',
+                      utm_medium: urlParams.get('utm_medium') || '',
+                      utm_campaign: urlParams.get('utm_campaign') || '',
+                      utm_term: urlParams.get('utm_term') || '',
+                      utm_content: urlParams.get('utm_content') || '',
+                    };
+
+                    // HubSpot Integration Ready
+                    const leadData = {
+                      name: formData.name,
+                      email: formData.email,
+                      ...utmData,
+                      timestamp: new Date().toISOString(),
+                      language: language,
+                      page: 'Playa Viva Landing',
+                    };
+
+                    console.log('Lead captured:', leadData);
+                    // TODO: Send to HubSpot API
+                    // Example: fetch('/api/hubspot/submit', { method: 'POST', body: JSON.stringify(leadData) })
+
+                    alert(language === "es"
+                      ? "¡Gracias! El dossier se enviará a su email."
+                      : "Thank you! The dossier will be sent to your email.");
+                  }}
+                  className="space-y-6"
+                >
+                  <div>
+                    <label className="block text-brown-dark font-medium mb-2 text-sm">
+                      {t.leadForm.form.namePlaceholder}
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
+                      placeholder={t.leadForm.form.namePlaceholder}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-brown-dark font-medium mb-2 text-sm">
+                      {t.leadForm.form.emailPlaceholder}
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-brown-dark/40" />
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full pl-11 pr-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
+                        placeholder={t.leadForm.form.emailPlaceholder}
+                      />
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-200 text-base md:text-lg"
+                  >
+                    <Download className="mr-2 h-5 w-5" />
+                    {t.leadForm.form.ctaButton}
+                  </Button>
+
+                  <p className="text-taupe-warm text-xs text-center leading-relaxed">
+                    {t.leadForm.form.privacy}
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Location */}
       <section
+        id="location"
         ref={locationRef}
-        className="relative py-24 bg-white"
+        className="relative py-24 bg-cream-light"
         style={{
           opacity: visibleSections.location ? 1 : 0,
           transform: visibleSections.location
