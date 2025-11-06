@@ -229,6 +229,8 @@ export default function PlayaVivaLanding() {
   };
 
   const t = content[language];
+  const priceString = language === "es" ? "170.000€" : "£150,000";
+  const pricePrefix = language === "es" ? "Desde" : "Starting from";
 
   return (
     <div className="min-h-screen bg-cream-light">
@@ -375,8 +377,10 @@ export default function PlayaVivaLanding() {
                     style={{ backgroundColor: "#6E5F46" }} // sólido y opaco garantizado
                   >
                     <div className="space-y-2 sm:space-y-3 text-center">
-                      <div className="text-gold-warm text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
-                        {t.hero.price}
+                      <div className="text-gold-warm text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold whitespace-nowrap [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
+                        {pricePrefix}
+                        {"\u00A0"}
+                        {priceString}
                       </div>
                       <div className="text-cream-light text-sm sm:text-base md:text-lg font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)]">
                         {t.hero.payment}
