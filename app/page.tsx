@@ -226,15 +226,16 @@ export default function PlayaVivaLanding() {
     <div className="min-h-screen bg-cream-light">
       {/* Language Toggle - Fixed positioning */}
       <div className="fixed top-6 right-6 z-9999">
+        {" "}
         <Button
           variant="outline"
           size="sm"
           onClick={() => setLanguage(language === "es" ? "en" : "es")}
           className="bg-white/95 backdrop-blur-sm border-gold-warm/30 hover:bg-cream-light text-brown-dark shadow-lg"
         >
-          <Globe className="mr-2 h-4 w-4" />
-          {language === "es" ? "EN" : "ES"}
-        </Button>
+          {" "}
+          <Globe className="mr-2 h-4 w-4" /> {language === "es" ? "EN" : "ES"}{" "}
+        </Button>{" "}
       </div>
 
       {/* Hero Section - Full viewport height */}
@@ -281,15 +282,15 @@ export default function PlayaVivaLanding() {
         {/* Hero Content */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
           <div className="container max-w-6xl mx-auto">
-            <div className="flex flex-col items-center justify-center text-center space-y-6 mt-4">
+            <div className="flex flex-col items-center justify-center text-center space-y-5 mt-0">
               {/* Logo - Slightly higher and compact */}
               <div
                 className="transition-all duration-1000 ease-out"
                 style={{
                   opacity: animationStates.logo ? 1 : 0,
                   transform: animationStates.logo
-                    ? "translateY(50px) scale(1.1)"
-                    : "translateY(70px) scale(1.0)",
+                    ? "translateY(40px) scale(1.1)"
+                    : "translateY(60px) scale(1.0)",
                 }}
               >
                 <div className="flex justify-center">
@@ -349,11 +350,11 @@ export default function PlayaVivaLanding() {
                   opacity: animationStates.priceBox ? 1 : 0,
                   transform: animationStates.priceBox
                     ? "translateY(0px)"
-                    : "translateY(40px)",
+                    : "translateY(30px)",
                 }}
               >
                 <div className="relative">
-                  <div className="bg-linear-to-br from-olive-dark via-brown-dark to-olive-brown backdrop-blur-sm border border-gold-warm/40 rounded-2xl p-5 sm:p-6 shadow-xl">
+                  <div className="bg-linear-to-br from-olive-dark via-brown-dark to-olive-brown border-2 border-brown-dark/70 rounded-2xl p-5 sm:p-6 shadow-2xl">
                     <div className="space-y-2 sm:space-y-3 text-center">
                       <div className="text-gold-warm text-3xl sm:text-4xl md:text-5xl font-bold [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
                         {t.hero.price}
@@ -361,7 +362,7 @@ export default function PlayaVivaLanding() {
                       <div className="text-cream-light text-base sm:text-lg md:text-xl font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)]">
                         {t.hero.payment}
                       </div>
-                      <div className="text-cream-light/90 text-sm sm:text-base [text-shadow:1px_1px_2px_rgba(0,0,0,0.7)]">
+                      <div className="text-cream-light text-sm sm:text-base font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.85)]">
                         {t.hero.handover}
                       </div>
                     </div>
@@ -380,18 +381,21 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="flex sm:flex-row gap-4 justify-center items-center">
+                  {" "}
                   <Button
                     size="lg"
-                    className="bg-gold-warm text-brown-dark font-semibold px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/60 shadow-lg transition-all duration-200 hover:bg-gold-warm/90 hover:-translate-y-0.5 hover:shadow-xl min-w-[220px]"
+                    className="bg-gold-warm text-brown-dark font-semibold px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/60 shadow-lg transition-all duration-200 hover:bg-gold-warm/90 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(0,0,0,0.35)] w-60"
                   >
-                    {t.hero.cta1}
-                  </Button>
+                    {" "}
+                    {t.hero.cta1}{" "}
+                  </Button>{" "}
                   <Button
                     size="lg"
-                    className="bg-gold-warm text-brown-dark font-semibold px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/60 shadow-lg transition-all duration-200 hover:bg-gold-warm/90 hover:-translate-y-0.5 hover:shadow-xl min-w-[220px]"
+                    className="bg-gold-warm text-brown-dark font-semibold px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/60 shadow-lg transition-all duration-200 hover:bg-gold-warm/90 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(0,0,0,0.35)] w-60"
                   >
-                    {t.hero.cta2}
-                  </Button>
+                    {" "}
+                    {t.hero.cta2}{" "}
+                  </Button>{" "}
                 </div>
                 {/* Scroll Indicator positioned precisely below and centered */}
                 <div
