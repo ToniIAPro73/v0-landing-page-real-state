@@ -23,62 +23,68 @@ export default function PlayaVivaLanding() {
     footer: false,
   });
 
-  const featuresRef = useRef<HTMLDivElement>(null);
-  const investmentRef = useRef<HTMLDivElement>(null);
-  const locationRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLDivElement>(null);
+  // Fit hero to viewport height (especially for mobile landscape)
+  const heroStackRef = useRef<HTMLDivElement>(null);
+  const [heroScale, setHeroScale] = useState(1);
 
-  // Automatic animation sequence on load
+  const fitHeroToViewport = () => {
+    const el = heroStackRef.current;
+    if (!el) return;
+    const available = window.innerHeight - 24;
+    const rect = el.getBoundingClientRect();
+    const scale = Math.min(1, available / rect.height);
+    setHeroScale(scale > 0 ? scale : 1);
+  };
+
   useEffect(() => {
     const startAnimationSequence = () => {
-      // Background image appears immediately
       setAnimationStates((prev) => ({ ...prev, backgroundImage: true }));
-
-      // Logo appears after 0.5 seconds
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, logo: true }));
       }, 500);
-
-      // Logo blur effect starts after logo appears
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, logoBlur: false }));
       }, 1200);
-
-      // Subtitle appears after 1 second
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, subtitle: true }));
       }, 1000);
-
-      // Description appears after 1.5 seconds
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, description: true }));
       }, 1500);
-
-      // Price box appears after 2 seconds
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, priceBox: true }));
       }, 2000);
-
-      // CTA buttons appear after 2.5 seconds
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, ctaButtons: true }));
       }, 2500);
-
-      // Scroll indicator appears after 3 seconds
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, scrollIndicator: true }));
       }, 3000);
     };
-
-    // Start animation sequence when component mounts
     startAnimationSequence();
   }, []);
 
   useEffect(() => {
+    fitHeroToViewport();
+  }, []);
+  useEffect(() => {
+    const onResize = () => fitHeroToViewport();
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+    };
+  }, []);
+  useEffect(() => {
+    if (animationStates.ctaButtons) {
+      setTimeout(() => fitHeroToViewport(), 0);
+    }
+  }, [animationStates.ctaButtons]);
+
+  useEffect(() => {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
-
-      // Check section visibility
       const checkSectionVisibility = (
         ref: React.RefObject<HTMLDivElement | null>,
         sectionKey: keyof typeof visibleSections
@@ -86,35 +92,37 @@ export default function PlayaVivaLanding() {
         if (ref.current) {
           const rect = ref.current.getBoundingClientRect();
           const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-
           setVisibleSections((prev) => ({
             ...prev,
-            [sectionKey]: isVisible || currentScroll > 300, // Show after scrolling past hero
+            [sectionKey]: isVisible || currentScroll > 300,
           }));
         }
       };
-
       checkSectionVisibility(featuresRef, "features");
       checkSectionVisibility(investmentRef, "investment");
       checkSectionVisibility(locationRef, "location");
       checkSectionVisibility(footerRef, "footer");
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const investmentRef = useRef<HTMLDivElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
 
   const content = {
     es: {
       hero: {
         title: "Playa Viva",
-        subtitle: "Al Marjan Island, Ras Al Khaimah",
+        subtitle: "AL MARJAN ISLAND, RAS AL KHAIMAH",
         description:
           "Un santuario exclusivo frente al mar diseñado para la vida de lujo moderna",
-        price: "Desde €150,000",
+        price: "Desde €170.000",
         payment: "Pague solo 1% mensual durante 5 años",
         handover: "Entrega Junio 2026",
-        cta1: "Descargar Brochure",
+        cta1: "Descargar Dossier",
         cta2: "Reservar Ahora",
       },
       features: {
@@ -165,13 +173,13 @@ export default function PlayaVivaLanding() {
     en: {
       hero: {
         title: "Playa Viva",
-        subtitle: "Al Marjan Island, Ras Al Khaimah",
+        subtitle: "AL MARJAN ISLAND, RAS AL KHAIMAH",
         description:
           "An exclusive beachfront sanctuary designed for modern luxury living",
-        price: "Starting from €150,000",
+        price: "Starting from €170.000",
         payment: "Pay Just 1% Per Month for 5 Years",
         handover: "Handover June 2026",
-        cta1: "Download Brochure",
+        cta1: "Download Dossier",
         cta2: "Book Now",
       },
       features: {
@@ -224,23 +232,22 @@ export default function PlayaVivaLanding() {
 
   return (
     <div className="min-h-screen bg-cream-light">
-      {/* Language Toggle - Fixed positioning */}
+      {/* Language Toggle */}
       <div className="fixed top-6 right-6 z-9999">
-        {" "}
         <Button
           variant="outline"
           size="sm"
           onClick={() => setLanguage(language === "es" ? "en" : "es")}
           className="bg-white/95 backdrop-blur-sm border-gold-warm/30 hover:bg-cream-light text-brown-dark shadow-lg"
         >
-          {" "}
-          <Globe className="mr-2 h-4 w-4" /> {language === "es" ? "EN" : "ES"}{" "}
-        </Button>{" "}
+          <Globe className="mr-2 h-4 w-4" />
+          {language === "es" ? "EN" : "ES"}
+        </Button>
       </div>
 
-      {/* Hero Section - Full viewport height */}
-      <section className="relative h-screen overflow-hidden">
-        {/* Background Image */}
+      {/* Hero Section */}
+      <section className="relative min-h-svh overflow-hidden">
+        {/* Background */}
         <div
           className="absolute inset-0 z-0 transition-all duration-700 ease-out"
           style={{
@@ -263,41 +270,42 @@ export default function PlayaVivaLanding() {
             decoding="sync"
             crossOrigin="anonymous"
             onError={(e) => {
-              console.log("Primary background image failed, trying fallback");
               const target = e.target as HTMLImageElement;
               target.src = "/fixed-hero-background.png";
             }}
-            onLoad={() => {
-              console.log("Background image loaded successfully");
-            }}
           />
-
-          {/* Subtle overlay */}
           <div
             className="absolute inset-0 bg-linear-to-b from-transparent via-black/10 to-black/30"
             style={{ opacity: animationStates.backgroundImage ? 0.2 : 0 }}
           />
         </div>
 
-        {/* Hero Content */}
+        {/* Content */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
-          <div className="container max-w-6xl mx-auto">
+          <div
+            ref={heroStackRef}
+            className="container max-w-6xl mx-auto"
+            style={{
+              transform: heroScale < 1 ? `scale(${heroScale})` : undefined,
+              transformOrigin: "top center",
+            }}
+          >
             <div className="flex flex-col items-center justify-center text-center space-y-5 mt-0">
-              {/* Logo - Slightly higher and compact */}
+              {/* Logo */}
               <div
                 className="transition-all duration-1000 ease-out"
                 style={{
                   opacity: animationStates.logo ? 1 : 0,
                   transform: animationStates.logo
-                    ? "translateY(40px) scale(1.1)"
-                    : "translateY(60px) scale(1.0)",
+                    ? "translateY(30px) scale(1.1)"
+                    : "translateY(50px) scale(1.0)",
                 }}
               >
                 <div className="flex justify-center">
                   <img
                     src="/logo-playa-viva.png"
                     alt="Playa Viva Logo"
-                    className="w-auto h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110"
+                    className="w-auto h-28 sm:h-40 md:h-48 lg:h-56 xl:h-64 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110"
                     style={{
                       filter: `brightness(110%) contrast(110%) ${
                         animationStates.logoBlur ? "blur(4px)" : "blur(0px)"
@@ -308,7 +316,7 @@ export default function PlayaVivaLanding() {
                 </div>
               </div>
 
-              {/* Subtitle - Arabic elegant with backdrop for legibility */}
+              {/* Subtitle pill: stronger background for readability + gold halo */}
               <div
                 className="transition-all duration-700 ease-out"
                 style={{
@@ -318,8 +326,8 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <div className="inline-block bg-black/35 backdrop-blur-sm rounded-lg px-4 py-2 border border-gold-warm/30">
-                  <p className="font-arabic text-gold-warm text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-semibold tracking-[0.06em] uppercase [text-shadow:0_1px_6px_rgba(0,0,0,0.45)]">
+                <div className="inline-block bg-black/65 sm:bg-black/55 rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 border border-gold-warm/60 ring-2 ring-gold-warm/75 shadow-[0_0_40px_rgba(162,144,96,0.7)]">
+                  <p className="font-arabic text-gold-warm text-xl sm:text-2xl md:text-3xl lg:text-[2.4rem] font-semibold tracking-[0.04em] sm:tracking-[0.06em] uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.65)]">
                     {t.hero.subtitle}
                   </p>
                 </div>
@@ -335,15 +343,23 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <div className="relative max-w-3xl mx-auto">
-                  <div className="absolute inset-0 bg-black/35 blur-[3px] rounded-lg" />
-                  <p className="relative text-cream-light text-lg sm:text-xl md:text-2xl lg:text-[1.6rem] leading-relaxed font-light px-4 [text-shadow:0_1px_6px_rgba(0,0,0,0.45)]">
+                <div className="relative max-w-[94vw] sm:max-w-3xl mx-auto">
+                  <div className="absolute inset-0 bg-black/40 rounded-lg" />
+                  <p
+                    className="relative text-[#FFFFFF] text-[clamp(0.9rem,3.9vw,1.3rem)] font-medium leading-snug px-3 sm:px-4 tracking-[0.01em] sm:whitespace-nowrap"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2, // en móviles: máximo 2 líneas
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
                     {t.hero.description}
                   </p>
                 </div>
               </div>
 
-              {/* Price Card - Dark brown gradient background */}
+              {/* Price Card: solid background enforced + stronger gold halo on hover */}
               <div
                 className="transition-all duration-700 ease-out"
                 style={{
@@ -354,15 +370,18 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="relative">
-                  <div className="bg-linear-to-br from-olive-dark via-brown-dark to-olive-brown border-2 border-brown-dark/70 rounded-2xl p-5 sm:p-6 shadow-2xl">
+                  <div
+                    className="rounded-2xl p-5 sm:p-6 shadow-2xl max-w-[90vw] sm:max-w-160 mx-auto transition-all duration-200 border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 hover:-translate-y-[3px] hover:ring-gold-warm/85 hover:shadow-[0_24px_52px_rgba(0,0,0,0.6),0_0_56px_rgba(162,144,96,0.7)]"
+                    style={{ backgroundColor: "#6E5F46" }} // sólido y opaco garantizado
+                  >
                     <div className="space-y-2 sm:space-y-3 text-center">
-                      <div className="text-gold-warm text-3xl sm:text-4xl md:text-5xl font-bold [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
+                      <div className="text-gold-warm text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
                         {t.hero.price}
                       </div>
-                      <div className="text-cream-light text-base sm:text-lg md:text-xl font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)]">
+                      <div className="text-cream-light text-sm sm:text-base md:text-lg font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)]">
                         {t.hero.payment}
                       </div>
-                      <div className="text-cream-light text-sm sm:text-base font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.85)]">
+                      <div className="text-cream-light text-xs sm:text-sm md:text-base font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.85)]">
                         {t.hero.handover}
                       </div>
                     </div>
@@ -370,9 +389,9 @@ export default function PlayaVivaLanding() {
                 </div>
               </div>
 
-              {/* CTA Buttons + Scroll Indicator (below and centered) */}
+              {/* CTA Buttons: crisper text + more pronounced hover */}
               <div
-                className="flex flex-col gap-4 justify-center items-center"
+                className="transition-all duration-700 ease-out"
                 style={{
                   opacity: animationStates.ctaButtons ? 1 : 0,
                   transform: animationStates.ctaButtons
@@ -380,46 +399,44 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <div className="flex sm:flex-row gap-4 justify-center items-center">
-                  {" "}
-                  <Button
-                    size="lg"
-                    className="bg-gold-warm text-brown-dark font-semibold px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/60 shadow-lg transition-all duration-200 hover:bg-gold-warm/90 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(0,0,0,0.35)] w-60"
+                <div className="flex flex-col gap-3 items-center">
+                  <div className="flex flex-col w-full max-w-[560px] gap-3 sm:flex-row sm:gap-4">
+                    <Button
+                      size="lg"
+                      className="w-full sm:w-60 bg-gold-warm text-brown-dark font-semibold antialiased tracking-[0.01em] px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 shadow-lg transition-all duration-200 hover:bg-gold-warm/70 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(0,0,0,0.55),0_0_48px_rgba(162,144,96,0.65)] hover:ring-gold-warm/85"
+                    >
+                      {t.hero.cta1}
+                    </Button>
+                    <Button
+                      size="lg"
+                      className="w-full sm:w-60 bg-gold-warm text-brown-dark font-semibold antialiased tracking-[0.01em] px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 shadow-lg transition-all duration-200 hover:bg-gold-warm/70 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(0,0,0,0.55),0_0_48px_rgba(162,144,96,0.65)] hover:ring-gold-warm/85"
+                    >
+                      {t.hero.cta2}
+                    </Button>
+                  </div>
+
+                  {/* Scroll Indicator (sm+) */}
+                  <div
+                    className="mt-2 hidden sm:flex justify-center pointer-events-none animate-bounce"
+                    style={{
+                      opacity: animationStates.scrollIndicator ? 1 : 0,
+                      transform: animationStates.scrollIndicator
+                        ? "translateY(0px)"
+                        : "translateY(20px)",
+                    }}
                   >
-                    {" "}
-                    {t.hero.cta1}{" "}
-                  </Button>{" "}
-                  <Button
-                    size="lg"
-                    className="bg-gold-warm text-brown-dark font-semibold px-10 py-4 text-lg rounded-xl border-2 border-brown-dark/60 shadow-lg transition-all duration-200 hover:bg-gold-warm/90 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(0,0,0,0.35)] w-60"
-                  >
-                    {" "}
-                    {t.hero.cta2}{" "}
-                  </Button>{" "}
-                </div>
-                {/* Scroll Indicator positioned precisely below and centered */}
-                <div
-                  className="mt-3 flex justify-center pointer-events-none animate-bounce"
-                  style={{
-                    opacity: animationStates.scrollIndicator ? 1 : 0,
-                    transform: animationStates.scrollIndicator
-                      ? "translateY(0px)"
-                      : "translateY(20px)",
-                  }}
-                >
-                  <div className="w-6 h-10 border-2 border-yellow-400/70 rounded-full flex items-start justify-center p-2">
-                    <div className="w-1.5 h-3 bg-yellow-400/80 rounded-full animate-pulse" />
+                    <div className="w-6 h-10 border-2 border-yellow-400/70 rounded-full flex items-start justify-center p-2">
+                      <div className="w-1.5 h-3 bg-yellow-400/80 rounded-full animate-pulse" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Removed absolute Scroll Indicator to prevent overlap */}
       </section>
 
-      {/* Features Section */}
+      {/* Features */}
       <section
         ref={featuresRef}
         className="relative py-24 bg-cream-light"
@@ -437,7 +454,6 @@ export default function PlayaVivaLanding() {
               {t.features.title}
             </h2>
           </div>
-
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {t.features.items.map((item, index) => (
               <div
@@ -468,7 +484,7 @@ export default function PlayaVivaLanding() {
         </div>
       </section>
 
-      {/* Invesment Section */}
+      {/* Investment */}
       <section
         ref={investmentRef}
         className="relative py-24 bg-brown-dark"
@@ -543,7 +559,7 @@ export default function PlayaVivaLanding() {
         </div>
       </section>
 
-      {/* Location Section */}
+      {/* Location */}
       <section
         ref={locationRef}
         className="relative py-24 bg-white"
