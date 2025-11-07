@@ -225,7 +225,8 @@ body {
 }
 
 /* Fix for mobile landscape - prevent menu overlap with Playa Viva logo */
-@media (max-height: 500px) and (max-width: 768px) {
+/* iPhone 12 Pro landscape: 844x390px */
+@media (max-height: 500px) and (max-width: 900px) {
   .hero-section {
     padding-top: 6.5rem !important;
   }
