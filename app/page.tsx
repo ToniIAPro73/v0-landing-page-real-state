@@ -711,7 +711,7 @@ export default function PlayaVivaLanding() {
                     className="bg-gold-warm text-brown-dark font-bold antialiased tracking-wide px-10 py-4 text-base sm:text-lg rounded-xl border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 shadow-2xl transition-all duration-200 hover:bg-gold-warm/80 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(0,0,0,0.55),0_0_48px_rgba(162,144,96,0.65)] hover:ring-gold-warm/85 hover:scale-105"
                   >
                     <span className="flex items-center gap-3">
-                      <span className="text-2xl">⬇️</span>
+                      <Download className="h-5 w-5" />
                       <span>{language === "es" ? "Dossier Exclusivo" : "Exclusive Dossier"}</span>
                     </span>
                   </Button>
