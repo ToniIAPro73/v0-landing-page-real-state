@@ -558,7 +558,7 @@ export default function PlayaVivaLanding() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-svh overflow-hidden pt-14 md:pt-0">
+      <section className="hero-section relative min-h-svh overflow-hidden pt-14 md:pt-0">
         {/* Background */}
         <div
           className="absolute inset-0 z-0 transition-all duration-700 ease-out"

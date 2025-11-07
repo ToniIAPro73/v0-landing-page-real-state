@@ -223,3 +223,10 @@ body {
 .bg-olive-brown {
   background-color: var(--olive-brown);
 }
+
+/* Fix for mobile landscape - prevent menu overlap with Playa Viva logo */
+@media (max-height: 500px) and (max-width: 768px) {
+  .hero-section {
+    padding-top: 5rem !important;
+  }
+}
