@@ -1151,7 +1151,7 @@ export default function PlayaVivaLanding() {
           {activeGalleryTab === "sitios" && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
               {[
-                { src: "/assets/imagenes/composicion%20fondo%20transparente.png", span: "md:col-span-2 md:row-span-2" },
+                { src: "/assets/imagenes/Collage_sitios_interes.png", span: "md:col-span-2 md:row-span-2" },
                 { src: "/assets/imagenes/composicion_casino_transparente.png", span: "" },
                 { src: "/assets/imagenes/Fondo%20Dubai.jpeg", span: "" },
                 { src: "/assets/imagenes/wynn.jpg", span: "md:col-span-2" },
