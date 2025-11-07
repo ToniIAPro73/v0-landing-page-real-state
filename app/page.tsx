@@ -145,9 +145,9 @@ export default function PlayaVivaLanding() {
         wynnEffect: "El Efecto Wynn",
         investment: "Inversión",
         features: "Características",
+        gallery: "Galería",
         dossier: "Dossier",
         location: "Ubicación",
-        contact: "Contacto",
       },
       wynnEffect: {
         title: "El Efecto Wynn",
@@ -340,9 +340,9 @@ export default function PlayaVivaLanding() {
         wynnEffect: "The Wynn Effect",
         investment: "Investment",
         features: "Features",
+        gallery: "Gallery",
         dossier: "Dossier",
         location: "Location",
-        contact: "Contact",
       },
       wynnEffect: {
         title: "The Wynn Effect",
@@ -562,31 +562,37 @@ export default function PlayaVivaLanding() {
             <div className="hidden md:flex items-center space-x-1 flex-1 justify-center">
               <button
                 onClick={() => scrollToSection("wynn-effect")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
               >
                 {t.menu.wynnEffect}
               </button>
               <button
                 onClick={() => scrollToSection("investment")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
               >
                 {t.menu.investment}
               </button>
               <button
                 onClick={() => scrollToSection("features")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
               >
                 {t.menu.features}
               </button>
               <button
+                onClick={() => scrollToSection("gallery")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
+              >
+                {t.menu.gallery}
+              </button>
+              <button
                 onClick={() => scrollToSection("dossier")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
               >
                 {t.menu.dossier}
               </button>
               <button
                 onClick={() => scrollToSection("location")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
               >
                 {t.menu.location}
               </button>
@@ -646,6 +652,12 @@ export default function PlayaVivaLanding() {
                   className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal text-left py-2"
                 >
                   {t.menu.features}
+                </button>
+                <button
+                  onClick={() => scrollToSection("gallery")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal text-left py-2"
+                >
+                  {t.menu.gallery}
                 </button>
                 <button
                   onClick={() => scrollToSection("dossier")}
@@ -927,7 +939,7 @@ export default function PlayaVivaLanding() {
             {t.wynnEffect.stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-br from-gold-warm/25 to-gold-warm/15 backdrop-blur-sm border-2 border-gold-warm/70 rounded-2xl p-8 text-center shadow-lg shadow-gold-warm/20 hover:border-gold-warm hover:shadow-2xl hover:shadow-gold-warm/40 transition-all duration-300 hover:-translate-y-2"
+                className="bg-white border-2 border-gold-warm/40 rounded-2xl p-8 text-center shadow-xl hover:border-gold-warm hover:shadow-2xl hover:shadow-gold-warm/30 transition-all duration-300 hover:-translate-y-2"
                 style={{
                   opacity: visibleSections.wynnEffect ? 1 : 0,
                   transform: visibleSections.wynnEffect
@@ -946,10 +958,10 @@ export default function PlayaVivaLanding() {
                 <div className="text-5xl md:text-6xl font-bold text-gold-warm mb-3">
                   {stat.value}
                 </div>
-                <h4 className="text-cream-light text-lg md:text-xl font-semibold mb-2">
+                <h4 className="text-brown-dark text-lg md:text-xl font-semibold mb-2">
                   {stat.label}
                 </h4>
-                <p className="text-cream-light/70 text-sm">
+                <p className="text-taupe-warm text-sm">
                   {stat.sublabel}
                 </p>
               </div>
@@ -1035,6 +1047,7 @@ export default function PlayaVivaLanding() {
 
       {/* Gallery */}
       <section
+        id="gallery"
         ref={galleryRef}
         className="relative py-24 bg-white"
         style={{
@@ -1061,14 +1074,14 @@ export default function PlayaVivaLanding() {
           {/* Gallery Grid - Masonry Style */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
             {[
-              { src: "/assets/imagenes/foto galeria 1.jpg", span: "md:col-span-2 md:row-span-2" },
-              { src: "/assets/imagenes/foto galeria 5.jpg", span: "" },
-              { src: "/assets/imagenes/foto galeria 6.jpg", span: "" },
-              { src: "/assets/imagenes/foto galeria 7.jpg", span: "" },
+              { src: "/assets/imagenes/foto%20galeria%201.jpg", span: "md:col-span-2 md:row-span-2" },
+              { src: "/assets/imagenes/foto%20galeria%205.jpg", span: "" },
+              { src: "/assets/imagenes/foto%20galeria%206.jpg", span: "" },
+              { src: "/assets/imagenes/foto%20galeria%207.jpg", span: "" },
               { src: "/assets/imagenes/view1.webp", span: "md:col-span-2" },
               { src: "/assets/imagenes/view2.jpg", span: "" },
-              { src: "/assets/imagenes/foto galeria 10.jpg", span: "md:row-span-2" },
-              { src: "/assets/imagenes/Playa Viva complex.jpg", span: "md:col-span-2" },
+              { src: "/assets/imagenes/foto%20galeria%2010.jpg", span: "md:row-span-2" },
+              { src: "/assets/imagenes/Playa%20Viva%20complex.jpg", span: "md:col-span-2" },
               { src: "/assets/imagenes/view3.webp", span: "" },
               { src: "/assets/imagenes/beach.webp", span: "" },
             ].map((image, index) => (
