@@ -223,3 +223,98 @@ body {
 .bg-olive-brown {
   background-color: var(--olive-brown);
 }
+
+/* Fix for mobile landscape - keep hero fully visible */
+/* iPhone 12 Pro landscape: 844x390px */
+@media (max-height: 500px) and (max-width: 900px) {
+  .landing-nav {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .landing-nav__bar {
+    height: 3rem !important;
+  }
+
+  .landing-nav__bar > .flex-shrink-0 span {
+    font-size: 0.78rem !important;
+  }
+
+  .landing-nav__bar button,
+  .landing-nav__bar .bg-gold-warm {
+    font-size: 0.75rem !important;
+    padding-top: 0.3rem !important;
+    padding-bottom: 0.3rem !important;
+  }
+
+  .landing-nav__inner .md\:hidden {
+    padding: 0.25rem;
+  }
+
+  .hero-section {
+    padding-top: 1.85rem !important;
+    padding-bottom: 1rem;
+    min-height: auto;
+  }
+
+  .hero-content {
+    justify-content: flex-start;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .hero-container {
+    transform-origin: top center !important;
+  }
+
+  .hero-stack {
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .hero-stack > * + * {
+    margin-top: 0.6rem !important;
+  }
+
+  .hero-subtitle {
+    padding: 0.3rem 0.8rem;
+  }
+
+  .hero-subtitle p {
+    font-size: clamp(0.85rem, 2.4vw, 1.05rem);
+    letter-spacing: 0.08em;
+  }
+
+  .hero-description p {
+    font-size: 0.9rem;
+    line-height: 1.3;
+    padding: 0.6rem 0.9rem;
+  }
+
+  .hero-price-card {
+    padding: 0.6rem 0.85rem !important;
+  }
+
+  .hero-price-card .hero-price-value {
+    font-size: 1.25rem;
+  }
+
+  .hero-price-card .hero-price-payment,
+  .hero-price-card .hero-price-handover {
+    font-size: 0.7rem;
+  }
+
+  .hero-cta {
+    padding: 0.65rem 2.3rem;
+    font-size: 0.9rem;
+  }
+
+  .hero-scroll-indicator {
+    display: flex !important;
+    margin-top: 0.35rem;
+  }
+
+  .hero-scroll-indicator > div {
+    transform: scale(0.85);
+  }
+}

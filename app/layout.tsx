@@ -10,6 +10,14 @@ export const metadata: Metadata = {
   generator: "v0.app",
   keywords:
     "inversión inmobiliaria Dubai, Al Marjan Island, Playa Viva, propiedades lujo Emiratos, real estate investment",
+  icons: {
+    icon: [
+      { url: "/favicon_playa_viva.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon_playa_viva.png", sizes: "192x192", type: "image/png" },
+    ],
+    shortcut: "/favicon_playa_viva.png",
+    apple: "/favicon_playa_viva.png",
+  },
 };
 
 export default function RootLayout({
