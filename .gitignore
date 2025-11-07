@@ -25,3 +25,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Evitar subir archivos pesados
+*.mp4
+*.mov
+*.avi
+*.zip
+*.psd
+*.ai
