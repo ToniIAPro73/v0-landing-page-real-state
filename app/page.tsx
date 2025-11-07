@@ -22,6 +22,7 @@ export default function PlayaVivaLanding() {
     investment: false,
     features: false,
     gallery: false,
+    apartments: false,
     trust: false,
     leadForm: false,
     location: false,
@@ -30,6 +31,7 @@ export default function PlayaVivaLanding() {
 
   const [showMenu, setShowMenu] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "" });
+  const [activeApartment, setActiveApartment] = useState<"studio" | "oneBed" | "twoBed" | "threeBed">("studio");
 
   // Fit hero to viewport height (especially for mobile landscape)
   const heroStackRef = useRef<HTMLDivElement>(null);
@@ -111,6 +113,7 @@ export default function PlayaVivaLanding() {
       checkSectionVisibility(investmentRef, "investment");
       checkSectionVisibility(featuresRef, "features");
       checkSectionVisibility(galleryRef, "gallery");
+      checkSectionVisibility(apartmentsRef, "apartments");
       checkSectionVisibility(trustRef, "trust");
       checkSectionVisibility(leadFormRef, "leadForm");
       checkSectionVisibility(locationRef, "location");
@@ -124,6 +127,7 @@ export default function PlayaVivaLanding() {
   const investmentRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const apartmentsRef = useRef<HTMLDivElement>(null);
   const trustRef = useRef<HTMLDivElement>(null);
   const leadFormRef = useRef<HTMLDivElement>(null);
   const locationRef = useRef<HTMLDivElement>(null);
@@ -147,6 +151,7 @@ export default function PlayaVivaLanding() {
         investment: "Inversión",
         features: "Características",
         gallery: "Galería",
+        apartments: "Apartamentos",
         dossier: "Dossier",
         location: "Ubicación",
       },
@@ -213,7 +218,59 @@ export default function PlayaVivaLanding() {
         subtitle: "Diseño arquitectónico excepcional en Al Marjan Island",
         description: "Explore la elegancia y sofisticación de Playa Viva a través de renders de alta resolución y fotografías del entorno.",
       },
-      trust: {
+      apartments: {
+        title: "Colección de Apartamentos",
+        subtitle: "Espacios diseñados para cada etapa de inversión",
+        description:
+          "Desde estudios boutique hasta áticos de tres dormitorios, cada tipología ofrece vistas al mar, entrega llave en mano y acceso al plan de pago del 1% mensual.",
+        note: "Los precios son estimaciones orientativas basadas en el tipo de cambio vigente y pueden variar sin previo aviso.",
+        tabs: {
+          studio: {
+            label: "Estudio",
+            headline: "Estudios boutique frente al mar",
+            description: "Distribución abierta con cocina integrada, ventanales de piso a techo y balcón privado hacia el Golfo.",
+            highlights: [
+              "Entrega totalmente amueblada con domótica y electrodomésticos premium",
+              "Baño hotelero con acabados de piedra natural",
+              "Ideal para renta corporativa o pied-à-terre en Ras Al Khaimah",
+            ],
+            parking: "Opción de aparcacoches gratuito para residentes",
+          },
+          oneBed: {
+            label: "1 Habitación",
+            headline: "Suite residencial con sala independiente",
+            description: "Salón comedor con cocina lineal, dormitorio en suite y balcón profundo para disfrutar del skyline.",
+            highlights: [
+              "Vestidor cerrado y baño principal con doble lavabo",
+              "Zona de lavandería y almacenamiento oculto",
+              "Elegible para paquete de gestión de rentas llave en mano",
+            ],
+            parking: "1 plaza de parking (aprox. 11.750€)",
+          },
+          twoBed: {
+            label: "2 Habitaciones",
+            headline: "Plantas angulares con vistas duales",
+            description: "Dos dormitorios en suite, cocina con isla y sala envolvente que accede a dos balcones panorámicos.",
+            highlights: [
+              "Dormitorio principal tipo master con lounge privado",
+              "Baño secundario con ventilación natural y tocador doble",
+              "Espacio flexible para despacho o family room",
+            ],
+            parking: "1 plaza de parking incluida",
+          },
+          threeBed: {
+            label: "3 Habitaciones",
+            headline: "Residencias familiares con terraza envolvente",
+            description: "Amplia zona social, cocina cerrada y tres suites con acceso directo a una terraza de más de 25 m².",
+            highlights: [
+              "Habitación principal con baño spa y walk-in closet de 6 metros",
+              "Cuarto de servicio con baño independiente",
+              "Vistas de 180° hacia el mar y el skyline de Wynn Resort",
+            ],
+            parking: "2 plazas de parking incluidas",
+          },
+        },
+      },      trust: {
         title: "Respaldado por Líderes Inmobiliarios",
         subtitle: "Uniestate y partners de confianza",
         description:
@@ -373,6 +430,7 @@ export default function PlayaVivaLanding() {
         investment: "Investment",
         features: "Features",
         gallery: "Gallery",
+        apartments: "Apartments",
         dossier: "Dossier",
         location: "Location",
       },
@@ -437,6 +495,59 @@ export default function PlayaVivaLanding() {
         title: "The Project",
         subtitle: "Exceptional architectural design in Al Marjan Island",
         description: "Explore the elegance and sophistication of Playa Viva through high-resolution renders and environmental photography.",
+      },
+      apartments: {
+        title: "Apartment Collection",
+        subtitle: "Layouts tailored to every investment thesis",
+        description:
+          "From boutique studios to three-bedroom residences, each typology delivers sea views, turnkey interiors, and access to the 1% monthly payment plan.",
+        note: "Prices are indicative estimates based on prevailing FX and may adjust at the time of reservation.",
+        tabs: {
+          studio: {
+            label: "Studio",
+            headline: "Boutique studios facing the sea",
+            description: "Open-plan living with integrated kitchen, floor-to-ceiling glazing, and a private balcony overlooking the Gulf.",
+            highlights: [
+              "Fully furnished delivery with smart-home package and premium appliances",
+              "Hotel-inspired bathroom wrapped in natural stone",
+              "Perfect for corporate leasing or a pied-à-terre in Ras Al Khaimah",
+            ],
+            parking: "Complimentary valet option for residents",
+          },
+          oneBed: {
+            label: "1 Bedroom",
+            headline: "One-bedroom suite with defined living zones",
+            description: "Separate living/dining area, en-suite bedroom, and a deep balcony to capture the skyline.",
+            highlights: [
+              "Walk-in wardrobe plus primary bathroom with double vanity",
+              "Dedicated laundry and concealed storage",
+              "Eligible for turnkey rental management",
+            ],
+            parking: "1 parking space (approx. £10,380)",
+          },
+          twoBed: {
+            label: "2 Bedrooms",
+            headline: "Corner layouts with dual-aspect views",
+            description: "Two en-suite bedrooms, island kitchen, and wraparound living room opening onto twin panoramic balconies.",
+            highlights: [
+              "Primary suite with private lounge corner",
+              "Secondary bath with natural ventilation and twin vanity",
+              "Flexible den for office or family room use",
+            ],
+            parking: "1 parking space included",
+          },
+          threeBed: {
+            label: "3 Bedrooms",
+            headline: "Family residences with sweeping terrace",
+            description: "Expansive great room, closed kitchen, and three suites that spill onto a 25 m² terrace.",
+            highlights: [
+              "Owner's suite with spa bathroom and 6-metre walk-in wardrobe",
+              "Maid's room with dedicated bathroom",
+              "180° views across the sea and Wynn Resort skyline",
+            ],
+            parking: "2 parking spaces included",
+          },
+        },
       },
       trust: {
         title: "Backed by Real Estate Leaders",
@@ -587,6 +698,75 @@ export default function PlayaVivaLanding() {
   const priceString = language === "es" ? "170.000€" : "£150,000";
   const pricePrefix = language === "es" ? "Desde" : "Starting from";
 
+  const apartmentConfigs = {
+    studio: {
+      image: "/assets/imagenes/studio.webp",
+      sizeSqftRange: [300, 462],
+      bedrooms: 0,
+      bathrooms: 1,
+    },
+    oneBed: {
+      image: "/assets/imagenes/1-bedroom.webp",
+      sizeSqftRange: [600, 850],
+      bedrooms: 1,
+      bathrooms: 1,
+    },
+    twoBed: {
+      image: "/assets/imagenes/2-bedroom.webp",
+      sizeSqftRange: [1100, 1200],
+      bedrooms: 2,
+      bathrooms: 1,
+    },
+    threeBed: {
+      image: "/assets/imagenes/3-bedroom.png",
+      sizeSqftRange: [1700, 1800],
+      bedrooms: 3,
+      bathrooms: 2,
+    },
+  } as const;
+
+  const formatSizeRange = (range: [number, number]) => {
+    if (language === "es") {
+      const sqm = range.map((value) => Math.round(value / 10.7639));
+      return `${sqm[0]}-${sqm[1]} m²`;
+    }
+    return `${range[0]}-${range[1]} sq ft`;
+  };
+
+  const formatBedroomValue = (count: number) => {
+    if (count === 0) {
+      return language === "es" ? "Estudio" : "Studio";
+    }
+    const plural = count > 1;
+    return language === "es"
+      ? `${count} ${plural ? "habitaciones" : "habitación"}`
+      : `${count} ${plural ? "bedrooms" : "bedroom"}`;
+  };
+
+  const formatBathroomValue = (count: number) => {
+    const valueString =
+      language === "es"
+        ? count.toString().replace(".", ",")
+        : count.toString();
+    const plural = count > 1;
+    return language === "es"
+      ? `${valueString} ${plural ? "baños" : "baño"}`
+      : `${valueString} ${plural ? "baths" : "bath"}`;
+  };
+
+  const infoLabels = {
+    size: language === "es" ? "Superficie" : "Interior size",
+    price: language === "es" ? "Precio orientativo" : "Price guidance",
+    bedrooms: language === "es" ? "Dormitorios" : "Bedrooms",
+    bathrooms: language === "es" ? "Baños" : "Bathrooms",
+    parking: "Parking",
+  };
+
+  const apartmentCopy = t.apartments.tabs[activeApartment];
+  const activeApartmentConfig = apartmentConfigs[activeApartment];
+  const nameLabel = language === "es" ? "Nombre completo" : "Full name";
+  const emailLabel = "Email";
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -625,37 +805,43 @@ export default function PlayaVivaLanding() {
             <div className="hidden md:flex items-center space-x-1 flex-1 justify-center">
               <button
                 onClick={() => scrollToSection("wynn-effect")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
               >
                 {t.menu.wynnEffect}
               </button>
               <button
                 onClick={() => scrollToSection("investment")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
               >
                 {t.menu.investment}
               </button>
               <button
                 onClick={() => scrollToSection("features")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
               >
                 {t.menu.features}
               </button>
               <button
+                onClick={() => scrollToSection("apartments")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.apartments}
+              </button>
+              <button
                 onClick={() => scrollToSection("gallery")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
               >
                 {t.menu.gallery}
               </button>
               <button
                 onClick={() => scrollToSection("dossier")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
               >
                 {t.menu.dossier}
               </button>
               <button
                 onClick={() => scrollToSection("location")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
               >
                 {t.menu.location}
               </button>
@@ -700,37 +886,43 @@ export default function PlayaVivaLanding() {
               <div className="flex flex-col space-y-3">
                 <button
                   onClick={() => scrollToSection("wynn-effect")}
-                  className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal text-left py-2"
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
                 >
                   {t.menu.wynnEffect}
                 </button>
                 <button
                   onClick={() => scrollToSection("investment")}
-                  className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal text-left py-2"
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
                 >
                   {t.menu.investment}
                 </button>
                 <button
                   onClick={() => scrollToSection("features")}
-                  className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal text-left py-2"
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
                 >
                   {t.menu.features}
                 </button>
                 <button
+                  onClick={() => scrollToSection("apartments")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.apartments}
+                </button>
+                <button
                   onClick={() => scrollToSection("gallery")}
-                  className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal text-left py-2"
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
                 >
                   {t.menu.gallery}
                 </button>
                 <button
                   onClick={() => scrollToSection("dossier")}
-                  className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal text-left py-2"
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
                 >
                   {t.menu.dossier}
                 </button>
                 <button
                   onClick={() => scrollToSection("location")}
-                  className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal text-left py-2"
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
                 >
                   {t.menu.location}
                 </button>
@@ -1251,6 +1443,139 @@ export default function PlayaVivaLanding() {
         </div>
       </section>
 
+      {/* Apartments */}
+      <section
+        id="apartments"
+        ref={apartmentsRef}
+        className="relative py-24 bg-gradient-to-br from-cream-light via-white to-cream-light"
+        style={{
+          opacity: visibleSections.apartments ? 1 : 0,
+          transform: visibleSections.apartments ? "translateY(0px)" : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-5xl font-light text-brown-dark mb-4">
+                {t.apartments.title}
+              </h2>
+              <h3 className="text-xl text-gold-warm mb-4">
+                {t.apartments.subtitle}
+              </h3>
+              <p className="text-taupe-warm text-base md:text-lg max-w-3xl mx-auto">
+                {t.apartments.description}
+              </p>
+            </div>
+
+            <div className="flex justify-center gap-4 mb-12 flex-wrap">
+              {(["studio", "oneBed", "twoBed", "threeBed"] as const).map((key) => (
+                <button
+                  key={key}
+                  onClick={() => setActiveApartment(key)}
+                  className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                    activeApartment === key
+                      ? "bg-gold-warm text-brown-dark shadow-lg"
+                      : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+                  }`}
+                >
+                  {t.apartments.tabs[key].label}
+                </button>
+              ))}
+            </div>
+
+            <div className="space-y-10">
+              <div
+                className="relative max-w-5xl mx-auto rounded-3xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_30px_60px_rgba(0,0,0,0.25)]"
+                style={{
+                  opacity: visibleSections.apartments ? 1 : 0,
+                  transform: visibleSections.apartments ? undefined : "translateY(30px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+              >
+                <img
+                  src={activeApartmentConfig.image}
+                  alt={apartmentCopy.headline}
+                  className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent p-6">
+                  <p className="text-sm text-white uppercase tracking-[0.3em]">
+                    {apartmentCopy.label}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 md:p-10 shadow-2xl border border-brown-dark/10 max-w-5xl mx-auto flex flex-col lg:flex-row gap-10">
+                <div className="flex-1 space-y-4">
+                  <p className="text-xs uppercase tracking-[0.4em] text-brown-dark/60">
+                    {apartmentCopy.label}
+                  </p>
+                  <h3 className="text-2xl md:text-4xl font-light text-brown-dark">
+                    {apartmentCopy.headline}
+                  </h3>
+                  <p className="text-brown-dark/80 text-base md:text-lg">
+                    {apartmentCopy.description}
+                  </p>
+                  <div className="space-y-3 pt-4">
+                    {apartmentCopy.highlights.map((highlight, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="bg-gold-warm/20 rounded-full p-1 mt-0.5">
+                          <CheckCircle2 className="h-4 w-4 text-gold-warm" />
+                        </div>
+                        <p className="text-brown-dark/80 text-sm">{highlight}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="rounded-2xl border border-gold-warm/30 p-4">
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.size}
+                    </p>
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {formatSizeRange(activeApartmentConfig.sizeSqftRange)}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-gold-warm/30 p-4">
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.price}
+                    </p>
+                    <p className="text-sm font-semibold text-brown-dark leading-relaxed">
+                      {t.apartments.note}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-gold-warm/30 p-4">
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.bedrooms}
+                    </p>
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {formatBedroomValue(activeApartmentConfig.bedrooms)}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-gold-warm/30 p-4">
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.bathrooms}
+                    </p>
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {formatBathroomValue(activeApartmentConfig.bathrooms)}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-gold-warm/30 p-4 sm:col-span-2">
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.parking}
+                    </p>
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {apartmentCopy.parking}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Trust & Credibility */}
       <section
         ref={trustRef}
@@ -1676,4 +2001,10 @@ export default function PlayaVivaLanding() {
     </div>
   );
 }
+
+
+
+
+
+
 
