@@ -201,6 +201,60 @@ export default function PlayaVivaLanding() {
           },
         ],
       },
+      gallery: {
+        title: "El Proyecto",
+        subtitle: "Diseño arquitectónico excepcional en Al Marjan Island",
+        description: "Explore la elegancia y sofisticación de Playa Viva a través de renders de alta resolución y fotografías del entorno.",
+      },
+      trust: {
+        title: "Respaldado por Líderes Inmobiliarios",
+        subtitle: "Uniestate y partners de confianza",
+        description: "Comercializado por Uniestate.co.uk con sede en Londres y Dubai, y respaldado por las principales firmas del sector inmobiliario de lujo.",
+        partners: "Partners de confianza",
+      },
+      specifications: {
+        title: "Especificaciones",
+        subtitle: "Unidades diseñadas para el inversor sofisticado",
+        description: "Desde estudios compactos hasta amplios apartamentos de 3 dormitorios, todas las unidades incluyen acabados premium, domótica y entrega totalmente amueblada.",
+        units: [
+          {
+            type: "Studio",
+            size: "37-45 m²",
+            price: "Desde €170,000",
+            features: ["Smart Home", "Totalmente amueblado", "Balcón privado", "Cocina equipada"],
+          },
+          {
+            type: "1 Dormitorio",
+            size: "65-75 m²",
+            price: "Desde €240,000",
+            features: ["Smart Home", "Totalmente amueblado", "Balcón amplio", "Dormitorio principal en-suite"],
+          },
+          {
+            type: "2 Dormitorios",
+            size: "95-110 m²",
+            price: "Desde €350,000",
+            features: ["Smart Home", "Totalmente amueblado", "2 Balcones", "Dormitorios en-suite"],
+          },
+          {
+            type: "3 Dormitorios",
+            size: "135-160 m²",
+            price: "Desde €480,000",
+            features: ["Smart Home", "Totalmente amueblado", "Terraza amplia", "3 Baños completos"],
+          },
+        ],
+      },
+      paymentPlan: {
+        title: "Plan de Pago Flexible",
+        subtitle: "Solo 1% mensual durante 5 años",
+        description: "Un esquema de financiamiento diseñado para inversores internacionales, permitiéndole posicionarse en Al Marjan Island con pagos mensuales mínimos.",
+        timeline: [
+          { stage: "Reserva", amount: "€5,000", description: "Reserva tu unidad" },
+          { stage: "Contrato", amount: "15%", description: "Al firmar contrato" },
+          { stage: "Durante construcción", amount: "1% mensual", description: "60 meses (5 años)" },
+          { stage: "Entrega Q2 2026", amount: "Saldo", description: "Balance al entregar llaves" },
+        ],
+        note: "* Plan sujeto a aprobación. Consulte con nuestro equipo para opciones personalizadas.",
+      },
       investment: {
         title: "Oportunidad de Inversión",
         subtitle: "Rendimientos reales impulsados por el Efecto Wynn",
