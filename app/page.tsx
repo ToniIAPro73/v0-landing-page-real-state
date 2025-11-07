@@ -558,7 +558,7 @@ export default function PlayaVivaLanding() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-svh overflow-hidden pt-14 md:pt-16">
+      <section className="relative min-h-svh overflow-hidden pt-14 md:pt-0">
         {/* Background */}
         <div
           className="absolute inset-0 z-0 transition-all duration-700 ease-out"
@@ -639,7 +639,7 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="inline-block bg-black/65 sm:bg-black/55 rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 border border-gold-warm/60 ring-2 ring-gold-warm/75 shadow-[0_0_40px_rgba(162,144,96,0.7)]">
-                  <p className="font-arabic text-gold-warm text-xl sm:text-2xl md:text-3xl lg:text-[2.4rem] font-semibold tracking-[0.04em] sm:tracking-[0.06em] uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.65)]">
+                  <p className="font-arabic text-gold-warm text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-[0.04em] sm:tracking-[0.06em] uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.65)] sm:whitespace-nowrap">
                     {t.hero.subtitle}
                   </p>
                 </div>
@@ -675,19 +675,19 @@ export default function PlayaVivaLanding() {
               >
                 <div className="relative">
                   <div
-                    className="rounded-2xl p-5 sm:p-6 shadow-2xl max-w-[90vw] sm:max-w-160 mx-auto transition-all duration-200 border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 hover:-translate-y-[3px] hover:ring-gold-warm/85 hover:shadow-[0_24px_52px_rgba(0,0,0,0.6),0_0_56px_rgba(162,144,96,0.7)]"
+                    className="rounded-2xl p-3 sm:p-4 shadow-2xl max-w-[90vw] sm:max-w-160 mx-auto transition-all duration-200 border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 hover:-translate-y-[3px] hover:ring-gold-warm/85 hover:shadow-[0_24px_52px_rgba(0,0,0,0.6),0_0_56px_rgba(162,144,96,0.7)]"
                     style={{ backgroundColor: "#6E5F46" }} // sólido y opaco garantizado
                   >
-                    <div className="space-y-2 sm:space-y-3 text-center">
-                      <div className="text-gold-warm text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold whitespace-nowrap [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
+                    <div className="space-y-1.5 sm:space-y-2 text-center">
+                      <div className="text-gold-warm text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold whitespace-nowrap [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
                         {pricePrefix}
                         {"\u00A0"}
                         {priceString}
                       </div>
-                      <div className="text-cream-light text-sm sm:text-base md:text-lg font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)]">
+                      <div className="text-cream-light text-xs sm:text-sm md:text-base font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)]">
                         {t.hero.payment}
                       </div>
-                      <div className="text-cream-light text-xs sm:text-sm md:text-base font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.85)]">
+                      <div className="text-cream-light text-xs sm:text-xs md:text-sm font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.85)]">
                         {t.hero.handover}
                       </div>
                     </div>
