@@ -1108,31 +1108,15 @@ export default function PlayaVivaLanding() {
 
           {/* Servicios e Instalaciones */}
           {activeGalleryTab === "servicios" && (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
-              {[
-                { src: "/assets/imagenes/building-structure.webp", span: "md:col-span-2 md:row-span-2" },
-                { src: "/assets/imagenes/foto%20galeria%2011.webp", span: "" },
-                { src: "/assets/imagenes/cinema.webp", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%204.jpg", span: "md:row-span-2" },
-                { src: "/assets/imagenes/foto%20galeria%205.jpg", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%206.jpg", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%207.jpg", span: "md:col-span-2" },
-                { src: "/assets/imagenes/foto%20galeria%2010.jpg", span: "" },
-              ].map((image, index) => (
-                <div
-                  key={index}
-                  className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
-                >
-                  <div className="aspect-square">
-                    <img
-                      src={image.src}
-                      alt={`Servicios ${index + 1}`}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-              ))}
+            <div className="max-w-6xl mx-auto">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
+                <img
+                  src="/assets/imagenes/Collage-servicios-instalaciones-triptico-transp.png"
+                  alt="Servicios e Instalaciones - Playa Viva"
+                  className="w-full h-auto"
+                  style={{ backgroundColor: 'white' }}
+                />
+              </div>
             </div>
           )}
 
