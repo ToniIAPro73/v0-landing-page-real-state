@@ -35,7 +35,8 @@ export default function PlayaVivaLanding() {
   const fitHeroToViewport = () => {
     const el = heroStackRef.current;
     if (!el) return;
-    const available = window.innerHeight - 24;
+    const navOffset = window.innerHeight <= 500 ? 80 : 24;
+    const available = window.innerHeight - navOffset;
     const rect = el.getBoundingClientRect();
     const scale = Math.min(1, available / rect.height);
     setHeroScale(scale > 0 ? scale : 1);
@@ -433,9 +434,9 @@ export default function PlayaVivaLanding() {
       </div>
 
       {/* Sticky Navigation Menu - Uniestate UK Style */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-14 md:h-16">
+      <nav className="landing-nav fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm">
+        <div className="landing-nav__inner container mx-auto px-4 md:px-6">
+          <div className="landing-nav__bar flex items-center justify-between h-14 md:h-16">
             {/* Logo Uniestate */}
             <div className="flex-shrink-0">
               <span className="text-brown-dark text-base md:text-lg font-bold tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', letterSpacing: '0.02em' }}>
@@ -593,16 +594,16 @@ export default function PlayaVivaLanding() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
+        <div className="hero-content relative z-10 h-full flex flex-col items-center justify-center px-4">
           <div
             ref={heroStackRef}
-            className="container max-w-6xl mx-auto"
+            className="hero-container container max-w-6xl mx-auto"
             style={{
               transform: heroScale < 1 ? `scale(${heroScale})` : undefined,
               transformOrigin: "top center",
             }}
           >
-            <div className="flex flex-col items-center justify-center text-center space-y-5 mt-0">
+            <div className="hero-stack flex flex-col items-center justify-center text-center space-y-5 mt-0">
               {/* Logo */}
               <div
                 className="transition-all duration-1000 ease-out"
@@ -638,7 +639,7 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <div className="inline-block bg-black/65 sm:bg-black/55 rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 border border-gold-warm/60 ring-2 ring-gold-warm/75 shadow-[0_0_40px_rgba(162,144,96,0.7)]">
+                <div className="hero-subtitle inline-block bg-black/65 sm:bg-black/55 rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 border border-gold-warm/60 ring-2 ring-gold-warm/75 shadow-[0_0_40px_rgba(162,144,96,0.7)]">
                   <p className="font-arabic text-gold-warm text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-[0.04em] sm:tracking-[0.06em] uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.65)] sm:whitespace-nowrap">
                     {t.hero.subtitle}
                   </p>
@@ -655,7 +656,7 @@ export default function PlayaVivaLanding() {
                     : "translateY(30px)",
                 }}
               >
-                <div className="relative max-w-[94vw] sm:max-w-3xl mx-auto px-2">
+                <div className="hero-description relative max-w-[94vw] sm:max-w-3xl mx-auto px-2">
                   <div className="absolute inset-0 bg-black/40 rounded-lg" />
                   <p className="relative text-[#FFFFFF] text-[clamp(0.85rem,3.2vw,1.15rem)] font-medium leading-relaxed px-3 sm:px-6 py-2 sm:py-3 tracking-[0.01em] text-center">
                     {t.hero.description}
@@ -675,19 +676,19 @@ export default function PlayaVivaLanding() {
               >
                 <div className="relative">
                   <div
-                    className="rounded-2xl p-3 sm:p-4 shadow-2xl max-w-[90vw] sm:max-w-160 mx-auto transition-all duration-200 border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 hover:-translate-y-[3px] hover:ring-gold-warm/85 hover:shadow-[0_24px_52px_rgba(0,0,0,0.6),0_0_56px_rgba(162,144,96,0.7)]"
+                    className="hero-price-card rounded-2xl p-3 sm:p-4 shadow-2xl max-w-[90vw] sm:max-w-160 mx-auto transition-all duration-200 border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 hover:-translate-y-[3px] hover:ring-gold-warm/85 hover:shadow-[0_24px_52px_rgba(0,0,0,0.6),0_0_56px_rgba(162,144,96,0.7)]"
                     style={{ backgroundColor: "#6E5F46" }} // sólido y opaco garantizado
                   >
                     <div className="space-y-1.5 sm:space-y-2 text-center">
-                      <div className="text-gold-warm text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold whitespace-nowrap [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
+                      <div className="hero-price-value text-gold-warm text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold whitespace-nowrap [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
                         {pricePrefix}
                         {"\u00A0"}
                         {priceString}
                       </div>
-                      <div className="text-cream-light text-xs sm:text-sm md:text-base font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)]">
+                      <div className="hero-price-payment text-cream-light text-xs sm:text-sm md:text-base font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)]">
                         {t.hero.payment}
                       </div>
-                      <div className="text-cream-light text-xs sm:text-xs md:text-sm font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.85)]">
+                      <div className="hero-price-handover text-cream-light text-xs sm:text-xs md:text-sm font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.85)]">
                         {t.hero.handover}
                       </div>
                     </div>
@@ -709,7 +710,7 @@ export default function PlayaVivaLanding() {
                   <Button
                     onClick={() => scrollToSection("dossier")}
                     size="lg"
-                    className="bg-gold-warm text-brown-dark font-bold antialiased tracking-wide px-10 py-4 text-base sm:text-lg rounded-xl border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 shadow-2xl transition-all duration-200 hover:bg-gold-warm/80 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(0,0,0,0.55),0_0_48px_rgba(162,144,96,0.65)] hover:ring-gold-warm/85 hover:scale-105"
+                    className="hero-cta bg-gold-warm text-brown-dark font-bold antialiased tracking-wide px-10 py-4 text-base sm:text-lg rounded-xl border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 shadow-2xl transition-all duration-200 hover:bg-gold-warm/80 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(0,0,0,0.55),0_0_48px_rgba(162,144,96,0.65)] hover:ring-gold-warm/85 hover:scale-105"
                   >
                     <span className="flex items-center gap-3">
                       <Download className="h-5 w-5" />
@@ -719,7 +720,7 @@ export default function PlayaVivaLanding() {
 
                   {/* Scroll Indicator (sm+) */}
                   <div
-                    className="mt-2 hidden sm:flex justify-center pointer-events-none animate-bounce"
+                    className="hero-scroll-indicator mt-2 hidden sm:flex justify-center pointer-events-none animate-bounce"
                     style={{
                       opacity: animationStates.scrollIndicator ? 1 : 0,
                       transform: animationStates.scrollIndicator
