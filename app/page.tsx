@@ -1126,7 +1126,7 @@ export default function PlayaVivaLanding() {
                 { src: "/assets/imagenes/studio.webp", span: "md:col-span-2 md:row-span-2" },
                 { src: "/assets/imagenes/1-bedroom.webp", span: "" },
                 { src: "/assets/imagenes/2-bedroom.webp", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%201.jpg", span: "md:col-span-2" },
+                { src: "/assets/imagenes/foto%20galeria%201.jpg", span: "" },
                 { src: "/assets/imagenes/foto%20galeria%202.jpg", span: "" },
                 { src: "/assets/imagenes/foto%20galeria%203.jpg", span: "" },
               ].map((image, index) => (
