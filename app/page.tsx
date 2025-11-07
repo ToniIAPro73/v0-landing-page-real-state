@@ -1111,10 +1111,9 @@ export default function PlayaVivaLanding() {
             <div className="max-w-6xl mx-auto">
               <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
                 <img
-                  src="/assets/imagenes/Collage-servicios-instalaciones-triptico-transp.png"
+                  src="/assets/imagenes/Collage-servicios-instalaciones.png"
                   alt="Servicios e Instalaciones - Playa Viva"
                   className="w-full h-auto"
-                  style={{ backgroundColor: 'white' }}
                 />
               </div>
             </div>
