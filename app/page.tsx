@@ -20,6 +20,8 @@ export default function PlayaVivaLanding() {
     wynnEffect: false,
     investment: false,
     features: false,
+    gallery: false,
+    trust: false,
     leadForm: false,
     location: false,
     footer: false,
@@ -107,6 +109,8 @@ export default function PlayaVivaLanding() {
       checkSectionVisibility(wynnEffectRef, "wynnEffect");
       checkSectionVisibility(investmentRef, "investment");
       checkSectionVisibility(featuresRef, "features");
+      checkSectionVisibility(galleryRef, "gallery");
+      checkSectionVisibility(trustRef, "trust");
       checkSectionVisibility(leadFormRef, "leadForm");
       checkSectionVisibility(locationRef, "location");
       checkSectionVisibility(footerRef, "footer");
@@ -118,6 +122,8 @@ export default function PlayaVivaLanding() {
   const wynnEffectRef = useRef<HTMLDivElement>(null);
   const investmentRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const trustRef = useRef<HTMLDivElement>(null);
   const leadFormRef = useRef<HTMLDivElement>(null);
   const locationRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
@@ -394,6 +400,60 @@ export default function PlayaVivaLanding() {
             description: "A private enclave for sophisticated investors",
           },
         ],
+      },
+      gallery: {
+        title: "The Project",
+        subtitle: "Exceptional architectural design in Al Marjan Island",
+        description: "Explore the elegance and sophistication of Playa Viva through high-resolution renders and environmental photography.",
+      },
+      trust: {
+        title: "Backed by Real Estate Leaders",
+        subtitle: "Uniestate and trusted partners",
+        description: "Marketed by Uniestate.co.uk based in London and Dubai, and supported by leading luxury real estate firms.",
+        partners: "Trusted partners",
+      },
+      specifications: {
+        title: "Specifications",
+        subtitle: "Units designed for the sophisticated investor",
+        description: "From compact studios to spacious 3-bedroom apartments, all units include premium finishes, home automation and fully furnished delivery.",
+        units: [
+          {
+            type: "Studio",
+            size: "37-45 m²",
+            price: "From £150,000",
+            features: ["Smart Home", "Fully furnished", "Private balcony", "Equipped kitchen"],
+          },
+          {
+            type: "1 Bedroom",
+            size: "65-75 m²",
+            price: "From £210,000",
+            features: ["Smart Home", "Fully furnished", "Spacious balcony", "Master bedroom en-suite"],
+          },
+          {
+            type: "2 Bedrooms",
+            size: "95-110 m²",
+            price: "From £310,000",
+            features: ["Smart Home", "Fully furnished", "2 Balconies", "En-suite bedrooms"],
+          },
+          {
+            type: "3 Bedrooms",
+            size: "135-160 m²",
+            price: "From £420,000",
+            features: ["Smart Home", "Fully furnished", "Large terrace", "3 Full bathrooms"],
+          },
+        ],
+      },
+      paymentPlan: {
+        title: "Flexible Payment Plan",
+        subtitle: "Only 1% monthly for 5 years",
+        description: "A financing scheme designed for international investors, allowing you to position yourself in Al Marjan Island with minimum monthly payments.",
+        timeline: [
+          { stage: "Booking", amount: "£5,000", description: "Reserve your unit" },
+          { stage: "Contract", amount: "15%", description: "Upon signing contract" },
+          { stage: "During construction", amount: "1% monthly", description: "60 months (5 years)" },
+          { stage: "Handover Q2 2026", amount: "Balance", description: "Balance upon key handover" },
+        ],
+        note: "* Plan subject to approval. Consult with our team for custom options.",
       },
       investment: {
         title: "Investment Opportunity",
@@ -969,6 +1029,136 @@ export default function PlayaVivaLanding() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery */}
+      <section
+        ref={galleryRef}
+        className="relative py-24 bg-white"
+        style={{
+          opacity: visibleSections.gallery ? 1 : 0,
+          transform: visibleSections.gallery
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16 max-w-4xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
+              {t.gallery.title}
+            </h2>
+            <h3 className="text-2xl text-gold-warm mb-6">
+              {t.gallery.subtitle}
+            </h3>
+            <p className="text-taupe-warm text-base md:text-lg leading-relaxed">
+              {t.gallery.description}
+            </p>
+          </div>
+
+          {/* Gallery Grid - Masonry Style */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
+            {[
+              { src: "/assets/imagenes/foto galeria 1.jpg", span: "md:col-span-2 md:row-span-2" },
+              { src: "/assets/imagenes/foto galeria 5.jpg", span: "" },
+              { src: "/assets/imagenes/foto galeria 6.jpg", span: "" },
+              { src: "/assets/imagenes/foto galeria 7.jpg", span: "" },
+              { src: "/assets/imagenes/view1.webp", span: "md:col-span-2" },
+              { src: "/assets/imagenes/view2.jpg", span: "" },
+              { src: "/assets/imagenes/foto galeria 10.jpg", span: "md:row-span-2" },
+              { src: "/assets/imagenes/Playa Viva complex.jpg", span: "md:col-span-2" },
+              { src: "/assets/imagenes/view3.webp", span: "" },
+              { src: "/assets/imagenes/beach.webp", span: "" },
+            ].map((image, index) => (
+              <div
+                key={index}
+                className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
+                style={{
+                  opacity: visibleSections.gallery ? 1 : 0,
+                  transform: visibleSections.gallery
+                    ? "translateY(0px)"
+                    : "translateY(30px)",
+                  transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+                    index * 0.05
+                  }s`,
+                }}
+              >
+                <div className="aspect-square">
+                  <img
+                    src={image.src}
+                    alt={`Playa Viva ${index + 1}`}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust & Credibility */}
+      <section
+        ref={trustRef}
+        className="relative py-20 bg-cream-light"
+        style={{
+          opacity: visibleSections.trust ? 1 : 0,
+          transform: visibleSections.trust
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-light text-brown-dark mb-4">
+                {t.trust.title}
+              </h2>
+              <h3 className="text-xl text-gold-warm mb-4">
+                {t.trust.subtitle}
+              </h3>
+              <p className="text-taupe-warm text-base md:text-lg max-w-3xl mx-auto">
+                {t.trust.description}
+              </p>
+            </div>
+
+            {/* Press Logos */}
+            <div className="mb-12">
+              <p className="text-center text-sm text-taupe-warm mb-6 uppercase tracking-wider">
+                {t.trust.partners}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center justify-items-center">
+                {[
+                  { src: "/assets/imagenes/news1.png", alt: "Press 1" },
+                  { src: "/assets/imagenes/news2.png", alt: "Press 2" },
+                  { src: "/assets/imagenes/news3.png", alt: "Press 3" },
+                ].map((logo, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-xl p-6 shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-1 w-full max-w-xs"
+                    style={{
+                      opacity: visibleSections.trust ? 1 : 0,
+                      transform: visibleSections.trust
+                        ? "translateY(0px)"
+                        : "translateY(30px)",
+                      transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+                        index * 0.15
+                      }s`,
+                    }}
+                  >
+                    <img
+                      src={logo.src}
+                      alt={logo.alt}
+                      className="w-full h-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
