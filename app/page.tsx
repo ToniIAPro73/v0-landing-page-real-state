@@ -435,43 +435,43 @@ export default function PlayaVivaLanding() {
       {/* Sticky Navigation Menu - Uniestate UK Style */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-16 md:h-20">
+          <div className="flex items-center justify-between h-14 md:h-16">
             {/* Logo Uniestate */}
             <div className="flex-shrink-0">
-              <span className="text-brown-dark text-lg md:text-xl font-bold tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', letterSpacing: '0.02em' }}>
+              <span className="text-brown-dark text-base md:text-lg font-bold tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', letterSpacing: '0.02em' }}>
                 UNIESTATE
               </span>
             </div>
 
-            {/* Desktop Menu - Centered */}
-            <div className="hidden lg:flex items-center space-x-1 flex-1 justify-center">
+            {/* Desktop Menu - Centered (shows on tablet landscape and up) */}
+            <div className="hidden md:flex items-center space-x-1 flex-1 justify-center">
               <button
                 onClick={() => scrollToSection("wynn-effect")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
               >
                 {t.menu.wynnEffect}
               </button>
               <button
                 onClick={() => scrollToSection("investment")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
               >
                 {t.menu.investment}
               </button>
               <button
                 onClick={() => scrollToSection("features")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
               >
                 {t.menu.features}
               </button>
               <button
                 onClick={() => scrollToSection("dossier")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
               >
                 {t.menu.dossier}
               </button>
               <button
                 onClick={() => scrollToSection("location")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-sm font-normal px-4 py-2"
+                className="text-brown-dark/70 hover:text-brown-dark transition-colors duration-200 text-xs md:text-sm font-normal px-3 md:px-4 py-2"
               >
                 {t.menu.location}
               </button>
@@ -481,7 +481,7 @@ export default function PlayaVivaLanding() {
             <div className="hidden md:block flex-shrink-0">
               <Button
                 onClick={() => scrollToSection("dossier")}
-                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-6 py-2 text-sm rounded-md shadow-md transition-all duration-200"
+                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm rounded-md shadow-md transition-all duration-200"
               >
                 {language === "es" ? "Reservar Ahora" : "Book Now"}
               </Button>
@@ -546,7 +546,8 @@ export default function PlayaVivaLanding() {
                 </button>
                 <Button
                   onClick={() => scrollToSection("dossier")}
-                  className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-6 py-2 text-sm rounded-md shadow-md w-full mt-2"
+                  size="sm"
+                  className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 py-1.5 text-xs rounded-md shadow-md w-full mt-2"
                 >
                   {language === "es" ? "Reservar Ahora" : "Book Now"}
                 </Button>
@@ -557,7 +558,7 @@ export default function PlayaVivaLanding() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-svh overflow-hidden">
+      <section className="relative min-h-svh overflow-hidden pt-14 md:pt-16">
         {/* Background */}
         <div
           className="absolute inset-0 z-0 transition-all duration-700 ease-out"
