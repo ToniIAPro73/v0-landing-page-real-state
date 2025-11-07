@@ -411,7 +411,7 @@ export default function PlayaVivaLanding() {
         title: "Dossier de Inversión Exclusivo",
         subtitle: "Análisis financiero completo y proyecciones del Efecto Wynn",
         description:
-          "Acceda al análisis detallado de la inversión, incluyendo proyecciones de rentabilidad, planos, especificaciones técnicas y el impacto financiero del Wynn Resort en Al Marjan Island.",
+          "Acceda al análisis detallado de la inversión, incluyendo proyecciones de rentabilidad, planos, especificaciones técnicas y el impacto financiero del Wynn Resort en Al Marjan Island, entrando a formar parte de la exclusiva Comunidad.",
         features: [
           "Escenarios de rentabilidad y salida 2026-2032",
           "Simulación de cashflow con el plan 1% mensual",
@@ -761,7 +761,7 @@ export default function PlayaVivaLanding() {
         title: "Exclusive Investment Dossier",
         subtitle: "Complete financial analysis and Wynn Effect projections",
         description:
-          "Access detailed investment analysis, including profitability projections, floor plans, technical specifications, and the financial impact of Wynn Resort on Al Marjan Island.",
+          "Access detailed investment analysis, including profitability projections, floor plans, technical specifications, and the financial impact of Wynn Resort on Al Marjan Island while joining the exclusive Playa Viva community.",
         features: [
           "2026-2032 return scenarios and exit strategies",
           "Cash-flow simulation with the 1% monthly plan",
@@ -924,6 +924,10 @@ export default function PlayaVivaLanding() {
 
   const apartmentCopy = t.apartments.tabs[activeApartment];
   const activeApartmentConfig = apartmentConfigs[activeApartment];
+  const featureColumns = [
+    t.leadForm.features.slice(0, 2),
+    t.leadForm.features.slice(2),
+  ];
   const nameLabel = language === "es" ? "Nombre completo" : "Full name";
   const emailLabel = "Email";
 
@@ -2073,70 +2077,62 @@ export default function PlayaVivaLanding() {
       <section
         id="faq"
         ref={faqRef}
-        className="relative py-24 bg-gradient-to-br from-olive-brown via-brown-dark to-brown-dark text-cream-light"
+        className="relative py-28 bg-[#f7f2ea]"
         style={{
           opacity: visibleSections.faq ? 1 : 0,
           transform: visibleSections.faq ? "translateY(0px)" : "translateY(60px)",
           transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 opacity-60 pointer-events-none">
           <div
-            className="absolute inset-0"
+            className="w-full h-full"
             style={{
               backgroundImage:
-                "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.18) 1px, transparent 0)",
-              backgroundSize: "140px 140px",
+                "radial-gradient(circle at 2px 2px, rgba(139,108,73,0.22) 1px, transparent 0)",
+              backgroundSize: "180px 180px",
             }}
           />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-3 gap-10 items-start">
-            <div className="space-y-6">
-              <p className="text-xs uppercase tracking-[0.55em] text-gold-warm/90">
-                {t.faq.eyebrow}
-              </p>
-              <h2 className="text-3xl md:text-5xl font-light font-arabic text-white">
-                {t.faq.title}
-              </h2>
-              <p className="text-cream-light/85 text-base md:text-lg leading-relaxed">
-                {t.faq.subtitle}
-              </p>
-              <div className="space-y-4 pt-2">
+          <div className="grid lg:grid-cols-[1.05fr,1.35fr] gap-12 items-stretch">
+            <div className="rounded-[40px] bg-white/80 border border-gold-warm/30 shadow-[0_40px_90px_rgba(92,74,52,0.15)] p-10 flex flex-col">
+              <div>
+                <p className="text-xs uppercase tracking-[0.6em] text-gold-warm mb-6">
+                  {t.faq.eyebrow}
+                </p>
+                <h2 className="text-4xl md:text-5xl font-light text-brown-dark leading-tight font-arabic">
+                  {t.faq.title}
+                </h2>
+                <p className="mt-6 text-lg md:text-xl text-brown-dark/80 leading-relaxed">
+                  {t.faq.subtitle}
+                </p>
+              </div>
+              <div className="mt-10 grid gap-4 text-brown-dark/70">
                 {t.faq.highlights.map((item) => (
-                  <div key={item} className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-gold-warm mt-1" />
-                    <p className="text-sm md:text-base text-cream-light/90">{item}</p>
-                  </div>
+                  <p key={item} className="text-base md:text-lg italic leading-relaxed">
+                    {item}
+                  </p>
                 ))}
               </div>
-              <Button
-                variant="outline"
-                onClick={() => scrollToSection("dossier")}
-                className="border-gold-warm text-gold-warm hover:bg-gold-warm hover:text-brown-dark transition-all duration-200"
-              >
-                {t.faq.cta}
-              </Button>
             </div>
-            <div className="lg:col-span-2 space-y-4">
+            <div className="rounded-[40px] bg-brown-dark text-cream-light shadow-[0_45px_90px_rgba(0,0,0,0.35)] border border-white/5 overflow-hidden">
               {t.faq.questions.map((qa, index) => (
                 <div
                   key={qa.question}
-                  className="group bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 backdrop-blur-sm hover:border-gold-warm/70 transition-all duration-300"
+                  className="flex gap-6 p-6 md:p-8 border-b border-white/10 last:border-b-0"
                 >
-                  <div className="flex gap-4">
-                    <span className="text-sm font-semibold tracking-[0.4em] text-gold-warm pt-1">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-semibold text-white mb-3">
-                        {qa.question}
-                      </h3>
-                      <p className="text-cream-light/85 text-sm md:text-base leading-relaxed">
-                        {qa.answer}
-                      </p>
-                    </div>
+                  <div className="text-4xl md:text-5xl font-light text-gold-warm/80 leading-none">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl md:text-2xl font-semibold mb-3 text-white">
+                      {qa.question}
+                    </h3>
+                    <p className="text-cream-light/80 text-sm md:text-base leading-relaxed">
+                      {qa.answer}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -2149,167 +2145,154 @@ export default function PlayaVivaLanding() {
       <section
         id="dossier"
         ref={leadFormRef}
-        className="relative py-20 md:py-32 bg-gradient-to-br from-brown-dark via-olive-brown to-brown-dark overflow-hidden"
+        className="relative py-24 bg-gradient-to-b from-brown-dark via-[#241b13] to-brown-dark overflow-hidden"
         style={{
           opacity: visibleSections.leadForm ? 1 : 0,
           transform: visibleSections.leadForm ? "translateY(0px)" : "translateY(50px)",
           transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
           <div
-            className="absolute inset-0"
+            className="w-full h-full"
             style={{
-              backgroundImage: `linear-gradient(45deg, transparent 48%, var(--gold-warm) 49%, var(--gold-warm) 51%, transparent 52%)`,
-              backgroundSize: "20px 20px",
+              backgroundImage:
+                "linear-gradient(120deg, rgba(255,255,255,0.08) 0%, transparent 45%, transparent 55%, rgba(255,255,255,0.06) 100%)",
             }}
           />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-start">
-              <div>
-                <div className="inline-flex mb-5">
-                  <div className="rounded-full border border-gold-warm bg-cream-light/95 px-6 py-2 shadow-[0_10px_20px_rgba(0,0,0,0.12)]">
-                    <p className="text-brown-dark text-xs md:text-sm font-semibold tracking-[0.25em] uppercase whitespace-nowrap">
-                      {language === "es"
-                        ? "Exclusivo para Inversores"
-                        : "Exclusive for Investors"}
+          <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
+            <div className="inline-flex mb-6">
+              <div className="px-8 py-3 rounded-full border border-gold-warm/80 bg-white/5 text-gold-warm font-semibold tracking-[0.4em] uppercase shadow-[0_20px_40px_rgba(0,0,0,0.35)] backdrop-blur">
+                {language === "es" ? "Exclusivo para Inversores" : "Exclusive for Investors"}
+              </div>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-3 font-arabic">
+              {t.leadForm.title}
+            </h2>
+            <p className="text-xl md:text-2xl text-gold-warm mb-4 font-semibold">
+              {t.leadForm.subtitle}
+            </p>
+            <p className="text-cream-light/90 text-base md:text-lg leading-relaxed max-w-4xl">
+              {t.leadForm.description}
+            </p>
+          </div>
+
+          <div className="mt-10 w-full max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+            {featureColumns.map((column, columnIndex) => (
+              <div key={columnIndex} className="space-y-4 text-left">
+                {column.map((feature) => (
+                  <div key={feature} className="flex items-start gap-3">
+                    <div className="bg-gold-warm/25 rounded-full p-2 mt-1">
+                      <CheckCircle2 className="h-4 w-4 text-gold-warm" />
+                    </div>
+                    <p className="text-cream-light/90 text-sm md:text-base leading-relaxed">
+                      {feature}
                     </p>
                   </div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 w-full flex justify-center">
+            <div className="w-full max-w-4xl rounded-[36px] border border-gold-warm/40 bg-white/97 shadow-[0_55px_110px_rgba(0,0,0,0.35)] px-8 md:px-12 py-10">
+              <form onSubmit={handleLeadSubmit} className="space-y-8 text-left">
+                <div className="grid md:[grid-template-columns:1fr_1.3fr] gap-4">
+                  <div>
+                    <label className="block text-brown-dark font-medium mb-2 text-sm tracking-wide">
+                      {t.leadForm.form.firstNamePlaceholder}
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.firstName}
+                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      className="w-full px-5 py-4 border-2 border-brown-dark/15 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/25 outline-none transition-all duration-200 bg-white text-brown-dark text-base md:text-lg"
+                      placeholder={t.leadForm.form.firstNamePlaceholder}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-brown-dark font-medium mb-2 text-sm tracking-wide">
+                      {t.leadForm.form.lastNamePlaceholder}
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.lastName}
+                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      className="w-full px-5 py-4 border-2 border-brown-dark/15 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/25 outline-none transition-all duration-200 bg-white text-brown-dark text-base md:text-lg"
+                      placeholder={t.leadForm.form.lastNamePlaceholder}
+                    />
+                  </div>
                 </div>
-                <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-3 font-arabic">
-                  {t.leadForm.title}
-                </h2>
-                <p className="text-xl md:text-2xl text-gold-warm mb-4 font-semibold">
-                  {t.leadForm.subtitle}
-                </p>
-                <p className="text-cream-light/90 text-base md:text-lg leading-relaxed mb-6">
-                  {t.leadForm.description}
-                </p>
-                <div className="space-y-4 mb-8">
-                  {t.leadForm.features.map((feature) => (
-                    <div key={feature} className="flex items-start gap-3">
-                      <div className="bg-gold-warm/20 rounded-full p-1.5 mt-0.5">
-                        <CheckCircle2 className="h-4 w-4 text-gold-warm" />
-                      </div>
-                      <p className="text-cream-light/90 text-sm md:text-base">{feature}</p>
-                    </div>
-                  ))}
+
+                <div>
+                  <label className="block text-brown-dark font-medium mb-2 text-sm tracking-wide">
+                    {t.leadForm.form.emailPlaceholder}
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-brown-dark/40" />
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full pl-12 pr-5 py-4 border-2 border-brown-dark/15 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/25 outline-none transition-all duration-200 bg-white text-brown-dark text-base md:text-lg"
+                      placeholder={t.leadForm.form.emailPlaceholder}
+                    />
+                  </div>
                 </div>
-                <div className="bg-white/5 border border-white/15 rounded-2xl p-6 space-y-4">
-                  <p className="text-sm uppercase tracking-[0.4em] text-gold-warm">
+
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isSubmitting}
+                  className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-bold py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-200 text-base md:text-lg disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  <Download className={`mr-2 h-5 w-5 ${isSubmitting ? "animate-pulse" : ""}`} />
+                  {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
+                </Button>
+
+                {automationFeedback && (
+                  <div
+                    className={`text-sm rounded-2xl border px-4 py-3 ${
+                      automationFeedback.type === "success"
+                        ? "border-emerald-400 text-emerald-600 bg-emerald-50"
+                        : "border-red-400 text-red-600 bg-red-50"
+                    }`}
+                  >
+                    {automationFeedback.message}
+                  </div>
+                )}
+
+                <p className="text-taupe-warm text-xs text-center leading-relaxed">
+                  {t.leadForm.form.privacy}
+                </p>
+
+                <div className="rounded-2xl bg-cream-light/70 border border-gold-warm/40 p-5">
+                  <p className="text-xs uppercase tracking-[0.4em] text-brown-dark/70 text-center mb-4">
                     {t.leadForm.workflow.title}
                   </p>
-                  <div className="space-y-4">
+                  <div className="grid md:grid-cols-3 gap-4 text-sm text-brown-dark/80">
                     {t.leadForm.workflow.steps.map((step, index) => (
-                      <div key={step} className="flex items-start gap-4">
-                        <div className="text-lg font-semibold text-gold-warm">
+                      <div key={step} className="text-center md:text-left">
+                        <p className="text-gold-warm font-semibold mb-1">
                           {String(index + 1).padStart(2, "0")}
-                        </div>
-                        <p className="text-cream-light/90 text-sm md:text-base">{step}</p>
+                        </p>
+                        <p>{step}</p>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-
-              <div
-                className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-2xl border-2 border-gold-warm/30"
-                style={{
-                  opacity: visibleSections.leadForm ? 1 : 0,
-                  transform: visibleSections.leadForm
-                    ? "translateY(0px)"
-                    : "translateY(30px)",
-                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
-                }}
-              >
-                <form
-                  onSubmit={handleLeadSubmit}
-                  className="space-y-6"
-                >
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-brown-dark font-medium mb-2 text-sm">
-                        {t.leadForm.form.firstNamePlaceholder}
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.firstName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, firstName: e.target.value })
-                        }
-                        className="w-full px-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
-                        placeholder={t.leadForm.form.firstNamePlaceholder}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-brown-dark font-medium mb-2 text-sm">
-                        {t.leadForm.form.lastNamePlaceholder}
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.lastName}
-                        onChange={(e) =>
-                          setFormData({ ...formData, lastName: e.target.value })
-                        }
-                        className="w-full px-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
-                        placeholder={t.leadForm.form.lastNamePlaceholder}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-brown-dark font-medium mb-2 text-sm">
-                      {t.leadForm.form.emailPlaceholder}
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-brown-dark/40" />
-                      <input
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full pl-11 pr-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
-                        placeholder={t.leadForm.form.emailPlaceholder}
-                      />
-                    </div>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    size="lg"
-                    disabled={isSubmitting}
-                    className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-200 text-base md:text-lg disabled:cursor-not-allowed disabled:opacity-70"
-                  >
-                    <Download className={`mr-2 h-5 w-5 ${isSubmitting ? "animate-pulse" : ""}`} />
-                    {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
-                  </Button>
-
-                  {automationFeedback && (
-                    <div
-                      className={`text-sm rounded-xl border px-4 py-3 ${
-                        automationFeedback.type === "success"
-                          ? "border-emerald-400 text-emerald-600 bg-emerald-50"
-                          : "border-red-400 text-red-600 bg-red-50"
-                      }`}
-                    >
-                      {automationFeedback.message}
-                    </div>
-                  )}
-
-                  <p className="text-taupe-warm text-xs text-center leading-relaxed">
-                    {t.leadForm.form.privacy}
-                  </p>
-                </form>
-              </div>
+              </form>
             </div>
           </div>
         </div>
       </section>
+
 
       {/* Footer CTA */}
       <section
