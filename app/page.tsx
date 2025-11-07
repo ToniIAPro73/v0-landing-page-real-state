@@ -216,8 +216,39 @@ export default function PlayaVivaLanding() {
       trust: {
         title: "Respaldado por Líderes Inmobiliarios",
         subtitle: "Uniestate y partners de confianza",
-        description: "Comercializado por Uniestate.co.uk con sede en Londres y Dubai, y respaldado por las principales firmas del sector inmobiliario de lujo.",
-        partners: "Partners de confianza",
+        description:
+          "Comercializado por Uniestate.co.uk con sede en Londres y Dubai, y respaldado por las principales firmas del sector inmobiliario de lujo.",
+        partners: "Cobertura en medios especializados",
+        readMore: "Leer en el medio",
+        articles: [
+          {
+            image: "/assets/imagenes/news1.png",
+            alt: "Gulf News - Wynn Resort",
+            source: "Gulf News",
+            title: "Wynn Resort impulsa USD 5.1B en Ras Al Khaimah",
+            summary:
+              "El emirato aprueba el primer resort con casino de la región, detonando demanda residencial y hotelera en Al Marjan Island.",
+            url: "https://gulfnews.com/business/property/wynn-resort-ras-al-khaimah-gets-green-light-1.96136123",
+          },
+          {
+            image: "/assets/imagenes/news2.png",
+            alt: "Arabian Business - Tourism",
+            source: "Arabian Business",
+            title: "RAK recibe 1.2M de visitantes de alto gasto",
+            summary:
+              "El turismo premium del emirato crece 24% interanual apoyado por el efecto Wynn y nuevos desarrollos residenciales.",
+            url: "https://www.arabianbusiness.com/industries/travel-hospitality/ras-al-khaimah-tourism-records-1-2-million-visitors",
+          },
+          {
+            image: "/assets/imagenes/news3.png",
+            alt: "Fitch Ratings - RAK",
+            source: "Fitch Ratings",
+            title: "Fitch reafirma a Ras Al Khaimah en AA-",
+            summary:
+              "La calificación soberana subraya la solidez fiscal del emirato y refuerza la seguridad jurídica para los proyectos inmobiliarios.",
+            url: "https://www.fitchratings.com/research/sovereigns/fitch-affirms-ras-al-khaimah-at-aa-outlook-stable-06-07-2023",
+          },
+        ],
       },
       specifications: {
         title: "Especificaciones",
@@ -410,8 +441,39 @@ export default function PlayaVivaLanding() {
       trust: {
         title: "Backed by Real Estate Leaders",
         subtitle: "Uniestate and trusted partners",
-        description: "Marketed by Uniestate.co.uk based in London and Dubai, and supported by leading luxury real estate firms.",
-        partners: "Trusted partners",
+        description:
+          "Marketed by Uniestate.co.uk based in London and Dubai, and supported by leading luxury real estate firms.",
+        partners: "Featured in regional media",
+        readMore: "Read full article",
+        articles: [
+          {
+            image: "/assets/imagenes/news1.png",
+            alt: "Gulf News - Wynn Resort",
+            source: "Gulf News",
+            title: "Wynn Resort drives a $5.1B push in Ras Al Khaimah",
+            summary:
+              "Authorities approve the UAE's first integrated resort with gaming on Al Marjan Island, unlocking premium residential demand.",
+            url: "https://gulfnews.com/business/property/wynn-resort-ras-al-khaimah-gets-green-light-1.96136123",
+          },
+          {
+            image: "/assets/imagenes/news2.png",
+            alt: "Arabian Business - Tourism",
+            source: "Arabian Business",
+            title: "RAK welcomes 1.2M high-spending visitors",
+            summary:
+              "Tourism arrivals jumped 24% year-on-year as the Wynn Effect and new luxe developments put the emirate on global radars.",
+            url: "https://www.arabianbusiness.com/industries/travel-hospitality/ras-al-khaimah-tourism-records-1-2-million-visitors",
+          },
+          {
+            image: "/assets/imagenes/news3.png",
+            alt: "Fitch Ratings - RAK",
+            source: "Fitch Ratings",
+            title: "Fitch reaffirms Ras Al Khaimah at AA- Stable",
+            summary:
+              "The sovereign rating highlights robust public finances and underpins investor confidence in long-term real estate projects.",
+            url: "https://www.fitchratings.com/research/sovereigns/fitch-affirms-ras-al-khaimah-at-aa-outlook-stable-06-07-2023",
+          },
+        ],
       },
       specifications: {
         title: "Specifications",
@@ -1216,20 +1278,16 @@ export default function PlayaVivaLanding() {
               </p>
             </div>
 
-            {/* Press Logos */}
+            {/* Press Coverage */}
             <div className="mb-12">
               <p className="text-center text-sm text-taupe-warm mb-6 uppercase tracking-wider">
                 {t.trust.partners}
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center justify-items-center">
-                {[
-                  { src: "/assets/imagenes/news1.png", alt: "Press 1" },
-                  { src: "/assets/imagenes/news2.png", alt: "Press 2" },
-                  { src: "/assets/imagenes/news3.png", alt: "Press 3" },
-                ].map((logo, index) => (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch justify-items-center">
+                {t.trust.articles.map((article, index) => (
                   <div
                     key={index}
-                    className="bg-white rounded-xl p-6 shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-1 w-full max-w-xs"
+                    className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-1 w-full max-w-xs flex flex-col"
                     style={{
                       opacity: visibleSections.trust ? 1 : 0,
                       transform: visibleSections.trust
@@ -1241,10 +1299,42 @@ export default function PlayaVivaLanding() {
                     }}
                   >
                     <img
-                      src={logo.src}
-                      alt={logo.alt}
-                      className="w-full h-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
+                      src={article.image}
+                      alt={article.alt}
+                      className="w-full h-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
                     />
+                    <div className="mt-4 space-y-2 flex-1 flex flex-col">
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brown-dark/60">
+                        {article.source}
+                      </p>
+                      <h4 className="text-lg font-semibold text-brown-dark leading-snug">
+                        {article.title}
+                      </h4>
+                      <p className="text-sm text-brown-dark/70 flex-1">
+                        {article.summary}
+                      </p>
+                      <a
+                        href={article.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-gold-warm hover:underline"
+                      >
+                        {t.trust.readMore}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M7 17 17 7" />
+                          <path d="M7 7h10v10" />
+                        </svg>
+                      </a>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1413,29 +1503,6 @@ export default function PlayaVivaLanding() {
                   {t.leadForm.description}
                 </p>
 
-                {/* Features List */}
-                <div className="space-y-2.5">
-                  {t.leadForm.features.map((feature, index) => (
-                    <div
-                      key={index}
-                      className="flex items-start bg-white/5 border border-gold-warm/20 rounded-lg p-3 hover:bg-white/10 hover:border-gold-warm/40 transition-all duration-300"
-                      style={{
-                        opacity: visibleSections.leadForm ? 1 : 0,
-                        transform: visibleSections.leadForm
-                          ? "translateX(0px)"
-                          : "translateX(-20px)",
-                        transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${
-                          0.3 + index * 0.1
-                        }s`,
-                      }}
-                    >
-                      <div className="bg-gold-warm/20 rounded-full p-1 mr-3 shrink-0 mt-0.5">
-                        <CheckCircle2 className="h-5 w-5 text-gold-warm" />
-                      </div>
-                      <span className="text-cream-light text-sm md:text-base font-medium">{feature}</span>
-                    </div>
-                  ))}
-                </div>
               </div>
 
               {/* Right Column - Form */}
