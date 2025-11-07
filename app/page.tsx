@@ -45,6 +45,7 @@ export default function PlayaVivaLanding() {
 
   const [showMenu, setShowMenu] = useState(false);
   const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "" });
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [automationFeedback, setAutomationFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [activeApartment, setActiveApartment] = useState<"studio" | "oneBed" | "twoBed" | "threeBed">("studio");
@@ -410,22 +411,16 @@ export default function PlayaVivaLanding() {
       leadForm: {
         title: "Dossier de Inversión Exclusivo",
         subtitle: "Análisis financiero completo y proyecciones del Efecto Wynn",
+        badge: "Dossier de Inversión Exclusivo",
+        intro: "Análisis financiero completo y proyecciones del Efecto Wynn",
         description:
-          "Acceda al análisis detallado de la inversión, incluyendo proyecciones de rentabilidad, planos, especificaciones técnicas y el impacto financiero del Wynn Resort en Al Marjan Island, entrando a formar parte de la exclusiva Comunidad.",
+          "Acceda al análisis más completo de la inversión, con proyecciones de rentabilidad, planos arquitectónicos, especificaciones de alto nivel y el impacto financiero del emblemático Wynn Resort en Al Marjan Island. Forme parte de una comunidad exclusiva que anticipa las oportunidades antes que el resto del mercado.",
         features: [
           "Escenarios de rentabilidad y salida 2026-2032",
           "Simulación de cashflow con el plan 1% mensual",
           "Plano maestro, tipologías y memorias de calidades",
           "Calendario de hitos, licencias y soporte postventa",
         ],
-        workflow: {
-          title: "¿Qué ocurre al descargar el dossier?",
-          steps: [
-            "Registramos el lead vía API segura en HubSpot y en nuestra base de datos propietaria para analítica paralela.",
-            "Un script en Python inserta tu nombre y apellidos tanto en la segunda página como en el nombre del PDF.",
-            "Tras confirmar la entrega del email mostramos un mensaje de agradecimiento cálido y verificamos el acceso al dossier.",
-          ],
-        },
         form: {
           firstNamePlaceholder: "Nombre",
           lastNamePlaceholder: "Apellidos",
@@ -760,22 +755,16 @@ export default function PlayaVivaLanding() {
       leadForm: {
         title: "Exclusive Investment Dossier",
         subtitle: "Complete financial analysis and Wynn Effect projections",
+        badge: "Exclusive Investment Dossier",
+        intro: "Comprehensive financial analysis and Wynn Effect projections",
         description:
-          "Access detailed investment analysis, including profitability projections, floor plans, technical specifications, and the financial impact of Wynn Resort on Al Marjan Island while joining the exclusive Playa Viva community.",
+          "Access the most complete investment analysis with profitability projections, architectural plans, specification sheets, and the financial impact of the emblematic Wynn Resort on Al Marjan Island. Join an exclusive community that anticipates opportunities ahead of the market.",
         features: [
           "2026-2032 return scenarios and exit strategies",
           "Cash-flow simulation with the 1% monthly plan",
           "Masterplan, unit typologies, and delivered specs",
           "Milestone calendar, permits, and after-sales support",
         ],
-        workflow: {
-          title: "What happens after you click download?",
-          steps: [
-            "We send the lead via secure API to HubSpot while storing it in our proprietary analytics database.",
-            "A Python script writes your first and last name on the second page and renames the dossier file accordingly.",
-            "Once the email dispatch is confirmed we display a sincere thank-you message and unlock the tailored PDF.",
-          ],
-        },
         form: {
           firstNamePlaceholder: "First name",
           lastNamePlaceholder: "Last name",
@@ -2077,62 +2066,69 @@ export default function PlayaVivaLanding() {
       <section
         id="faq"
         ref={faqRef}
-        className="relative py-28 bg-[#f7f2ea]"
+        className="relative py-20 bg-[#f8f3ec]"
         style={{
           opacity: visibleSections.faq ? 1 : 0,
-          transform: visibleSections.faq ? "translateY(0px)" : "translateY(60px)",
+          transform: visibleSections.faq ? "translateY(0px)" : "translateY(50px)",
           transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        <div className="absolute inset-0 opacity-60 pointer-events-none">
+        <div className="absolute inset-0 opacity-50 pointer-events-none">
           <div
             className="w-full h-full"
             style={{
               backgroundImage:
-                "radial-gradient(circle at 2px 2px, rgba(139,108,73,0.22) 1px, transparent 0)",
-              backgroundSize: "180px 180px",
+                "radial-gradient(circle at 1px 1px, rgba(132,104,71,0.18) 1px, transparent 0)",
+              backgroundSize: "160px 160px",
             }}
           />
         </div>
-
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-[1.05fr,1.35fr] gap-12 items-stretch">
-            <div className="rounded-[40px] bg-white/80 border border-gold-warm/30 shadow-[0_40px_90px_rgba(92,74,52,0.15)] p-10 flex flex-col">
-              <div>
-                <p className="text-xs uppercase tracking-[0.6em] text-gold-warm mb-6">
-                  {t.faq.eyebrow}
-                </p>
-                <h2 className="text-4xl md:text-5xl font-light text-brown-dark leading-tight font-arabic">
-                  {t.faq.title}
-                </h2>
-                <p className="mt-6 text-lg md:text-xl text-brown-dark/80 leading-relaxed">
-                  {t.faq.subtitle}
-                </p>
-              </div>
-              <div className="mt-10 grid gap-4 text-brown-dark/70">
+          <div className="grid lg:grid-cols-[0.8fr,1.2fr] gap-10 items-start">
+            <div className="rounded-[28px] bg-white/85 border border-gold-warm/25 shadow-[0_30px_60px_rgba(90,72,50,0.15)] p-8">
+              <p className="text-[11px] uppercase tracking-[0.55em] text-gold-warm mb-5">
+                {t.faq.eyebrow}
+              </p>
+              <h2 className="text-3xl md:text-4xl font-light text-brown-dark leading-tight font-arabic">
+                {t.faq.title}
+              </h2>
+              <p className="mt-4 text-base md:text-lg text-brown-dark/80 leading-relaxed">
+                {t.faq.subtitle}
+              </p>
+              <div className="mt-6 space-y-3">
                 {t.faq.highlights.map((item) => (
-                  <p key={item} className="text-base md:text-lg italic leading-relaxed">
+                  <p key={item} className="text-sm md:text-base text-brown-dark/70">
                     {item}
                   </p>
                 ))}
               </div>
             </div>
-            <div className="rounded-[40px] bg-brown-dark text-cream-light shadow-[0_45px_90px_rgba(0,0,0,0.35)] border border-white/5 overflow-hidden">
+            <div className="rounded-[28px] bg-white shadow-[0_30px_70px_rgba(0,0,0,0.12)] border border-brown-dark/10 divide-y divide-brown-dark/10">
               {t.faq.questions.map((qa, index) => (
                 <div
                   key={qa.question}
-                  className="flex gap-6 p-6 md:p-8 border-b border-white/10 last:border-b-0"
+                  className="p-5 md:p-6 transition-all duration-300 cursor-default"
+                  onMouseEnter={() => setActiveFaq(index)}
+                  onMouseLeave={() => setActiveFaq(null)}
+                  onFocus={() => setActiveFaq(index)}
+                  onBlur={() => setActiveFaq(null)}
+                  tabIndex={0}
                 >
-                  <div className="text-4xl md:text-5xl font-light text-gold-warm/80 leading-none">
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl md:text-2xl font-semibold mb-3 text-white">
-                      {qa.question}
-                    </h3>
-                    <p className="text-cream-light/80 text-sm md:text-base leading-relaxed">
-                      {qa.answer}
-                    </p>
+                  <p
+                    className={`text-sm md:text-base font-medium ${
+                      activeFaq === index ? "text-brown-dark" : "text-brown-dark/70"
+                    }`}
+                  >
+                    {qa.question}
+                  </p>
+                  <div
+                    className={`text-xs md:text-sm text-brown-dark/75 leading-relaxed transition-all duration-300 ${
+                      activeFaq === index
+                        ? "max-h-40 opacity-100 mt-3"
+                        : "max-h-0 opacity-0 mt-0 pointer-events-none"
+                    }`}
+                  >
+                    {qa.answer}
                   </div>
                 </div>
               ))}
@@ -2145,64 +2141,59 @@ export default function PlayaVivaLanding() {
       <section
         id="dossier"
         ref={leadFormRef}
-        className="relative py-24 bg-gradient-to-b from-brown-dark via-[#241b13] to-brown-dark overflow-hidden"
+        className="relative py-20 bg-gradient-to-b from-brown-dark via-[#22170f] to-brown-dark overflow-hidden"
         style={{
           opacity: visibleSections.leadForm ? 1 : 0,
           transform: visibleSections.leadForm ? "translateY(0px)" : "translateY(50px)",
           transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 opacity-15 pointer-events-none">
           <div
             className="w-full h-full"
             style={{
               backgroundImage:
-                "linear-gradient(120deg, rgba(255,255,255,0.08) 0%, transparent 45%, transparent 55%, rgba(255,255,255,0.06) 100%)",
+                "linear-gradient(115deg, rgba(255,255,255,0.08) 0%, transparent 50%, transparent 60%, rgba(255,255,255,0.08) 100%)",
             }}
           />
         </div>
-
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
-            <div className="inline-flex mb-6">
-              <div className="px-8 py-3 rounded-full border border-gold-warm/80 bg-white/5 text-gold-warm font-semibold tracking-[0.4em] uppercase shadow-[0_20px_40px_rgba(0,0,0,0.35)] backdrop-blur">
-                {language === "es" ? "Exclusivo para Inversores" : "Exclusive for Investors"}
+          <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
+            <div className="inline-flex mb-3">
+              <div className="px-7 py-2.5 rounded-full border border-gold-warm/80 bg-white/5 text-gold-warm font-semibold tracking-[0.28em] shadow-[0_18px_36px_rgba(0,0,0,0.35)] backdrop-blur">
+                {t.leadForm.badge}
               </div>
             </div>
-            <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-3 font-arabic">
+            <p className="text-gold-warm text-base font-semibold mb-2">{t.leadForm.intro}</p>
+            <h2 className="text-3xl md:text-4xl font-light text-cream-light mb-3 font-arabic">
               {t.leadForm.title}
             </h2>
-            <p className="text-xl md:text-2xl text-gold-warm mb-4 font-semibold">
-              {t.leadForm.subtitle}
-            </p>
-            <p className="text-cream-light/90 text-base md:text-lg leading-relaxed max-w-4xl">
+            <p className="text-cream-light/90 text-sm md:text-base leading-relaxed">
               {t.leadForm.description}
             </p>
           </div>
 
-          <div className="mt-10 w-full max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+          <div className="mt-8 w-full max-w-3xl mx-auto grid md:grid-cols-2 gap-4">
             {featureColumns.map((column, columnIndex) => (
-              <div key={columnIndex} className="space-y-4 text-left">
+              <div key={columnIndex} className="space-y-3 text-left">
                 {column.map((feature) => (
-                  <div key={feature} className="flex items-start gap-3">
-                    <div className="bg-gold-warm/25 rounded-full p-2 mt-1">
-                      <CheckCircle2 className="h-4 w-4 text-gold-warm" />
+                  <div key={feature} className="flex items-start gap-2">
+                    <div className="bg-gold-warm/25 rounded-full p-1.5 mt-0.5">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-gold-warm" />
                     </div>
-                    <p className="text-cream-light/90 text-sm md:text-base leading-relaxed">
-                      {feature}
-                    </p>
+                    <p className="text-cream-light/85 text-sm leading-relaxed">{feature}</p>
                   </div>
                 ))}
               </div>
             ))}
           </div>
 
-          <div className="mt-12 w-full flex justify-center">
-            <div className="w-full max-w-4xl rounded-[36px] border border-gold-warm/40 bg-white/97 shadow-[0_55px_110px_rgba(0,0,0,0.35)] px-8 md:px-12 py-10">
-              <form onSubmit={handleLeadSubmit} className="space-y-8 text-left">
-                <div className="grid md:[grid-template-columns:1fr_1.3fr] gap-4">
+          <div className="mt-10 w-full flex justify-center">
+            <div className="w-full max-w-3xl rounded-[28px] border border-gold-warm/35 bg-white/96 shadow-[0_45px_90px_rgba(0,0,0,0.32)] px-6 md:px-10 py-8">
+              <form onSubmit={handleLeadSubmit} className="space-y-6 text-left">
+                <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-brown-dark font-medium mb-2 text-sm tracking-wide">
+                    <label className="block text-brown-dark font-medium mb-2 text-sm">
                       {t.leadForm.form.firstNamePlaceholder}
                     </label>
                     <input
@@ -2210,12 +2201,12 @@ export default function PlayaVivaLanding() {
                       required
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      className="w-full px-5 py-4 border-2 border-brown-dark/15 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/25 outline-none transition-all duration-200 bg-white text-brown-dark text-base md:text-lg"
+                      className="w-full px-4 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
                       placeholder={t.leadForm.form.firstNamePlaceholder}
                     />
                   </div>
                   <div>
-                    <label className="block text-brown-dark font-medium mb-2 text-sm tracking-wide">
+                    <label className="block text-brown-dark font-medium mb-2 text-sm">
                       {t.leadForm.form.lastNamePlaceholder}
                     </label>
                     <input
@@ -2223,14 +2214,14 @@ export default function PlayaVivaLanding() {
                       required
                       value={formData.lastName}
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                      className="w-full px-5 py-4 border-2 border-brown-dark/15 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/25 outline-none transition-all duration-200 bg-white text-brown-dark text-base md:text-lg"
+                      className="w-full px-4 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
                       placeholder={t.leadForm.form.lastNamePlaceholder}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-brown-dark font-medium mb-2 text-sm tracking-wide">
+                  <label className="block text-brown-dark font-medium mb-2 text-sm">
                     {t.leadForm.form.emailPlaceholder}
                   </label>
                   <div className="relative">
@@ -2240,7 +2231,7 @@ export default function PlayaVivaLanding() {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full pl-12 pr-5 py-4 border-2 border-brown-dark/15 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/25 outline-none transition-all duration-200 bg-white text-brown-dark text-base md:text-lg"
+                      className="w-full pl-12 pr-4 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
                       placeholder={t.leadForm.form.emailPlaceholder}
                     />
                   </div>
@@ -2250,7 +2241,7 @@ export default function PlayaVivaLanding() {
                   type="submit"
                   size="lg"
                   disabled={isSubmitting}
-                  className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-bold py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-200 text-base md:text-lg disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold py-3.5 rounded-2xl shadow-lg hover:shadow-xl transition-all duraci�n-200 text-base disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <Download className={`mr-2 h-5 w-5 ${isSubmitting ? "animate-pulse" : ""}`} />
                   {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
@@ -2271,22 +2262,6 @@ export default function PlayaVivaLanding() {
                 <p className="text-taupe-warm text-xs text-center leading-relaxed">
                   {t.leadForm.form.privacy}
                 </p>
-
-                <div className="rounded-2xl bg-cream-light/70 border border-gold-warm/40 p-5">
-                  <p className="text-xs uppercase tracking-[0.4em] text-brown-dark/70 text-center mb-4">
-                    {t.leadForm.workflow.title}
-                  </p>
-                  <div className="grid md:grid-cols-3 gap-4 text-sm text-brown-dark/80">
-                    {t.leadForm.workflow.steps.map((step, index) => (
-                      <div key={step} className="text-center md:text-left">
-                        <p className="text-gold-warm font-semibold mb-1">
-                          {String(index + 1).padStart(2, "0")}
-                        </p>
-                        <p>{step}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </form>
             </div>
           </div>
