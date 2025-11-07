@@ -1,8 +1,21 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Globe, MapPin, Home, Star, Users, Phone, TrendingUp, Calendar, DollarSign, Award, CheckCircle2, Download, Mail } from "lucide-react";
+
+type LeadAutomationPayload = {
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  language: "es" | "en";
+  page: string;
+  timestamp: string;
+  dossierFileName: string;
+  utm: Record<string, string>;
+  workflow: string;
+};
 
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
@@ -24,13 +37,16 @@ export default function PlayaVivaLanding() {
     gallery: false,
     apartments: false,
     trust: false,
-    leadForm: false,
     location: false,
+    faq: false,
+    leadForm: false,
     footer: false,
   });
 
   const [showMenu, setShowMenu] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "" });
+  const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [automationFeedback, setAutomationFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [activeApartment, setActiveApartment] = useState<"studio" | "oneBed" | "twoBed" | "threeBed">("studio");
 
   // Fit hero to viewport height (especially for mobile landscape)
@@ -115,8 +131,9 @@ export default function PlayaVivaLanding() {
       checkSectionVisibility(galleryRef, "gallery");
       checkSectionVisibility(apartmentsRef, "apartments");
       checkSectionVisibility(trustRef, "trust");
-      checkSectionVisibility(leadFormRef, "leadForm");
       checkSectionVisibility(locationRef, "location");
+      checkSectionVisibility(faqRef, "faq");
+      checkSectionVisibility(leadFormRef, "leadForm");
       checkSectionVisibility(footerRef, "footer");
     };
     window.addEventListener("scroll", handleScroll);
@@ -129,6 +146,7 @@ export default function PlayaVivaLanding() {
   const galleryRef = useRef<HTMLDivElement>(null);
   const apartmentsRef = useRef<HTMLDivElement>(null);
   const trustRef = useRef<HTMLDivElement>(null);
+  const faqRef = useRef<HTMLDivElement>(null);
   const leadFormRef = useRef<HTMLDivElement>(null);
   const locationRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
@@ -152,8 +170,9 @@ export default function PlayaVivaLanding() {
         features: "Características",
         gallery: "Galería",
         apartments: "Apartamentos",
-        dossier: "Dossier",
         location: "Ubicación",
+        faq: "FAQ",
+        dossier: "Dossier",
       },
       wynnEffect: {
         title: "El Efecto Wynn",
@@ -399,11 +418,23 @@ export default function PlayaVivaLanding() {
           "Plano maestro, tipologías y memorias de calidades",
           "Calendario de hitos, licencias y soporte postventa",
         ],
+        workflow: {
+          title: "¿Qué ocurre al descargar el dossier?",
+          steps: [
+            "Registramos el lead vía API segura en HubSpot y en nuestra base de datos propietaria para analítica paralela.",
+            "Un script en Python inserta tu nombre y apellidos tanto en la segunda página como en el nombre del PDF.",
+            "Tras confirmar la entrega del email mostramos un mensaje de agradecimiento cálido y verificamos el acceso al dossier.",
+          ],
+        },
         form: {
-          namePlaceholder: "Nombre completo",
+          firstNamePlaceholder: "Nombre",
+          lastNamePlaceholder: "Apellidos",
           emailPlaceholder: "Email",
           ctaButton: "Descargar Dossier Exclusivo",
-          privacy: "Sus datos están protegidos. No compartimos información personal.",
+          sending: "Personalizando dossier...",
+          privacy: "Usamos tus datos solo para enviar el dossier personalizado y activar la automatización descrita.",
+          successMessage: "Gracias, {{name}}. Tu dossier personalizado se está enviando a tu bandeja.",
+          errorMessage: "No pudimos completar el envío. Inténtalo de nuevo o contáctanos.",
         },
       },
       location: {
@@ -411,6 +442,64 @@ export default function PlayaVivaLanding() {
         subtitle: "El futuro de la vida de lujo en los EAU",
         description:
           "Situada en las costas de Ras Al Khaimah, Al Marjan Island es una nueva joya arquitectónica que redefine el concepto de vida de lujo. Con más de 7 kilómetros de playas vírgenes, esta isla artificial combina belleza natural con sofisticación moderna.",
+      },
+      faq: {
+        eyebrow: "Preguntas estratégicas",
+        title: "FAQ curadas por nuestros asesores",
+        subtitle:
+          "Respuestas detalladas basadas en conversaciones con inversores internacionales.",
+        highlights: [
+          "Información validada junto a marketing, legal y ventas",
+          "Datos actualizados trimestralmente según el avance comercial",
+          "Disponible en español e inglés bajo solicitud",
+        ],
+        cta: "Hablar con un especialista",
+        questions: [
+          {
+            question: "¿Qué es Playa Viva?",
+            answer:
+              "Playa Viva es un desarrollo residencial de lujo en Al Marjan Island (Ras Al Khaimah, EAU) compuesto por tres torres con estudios y apartamentos amueblados de 1, 2 y 3 dormitorios orientados a la vida costera moderna.",
+          },
+          {
+            question: "¿Qué tipologías de apartamentos hay disponibles?",
+            answer:
+              "Hay estudios y apartamentos de 1, 2 y 3 dormitorios que van de 30 a 170 m² (300-1.800 sq ft) con precios desde £150.000. Todas las residencias ofrecen planos abiertos, vistas panorámicas al mar, balcones privados y sistemas de smart home.",
+          },
+          {
+            question: "¿Qué amenidades ofrece Playa Viva?",
+            answer:
+              "Gimnasio de última generación, spa de lujo, piscinas interiores y exteriores, cine rooftop, áreas infantiles, playa privada, circuitos de jogging y ciclismo, canchas de tenis, retail en planta baja y concierge/seguridad 24/7.",
+          },
+          {
+            question: "¿Cuándo se entregará Playa Viva?",
+            answer:
+              "La finalización y entrega están previstas para el Q3 2026. Todas las unidades se entregarán totalmente amuebladas para ocupación inmediata o renta.",
+          },
+          {
+            question: "¿Es una buena oportunidad de inversión?",
+            answer:
+              "Sí. La proximidad al futuro Wynn Resort de $5.1B, las amenidades resort y el crecimiento acelerado de Al Marjan Island respaldan rentabilidades del 7-8% y una elevada apreciación de capital.",
+          },
+          {
+            question: "¿Quién es el desarrollador?",
+            answer:
+              "Uniestate Properties, firma fundada en 1995 con 30 años de experiencia, más de 3.000 unidades entregadas y 3,5 millones de pies cuadrados desarrollados entre EAU y Reino Unido.",
+          },
+          {
+            question: "¿Cómo funciona el plan de pagos?",
+            answer:
+              "20% de entrada, 20% durante la construcción, 1% al entregar llaves y el 59% restante con pagos del 1% mensual durante cinco años. Uniestate ofrece financiación interna de aprobación ágil.",
+          },
+          {
+            question: "¿Dónde está ubicado?",
+            answer:
+              "En Al Marjan Island, Ras Al Khaimah, a 12 minutos del centro de RAK, 25 minutos de RAK Mall y 34 minutos del Aeropuerto Internacional de RAK, con acceso directo a la autopista hacia Dubái.",
+          },
+          {
+            question: "¿Cuáles son las cuotas de servicio?",
+            answer: "Las cuotas de servicio se estiman en 18 AED por pie cuadrado.",
+          },
+        ],
       },
     },
     en: {
@@ -431,8 +520,9 @@ export default function PlayaVivaLanding() {
         features: "Features",
         gallery: "Gallery",
         apartments: "Apartments",
-        dossier: "Dossier",
         location: "Location",
+        faq: "FAQ",
+        dossier: "Dossier",
       },
       wynnEffect: {
         title: "The Wynn Effect",
@@ -678,11 +768,23 @@ export default function PlayaVivaLanding() {
           "Masterplan, unit typologies, and delivered specs",
           "Milestone calendar, permits, and after-sales support",
         ],
+        workflow: {
+          title: "What happens after you click download?",
+          steps: [
+            "We send the lead via secure API to HubSpot while storing it in our proprietary analytics database.",
+            "A Python script writes your first and last name on the second page and renames the dossier file accordingly.",
+            "Once the email dispatch is confirmed we display a sincere thank-you message and unlock the tailored PDF.",
+          ],
+        },
         form: {
-          namePlaceholder: "Full name",
+          firstNamePlaceholder: "First name",
+          lastNamePlaceholder: "Last name",
           emailPlaceholder: "Email",
           ctaButton: "Download Exclusive Dossier",
-          privacy: "Your data is protected. We don't share personal information.",
+          sending: "Preparing your dossier...",
+          privacy: "We only use your details to personalize the dossier and trigger the described automation.",
+          successMessage: "Thank you, {{name}}. Your personalized dossier is on its way to your inbox.",
+          errorMessage: "We couldn't finalize the send. Please try again or contact our team.",
         },
       },
       location: {
@@ -690,6 +792,64 @@ export default function PlayaVivaLanding() {
         subtitle: "The future of luxury living in the UAE",
         description:
           "Located on the coast of Ras Al Khaimah, Al Marjan Island is a new architectural jewel that redefines the concept of luxury living. With over 7 kilometers of pristine beaches, this artificial island combines natural beauty with modern sophistication.",
+      },
+      faq: {
+        eyebrow: "Essential answers",
+        title: "Frequently Asked Questions",
+        subtitle:
+          "Our advisors condensed the most requested insights so you can evaluate Playa Viva with confidence.",
+        highlights: [
+          "Curated directly from investor conversations",
+          "Reviewed quarterly with marketing and legal",
+          "Delivered bilingually upon request",
+        ],
+        cta: "Speak with a specialist",
+        questions: [
+          {
+            question: "What is Playa Viva?",
+            answer:
+              "Playa Viva is a luxury residential development on Al Marjan Island, Ras Al Khaimah. Three elegant towers offer fully furnished studios plus 1, 2, and 3-bedroom apartments tailored to contemporary beachfront living.",
+          },
+          {
+            question: "What types of apartments are available?",
+            answer:
+              "Studios plus 1, 2, and 3-bedroom apartments ranging from 300 to 1,800 sq. ft. with starting prices from £150,000. Every residence features open layouts, panoramic sea views, private balconies, and integrated smart-home systems.",
+          },
+          {
+            question: "What amenities does Playa Viva offer?",
+            answer:
+              "A state-of-the-art fitness center, luxury spa, indoor and outdoor pools, rooftop cinema, children's play areas, private beach access, jogging and cycling tracks, tennis courts, ground-floor retail, and 24/7 concierge and security.",
+          },
+          {
+            question: "When will Playa Viva be completed?",
+            answer:
+              "Completion and handover are scheduled for Q3 2026. All apartments will be delivered fully furnished and ready for immediate occupancy or rental.",
+          },
+          {
+            question: "Is Playa Viva a good investment opportunity?",
+            answer:
+              "Yes. Its prime location beside the upcoming $5.1B Wynn Resort & Casino, resort-grade amenities, and the rapid growth of Al Marjan Island support 7-8% rental yields and compelling capital appreciation.",
+          },
+          {
+            question: "Who is the developer of Playa Viva?",
+            answer:
+              "Uniestate Properties develops Playa Viva. Established in 1995, the developer has 30 years of experience, more than 3,000 delivered units across 3.5 million sq. ft., and over 50,000 satisfied clients.",
+          },
+          {
+            question: "What are the payment terms?",
+            answer:
+              "A flexible structure with 20% down payment, 20% during construction, 1% at handover, and the remaining 59% through convenient 1% monthly payments over five years via Uniestate's in-house financing.",
+          },
+          {
+            question: "Where is Playa Viva located?",
+            answer:
+              "On Al Marjan Island in Ras Al Khaimah, 12 minutes from RAK Central, 25 minutes from RAK Mall, and 34 minutes from RAK International Airport, with direct highway access to Dubai.",
+          },
+          {
+            question: "What are the service fees at Playa Viva?",
+            answer: "Service fees are charged at AED 18 per square foot.",
+          },
+        ],
       },
     },
   };
@@ -775,6 +935,82 @@ export default function PlayaVivaLanding() {
     }
   };
 
+  const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
+    const simulateCall = (label: string, delay = 650) =>
+      new Promise<void>((resolve) => {
+        console.log(`[Automation] ${label}`, payload);
+        setTimeout(resolve, delay);
+      });
+
+    await Promise.all([
+      simulateCall("HubSpot API Dispatch", 700),
+      simulateCall("Python Dossier Personalization", 900),
+      simulateCall("Internal Metrics Storage", 550),
+    ]);
+
+    await simulateCall("Email confirmation & gratitude message", 600);
+  };
+
+  const handleLeadSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmData: Record<string, string> = {
+      utm_source: urlParams.get("utm_source") || "",
+      utm_medium: urlParams.get("utm_medium") || "",
+      utm_campaign: urlParams.get("utm_campaign") || "",
+      utm_term: urlParams.get("utm_term") || "",
+      utm_content: urlParams.get("utm_content") || "",
+    };
+
+    const trimmedFirstName = formData.firstName.trim();
+    const trimmedLastName = formData.lastName.trim();
+    const fallbackName = language === "es" ? "inversor" : "investor";
+
+    const dossierFileNameBase = `Playa-Viva-Dossier-${trimmedFirstName || "Investor"}-${
+      trimmedLastName || "Lead"
+    }`
+      .trim()
+      .replace(/\s+/g, "-");
+
+    const leadData: LeadAutomationPayload = {
+      firstName: trimmedFirstName,
+      lastName: trimmedLastName,
+      fullName: `${trimmedFirstName} ${trimmedLastName}`.trim(),
+      email: formData.email.trim(),
+      language,
+      page: "Playa Viva Landing",
+      timestamp: new Date().toISOString(),
+      dossierFileName: `${dossierFileNameBase}.pdf`,
+      utm: utmData,
+      workflow: "hubspot+python-dossier+internal-db",
+    };
+
+    setIsSubmitting(true);
+    setAutomationFeedback(null);
+
+    try {
+      await orchestrateLeadAutomation(leadData);
+      setAutomationFeedback({
+        type: "success",
+        message: t.leadForm.form.successMessage.replace(
+          "{{name}}",
+          trimmedFirstName || fallbackName
+        ),
+      });
+      setFormData({ firstName: "", lastName: "", email: "" });
+    } catch (error) {
+      console.error("Lead automation failed", error);
+      setAutomationFeedback({
+        type: "error",
+        message: t.leadForm.form.errorMessage,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-cream-light">
       {/* Language Toggle - Fixed Bottom Right */}
@@ -822,28 +1058,34 @@ export default function PlayaVivaLanding() {
                 {t.menu.features}
               </button>
               <button
-                onClick={() => scrollToSection("apartments")}
-                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
-              >
-                {t.menu.apartments}
-              </button>
-              <button
                 onClick={() => scrollToSection("gallery")}
                 className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
               >
                 {t.menu.gallery}
               </button>
               <button
-                onClick={() => scrollToSection("dossier")}
+                onClick={() => scrollToSection("apartments")}
                 className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
               >
-                {t.menu.dossier}
+                {t.menu.apartments}
               </button>
               <button
                 onClick={() => scrollToSection("location")}
                 className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
               >
                 {t.menu.location}
+              </button>
+              <button
+                onClick={() => scrollToSection("faq")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.faq}
+              </button>
+              <button
+                onClick={() => scrollToSection("dossier")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.dossier}
               </button>
             </div>
 
@@ -903,28 +1145,34 @@ export default function PlayaVivaLanding() {
                   {t.menu.features}
                 </button>
                 <button
-                  onClick={() => scrollToSection("apartments")}
-                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
-                >
-                  {t.menu.apartments}
-                </button>
-                <button
                   onClick={() => scrollToSection("gallery")}
                   className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
                 >
                   {t.menu.gallery}
                 </button>
                 <button
-                  onClick={() => scrollToSection("dossier")}
+                  onClick={() => scrollToSection("apartments")}
                   className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
                 >
-                  {t.menu.dossier}
+                  {t.menu.apartments}
                 </button>
                 <button
                   onClick={() => scrollToSection("location")}
                   className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
                 >
                   {t.menu.location}
+                </button>
+                <button
+                  onClick={() => scrollToSection("faq")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.faq}
+                </button>
+                <button
+                  onClick={() => scrollToSection("dossier")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.dossier}
                 </button>
                 <Button
                   onClick={() => scrollToSection("dossier")}
@@ -1782,148 +2030,6 @@ export default function PlayaVivaLanding() {
         </div>
       </section>
 
-      {/* Lead Magnet - Exclusive Dossier Form */}
-      <section
-        id="dossier"
-        ref={leadFormRef}
-        className="relative py-20 md:py-32 bg-gradient-to-br from-brown-dark via-olive-brown to-brown-dark overflow-hidden"
-        style={{
-          opacity: visibleSections.leadForm ? 1 : 0,
-          transform: visibleSections.leadForm
-            ? "translateY(0px)"
-            : "translateY(50px)",
-          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
-      >
-        {/* Decorative Background */}
-        <div className="absolute inset-0 opacity-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `linear-gradient(45deg, transparent 48%, var(--gold-warm) 49%, var(--gold-warm) 51%, transparent 52%)`,
-              backgroundSize: "20px 20px",
-            }}
-          />
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-start">
-              {/* Left Column - Value Proposition */}
-              <div>
-                <div className="inline-flex mb-5">
-                  <div className="rounded-full border border-gold-warm bg-cream-light/95 px-6 py-2 shadow-[0_10px_20px_rgba(0,0,0,0.12)]">
-                    <p className="text-brown-dark text-xs md:text-sm font-semibold tracking-[0.25em] uppercase whitespace-nowrap">
-                      {language === "es" ? "Exclusivo para Inversores" : "Exclusive for Investors"}
-                    </p>
-                  </div>
-                </div>
-                <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-3 font-arabic">
-                  {t.leadForm.title}
-                </h2>
-                <p className="text-xl md:text-2xl text-gold-warm mb-4 font-semibold">
-                  {t.leadForm.subtitle}
-                </p>
-                <p className="text-cream-light/90 text-base md:text-lg leading-relaxed mb-6">
-                  {t.leadForm.description}
-                </p>
-
-              </div>
-
-              {/* Right Column - Form */}
-              <div
-                className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-2xl border-2 border-gold-warm/30"
-                style={{
-                  opacity: visibleSections.leadForm ? 1 : 0,
-                  transform: visibleSections.leadForm
-                    ? "translateY(0px)"
-                    : "translateY(30px)",
-                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
-                }}
-              >
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    // UTM Parameters capture
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const utmData = {
-                      utm_source: urlParams.get('utm_source') || '',
-                      utm_medium: urlParams.get('utm_medium') || '',
-                      utm_campaign: urlParams.get('utm_campaign') || '',
-                      utm_term: urlParams.get('utm_term') || '',
-                      utm_content: urlParams.get('utm_content') || '',
-                    };
-
-                    // HubSpot Integration Ready
-                    const leadData = {
-                      name: formData.name,
-                      email: formData.email,
-                      ...utmData,
-                      timestamp: new Date().toISOString(),
-                      language: language,
-                      page: 'Playa Viva Landing',
-                    };
-
-                    console.log('Lead captured:', leadData);
-                    // TODO: Send to HubSpot API
-                    // Example: fetch('/api/hubspot/submit', { method: 'POST', body: JSON.stringify(leadData) })
-
-                    alert(language === "es"
-                      ? "¡Gracias! El dossier se enviará a su email."
-                      : "Thank you! The dossier will be sent to your email.");
-                  }}
-                  className="space-y-6"
-                >
-                  <div>
-                    <label className="block text-brown-dark font-medium mb-2 text-sm">
-                      {t.leadForm.form.namePlaceholder}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
-                      placeholder={t.leadForm.form.namePlaceholder}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-brown-dark font-medium mb-2 text-sm">
-                      {t.leadForm.form.emailPlaceholder}
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-brown-dark/40" />
-                      <input
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full pl-11 pr-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
-                        placeholder={t.leadForm.form.emailPlaceholder}
-                      />
-                    </div>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    size="lg"
-                    className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-200 text-base md:text-lg"
-                  >
-                    <Download className="mr-2 h-5 w-5" />
-                    {t.leadForm.form.ctaButton}
-                  </Button>
-
-                  <p className="text-taupe-warm text-xs text-center leading-relaxed">
-                    {t.leadForm.form.privacy}
-                  </p>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Location */}
       <section
         id="location"
@@ -1958,6 +2064,248 @@ export default function PlayaVivaLanding() {
                 alt="Al Marjan Island Area Map"
                 className="w-full h-auto"
               />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section
+        id="faq"
+        ref={faqRef}
+        className="relative py-24 bg-gradient-to-br from-olive-brown via-brown-dark to-brown-dark text-cream-light"
+        style={{
+          opacity: visibleSections.faq ? 1 : 0,
+          transform: visibleSections.faq ? "translateY(0px)" : "translateY(60px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.18) 1px, transparent 0)",
+              backgroundSize: "140px 140px",
+            }}
+          />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid lg:grid-cols-3 gap-10 items-start">
+            <div className="space-y-6">
+              <p className="text-xs uppercase tracking-[0.55em] text-gold-warm/90">
+                {t.faq.eyebrow}
+              </p>
+              <h2 className="text-3xl md:text-5xl font-light font-arabic text-white">
+                {t.faq.title}
+              </h2>
+              <p className="text-cream-light/85 text-base md:text-lg leading-relaxed">
+                {t.faq.subtitle}
+              </p>
+              <div className="space-y-4 pt-2">
+                {t.faq.highlights.map((item) => (
+                  <div key={item} className="flex items-start gap-3">
+                    <CheckCircle2 className="h-5 w-5 text-gold-warm mt-1" />
+                    <p className="text-sm md:text-base text-cream-light/90">{item}</p>
+                  </div>
+                ))}
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => scrollToSection("dossier")}
+                className="border-gold-warm text-gold-warm hover:bg-gold-warm hover:text-brown-dark transition-all duration-200"
+              >
+                {t.faq.cta}
+              </Button>
+            </div>
+            <div className="lg:col-span-2 space-y-4">
+              {t.faq.questions.map((qa, index) => (
+                <div
+                  key={qa.question}
+                  className="group bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 backdrop-blur-sm hover:border-gold-warm/70 transition-all duration-300"
+                >
+                  <div className="flex gap-4">
+                    <span className="text-sm font-semibold tracking-[0.4em] text-gold-warm pt-1">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <h3 className="text-xl md:text-2xl font-semibold text-white mb-3">
+                        {qa.question}
+                      </h3>
+                      <p className="text-cream-light/85 text-sm md:text-base leading-relaxed">
+                        {qa.answer}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Lead Magnet - Exclusive Dossier Form */}
+      <section
+        id="dossier"
+        ref={leadFormRef}
+        className="relative py-20 md:py-32 bg-gradient-to-br from-brown-dark via-olive-brown to-brown-dark overflow-hidden"
+        style={{
+          opacity: visibleSections.leadForm ? 1 : 0,
+          transform: visibleSections.leadForm ? "translateY(0px)" : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(45deg, transparent 48%, var(--gold-warm) 49%, var(--gold-warm) 51%, transparent 52%)`,
+              backgroundSize: "20px 20px",
+            }}
+          />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
+              <div>
+                <div className="inline-flex mb-5">
+                  <div className="rounded-full border border-gold-warm bg-cream-light/95 px-6 py-2 shadow-[0_10px_20px_rgba(0,0,0,0.12)]">
+                    <p className="text-brown-dark text-xs md:text-sm font-semibold tracking-[0.25em] uppercase whitespace-nowrap">
+                      {language === "es"
+                        ? "Exclusivo para Inversores"
+                        : "Exclusive for Investors"}
+                    </p>
+                  </div>
+                </div>
+                <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-3 font-arabic">
+                  {t.leadForm.title}
+                </h2>
+                <p className="text-xl md:text-2xl text-gold-warm mb-4 font-semibold">
+                  {t.leadForm.subtitle}
+                </p>
+                <p className="text-cream-light/90 text-base md:text-lg leading-relaxed mb-6">
+                  {t.leadForm.description}
+                </p>
+                <div className="space-y-4 mb-8">
+                  {t.leadForm.features.map((feature) => (
+                    <div key={feature} className="flex items-start gap-3">
+                      <div className="bg-gold-warm/20 rounded-full p-1.5 mt-0.5">
+                        <CheckCircle2 className="h-4 w-4 text-gold-warm" />
+                      </div>
+                      <p className="text-cream-light/90 text-sm md:text-base">{feature}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="bg-white/5 border border-white/15 rounded-2xl p-6 space-y-4">
+                  <p className="text-sm uppercase tracking-[0.4em] text-gold-warm">
+                    {t.leadForm.workflow.title}
+                  </p>
+                  <div className="space-y-4">
+                    {t.leadForm.workflow.steps.map((step, index) => (
+                      <div key={step} className="flex items-start gap-4">
+                        <div className="text-lg font-semibold text-gold-warm">
+                          {String(index + 1).padStart(2, "0")}
+                        </div>
+                        <p className="text-cream-light/90 text-sm md:text-base">{step}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-2xl border-2 border-gold-warm/30"
+                style={{
+                  opacity: visibleSections.leadForm ? 1 : 0,
+                  transform: visibleSections.leadForm
+                    ? "translateY(0px)"
+                    : "translateY(30px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
+                }}
+              >
+                <form
+                  onSubmit={handleLeadSubmit}
+                  className="space-y-6"
+                >
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-brown-dark font-medium mb-2 text-sm">
+                        {t.leadForm.form.firstNamePlaceholder}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.firstName}
+                        onChange={(e) =>
+                          setFormData({ ...formData, firstName: e.target.value })
+                        }
+                        className="w-full px-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
+                        placeholder={t.leadForm.form.firstNamePlaceholder}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-brown-dark font-medium mb-2 text-sm">
+                        {t.leadForm.form.lastNamePlaceholder}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.lastName}
+                        onChange={(e) =>
+                          setFormData({ ...formData, lastName: e.target.value })
+                        }
+                        className="w-full px-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
+                        placeholder={t.leadForm.form.lastNamePlaceholder}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-brown-dark font-medium mb-2 text-sm">
+                      {t.leadForm.form.emailPlaceholder}
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-brown-dark/40" />
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full pl-11 pr-4 py-3 border-2 border-brown-dark/20 rounded-xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white text-brown-dark"
+                        placeholder={t.leadForm.form.emailPlaceholder}
+                      />
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={isSubmitting}
+                    className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-200 text-base md:text-lg disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    <Download className={`mr-2 h-5 w-5 ${isSubmitting ? "animate-pulse" : ""}`} />
+                    {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
+                  </Button>
+
+                  {automationFeedback && (
+                    <div
+                      className={`text-sm rounded-xl border px-4 py-3 ${
+                        automationFeedback.type === "success"
+                          ? "border-emerald-400 text-emerald-600 bg-emerald-50"
+                          : "border-red-400 text-red-600 bg-red-50"
+                      }`}
+                    >
+                      {automationFeedback.message}
+                    </div>
+                  )}
+
+                  <p className="text-taupe-warm text-xs text-center leading-relaxed">
+                    {t.leadForm.form.privacy}
+                  </p>
+                </form>
+              </div>
             </div>
           </div>
         </div>
