@@ -1149,28 +1149,14 @@ export default function PlayaVivaLanding() {
 
           {/* Sitios de Interés */}
           {activeGalleryTab === "sitios" && (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
-              {[
-                { src: "/assets/imagenes/Collage_sitios_interes.png", span: "md:col-span-2 md:row-span-2" },
-                { src: "/assets/imagenes/composicion_casino_transparente.png", span: "" },
-                { src: "/assets/imagenes/Fondo%20Dubai.jpeg", span: "" },
-                { src: "/assets/imagenes/wynn.jpg", span: "md:col-span-2" },
-                { src: "/assets/imagenes/Wynn%20Resort%20to%20Boosts%20Ras%20Al%20Khaimah%27s%20Property%20Market%20with%20High%20Returns%20on%20Investment.jpeg", span: "" },
-              ].map((image, index) => (
-                <div
-                  key={index}
-                  className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
-                >
-                  <div className="aspect-square">
-                    <img
-                      src={image.src}
-                      alt={`Sitio de interés ${index + 1}`}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-              ))}
+            <div className="max-w-6xl mx-auto">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
+                <img
+                  src="/assets/imagenes/Collage_sitios_interes.png"
+                  alt="Sitios de interes cercanos a Playa Viva"
+                  className="w-full h-auto"
+                />
+              </div>
             </div>
           )}
         </div>
@@ -1598,3 +1584,4 @@ export default function PlayaVivaLanding() {
     </div>
   );
 }
+
