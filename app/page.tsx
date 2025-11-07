@@ -306,10 +306,10 @@ export default function PlayaVivaLanding() {
         description:
           "Acceda al análisis detallado de la inversión, incluyendo proyecciones de rentabilidad, planos, especificaciones técnicas y el impacto financiero del Wynn Resort en Al Marjan Island.",
         features: [
-          "Proyecciones de rentabilidad 2026-2030",
-          "Análisis del Efecto Wynn en precios de alquiler",
-          "Planos y renders de alta resolución",
-          "Plan de pago detallado y opciones de financiamiento",
+          "Escenarios de rentabilidad y salida 2026-2032",
+          "Simulación de cashflow con el plan 1% mensual",
+          "Plano maestro, tipologías y memorias de calidades",
+          "Calendario de hitos, licencias y soporte postventa",
         ],
         form: {
           namePlaceholder: "Nombre completo",
@@ -500,10 +500,10 @@ export default function PlayaVivaLanding() {
         description:
           "Access detailed investment analysis, including profitability projections, floor plans, technical specifications, and the financial impact of Wynn Resort on Al Marjan Island.",
         features: [
-          "2026-2030 profitability projections",
-          "Wynn Effect analysis on rental prices",
-          "High-resolution floor plans and renders",
-          "Detailed payment plan and financing options",
+          "2026-2032 return scenarios and exit strategies",
+          "Cash-flow simulation with the 1% monthly plan",
+          "Masterplan, unit typologies, and delivered specs",
+          "Milestone calendar, permits, and after-sales support",
         ],
         form: {
           namePlaceholder: "Full name",
@@ -1366,30 +1366,28 @@ export default function PlayaVivaLanding() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-5xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
               {/* Left Column - Value Proposition */}
               <div>
-                <div className="inline-block mb-8">
-                  <div className="relative bg-gradient-to-r from-gold-warm via-gold-warm to-gold-warm/90 rounded-2xl px-8 py-4 shadow-2xl shadow-gold-warm/40 border-2 border-cream-light/20">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-2xl"></div>
-                    <p className="relative text-brown-dark text-base md:text-lg font-bold tracking-wider uppercase flex items-center gap-2">
-                      <Award className="h-5 w-5" />
+                <div className="inline-flex mb-5">
+                  <div className="rounded-full border border-gold-warm bg-cream-light/95 px-6 py-2 shadow-[0_10px_20px_rgba(0,0,0,0.12)]">
+                    <p className="text-brown-dark text-xs md:text-sm font-semibold tracking-[0.25em] uppercase whitespace-nowrap">
                       {language === "es" ? "Exclusivo para Inversores" : "Exclusive for Investors"}
                     </p>
                   </div>
                 </div>
-                <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-4 font-arabic">
+                <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-3 font-arabic">
                   {t.leadForm.title}
                 </h2>
-                <p className="text-xl md:text-2xl text-gold-warm mb-6 font-semibold">
+                <p className="text-xl md:text-2xl text-gold-warm mb-4 font-semibold">
                   {t.leadForm.subtitle}
                 </p>
-                <p className="text-cream-light/90 text-base md:text-lg leading-relaxed mb-8">
+                <p className="text-cream-light/90 text-base md:text-lg leading-relaxed mb-6">
                   {t.leadForm.description}
                 </p>
 
                 {/* Features List */}
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {t.leadForm.features.map((feature, index) => (
                     <div
                       key={index}
