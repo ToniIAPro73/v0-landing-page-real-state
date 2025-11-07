@@ -6,6 +6,7 @@ import { Globe, MapPin, Home, Star, Users, Phone, TrendingUp, Calendar, DollarSi
 
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
+  const [activeGalleryTab, setActiveGalleryTab] = useState<"servicios" | "interior" | "sitios">("servicios");
   const [animationStates, setAnimationStates] = useState({
     backgroundImage: false,
     logo: false,
@@ -1059,7 +1060,7 @@ export default function PlayaVivaLanding() {
         }}
       >
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16 max-w-4xl mx-auto">
+          <div className="text-center mb-12 max-w-4xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
               {t.gallery.title}
             </h2>
@@ -1071,44 +1072,124 @@ export default function PlayaVivaLanding() {
             </p>
           </div>
 
-          {/* Gallery Grid - Masonry Style */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
-            {[
-              { src: "/assets/imagenes/foto%20galeria%201.jpg", span: "md:col-span-2 md:row-span-2" },
-              { src: "/assets/imagenes/foto%20galeria%205.jpg", span: "" },
-              { src: "/assets/imagenes/foto%20galeria%206.jpg", span: "" },
-              { src: "/assets/imagenes/foto%20galeria%207.jpg", span: "" },
-              { src: "/assets/imagenes/view1.webp", span: "md:col-span-2" },
-              { src: "/assets/imagenes/view2.jpg", span: "" },
-              { src: "/assets/imagenes/foto%20galeria%2010.jpg", span: "md:row-span-2" },
-              { src: "/assets/imagenes/Playa%20Viva%20complex.jpg", span: "md:col-span-2" },
-              { src: "/assets/imagenes/view3.webp", span: "" },
-              { src: "/assets/imagenes/beach.webp", span: "" },
-            ].map((image, index) => (
-              <div
-                key={index}
-                className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
-                style={{
-                  opacity: visibleSections.gallery ? 1 : 0,
-                  transform: visibleSections.gallery
-                    ? "translateY(0px)"
-                    : "translateY(30px)",
-                  transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
-                    index * 0.05
-                  }s`,
-                }}
-              >
-                <div className="aspect-square">
-                  <img
-                    src={image.src}
-                    alt={`Playa Viva ${index + 1}`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-            ))}
+          {/* Gallery Tabs */}
+          <div className="flex justify-center gap-4 mb-12 flex-wrap">
+            <button
+              onClick={() => setActiveGalleryTab("servicios")}
+              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                activeGalleryTab === "servicios"
+                  ? "bg-gold-warm text-brown-dark shadow-lg"
+                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+              }`}
+            >
+              {language === "es" ? "Servicios e Instalaciones" : "Services & Facilities"}
+            </button>
+            <button
+              onClick={() => setActiveGalleryTab("interior")}
+              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                activeGalleryTab === "interior"
+                  ? "bg-gold-warm text-brown-dark shadow-lg"
+                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+              }`}
+            >
+              {language === "es" ? "Interiores" : "Interiors"}
+            </button>
+            <button
+              onClick={() => setActiveGalleryTab("sitios")}
+              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                activeGalleryTab === "sitios"
+                  ? "bg-gold-warm text-brown-dark shadow-lg"
+                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+              }`}
+            >
+              {language === "es" ? "Sitios de Interés" : "Points of Interest"}
+            </button>
           </div>
+
+          {/* Servicios e Instalaciones */}
+          {activeGalleryTab === "servicios" && (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
+              {[
+                { src: "/assets/imagenes/building-structure.webp", span: "md:col-span-2 md:row-span-2" },
+                { src: "/assets/imagenes/foto%20galeria%2011.webp", span: "" },
+                { src: "/assets/imagenes/cinema.webp", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%204.jpg", span: "md:row-span-2" },
+                { src: "/assets/imagenes/foto%20galeria%205.jpg", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%206.jpg", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%207.jpg", span: "md:col-span-2" },
+                { src: "/assets/imagenes/foto%20galeria%2010.jpg", span: "" },
+              ].map((image, index) => (
+                <div
+                  key={index}
+                  className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
+                >
+                  <div className="aspect-square">
+                    <img
+                      src={image.src}
+                      alt={`Servicios ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Interior */}
+          {activeGalleryTab === "interior" && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+              {[
+                { src: "/assets/imagenes/studio.webp", span: "md:col-span-2 md:row-span-2" },
+                { src: "/assets/imagenes/1-bedroom.webp", span: "" },
+                { src: "/assets/imagenes/2-bedroom.webp", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%201.jpg", span: "md:col-span-2" },
+                { src: "/assets/imagenes/foto%20galeria%202.jpg", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%203.jpg", span: "" },
+              ].map((image, index) => (
+                <div
+                  key={index}
+                  className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
+                >
+                  <div className="aspect-square">
+                    <img
+                      src={image.src}
+                      alt={`Interior ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Sitios de Interés */}
+          {activeGalleryTab === "sitios" && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+              {[
+                { src: "/assets/imagenes/composicion%20fondo%20transparente.png", span: "md:col-span-2 md:row-span-2" },
+                { src: "/assets/imagenes/composicion_casino_transparente.png", span: "" },
+                { src: "/assets/imagenes/Fondo%20Dubai.jpeg", span: "" },
+                { src: "/assets/imagenes/wynn.jpg", span: "md:col-span-2" },
+                { src: "/assets/imagenes/Wynn%20Resort%20to%20Boosts%20Ras%20Al%20Khaimah%27s%20Property%20Market%20with%20High%20Returns%20on%20Investment.jpeg", span: "" },
+              ].map((image, index) => (
+                <div
+                  key={index}
+                  className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
+                >
+                  <div className="aspect-square">
+                    <img
+                      src={image.src}
+                      alt={`Sitio de interés ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -1319,29 +1400,31 @@ export default function PlayaVivaLanding() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Left Column - Value Proposition */}
               <div>
-                <div className="inline-block mb-6">
-                  <div className="bg-gold-warm/20 border border-gold-warm/40 rounded-full px-6 py-2">
-                    <p className="text-gold-warm text-sm font-semibold tracking-widest uppercase">
+                <div className="inline-block mb-8">
+                  <div className="relative bg-gradient-to-r from-gold-warm via-gold-warm to-gold-warm/90 rounded-2xl px-8 py-4 shadow-2xl shadow-gold-warm/40 border-2 border-cream-light/20">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-2xl"></div>
+                    <p className="relative text-brown-dark text-base md:text-lg font-bold tracking-wider uppercase flex items-center gap-2">
+                      <Award className="h-5 w-5" />
                       {language === "es" ? "Exclusivo para Inversores" : "Exclusive for Investors"}
                     </p>
                   </div>
                 </div>
-                <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-6 font-arabic">
+                <h2 className="text-3xl md:text-5xl font-light text-cream-light mb-4 font-arabic">
                   {t.leadForm.title}
                 </h2>
-                <p className="text-xl text-gold-warm mb-8">
+                <p className="text-xl md:text-2xl text-gold-warm mb-6 font-semibold">
                   {t.leadForm.subtitle}
                 </p>
-                <p className="text-cream-light/90 text-base leading-relaxed mb-8">
+                <p className="text-cream-light/90 text-base md:text-lg leading-relaxed mb-8">
                   {t.leadForm.description}
                 </p>
 
                 {/* Features List */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {t.leadForm.features.map((feature, index) => (
                     <div
                       key={index}
-                      className="flex items-start"
+                      className="flex items-start bg-white/5 border border-gold-warm/20 rounded-lg p-3 hover:bg-white/10 hover:border-gold-warm/40 transition-all duration-300"
                       style={{
                         opacity: visibleSections.leadForm ? 1 : 0,
                         transform: visibleSections.leadForm
@@ -1352,8 +1435,10 @@ export default function PlayaVivaLanding() {
                         }s`,
                       }}
                     >
-                      <CheckCircle2 className="h-5 w-5 text-gold-warm mr-3 shrink-0 mt-0.5" />
-                      <span className="text-cream-light text-sm md:text-base">{feature}</span>
+                      <div className="bg-gold-warm/20 rounded-full p-1 mr-3 shrink-0 mt-0.5">
+                        <CheckCircle2 className="h-5 w-5 text-gold-warm" />
+                      </div>
+                      <span className="text-cream-light text-sm md:text-base font-medium">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -1467,16 +1552,27 @@ export default function PlayaVivaLanding() {
         }}
       >
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
-              {t.location.title}
-            </h2>
-            <h3 className="text-2xl text-gold-warm mb-8">
-              {t.location.subtitle}
-            </h3>
-            <p className="text-taupe-warm text-lg leading-relaxed">
-              {t.location.description}
-            </p>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
+                {t.location.title}
+              </h2>
+              <h3 className="text-2xl text-gold-warm mb-8">
+                {t.location.subtitle}
+              </h3>
+              <p className="text-taupe-warm text-lg leading-relaxed max-w-4xl mx-auto">
+                {t.location.description}
+              </p>
+            </div>
+
+            {/* Area Map */}
+            <div className="mt-12 rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30">
+              <img
+                src="/assets/imagenes/areamap.webp"
+                alt="Al Marjan Island Area Map"
+                className="w-full h-auto"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -1484,7 +1580,7 @@ export default function PlayaVivaLanding() {
       {/* Footer CTA */}
       <section
         ref={footerRef}
-        className="relative py-16 bg-brown-dark"
+        className="relative py-20 bg-gradient-to-br from-brown-dark via-brown-dark to-olive-brown"
         style={{
           opacity: visibleSections.footer ? 1 : 0,
           transform: visibleSections.footer
@@ -1494,21 +1590,22 @@ export default function PlayaVivaLanding() {
         }}
       >
         <div className="container mx-auto px-4 text-center">
-          <div className="max-w-2xl mx-auto space-y-6">
-            <h3 className="text-3xl text-gold-warm font-light">
+          <div className="max-w-3xl mx-auto space-y-8">
+            <h3 className="text-3xl md:text-4xl text-gold-warm font-semibold">
               {language === "es" ? "¿Listo para invertir?" : "Ready to invest?"}
             </h3>
-            <p className="text-cream-light/90">
+            <p className="text-cream-light text-base md:text-lg leading-relaxed font-medium">
               {language === "es"
                 ? "Contacta con nuestro equipo de expertos para obtener información personalizada sobre Playa Viva."
                 : "Contact our expert team for personalized information about Playa Viva."}
             </p>
             <div className="flex justify-center">
               <Button
+                onClick={() => scrollToSection("dossier")}
                 size="lg"
-                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-8 py-6 text-lg rounded-xl shadow-2xl hover:scale-105 transition-all duration-300"
+                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-bold px-10 py-6 text-base md:text-lg rounded-xl shadow-2xl hover:scale-105 transition-all duration-300"
               >
-                <Phone className="mr-2 h-5 w-5" />
+                <Phone className="mr-2 h-6 w-6" />
                 {language === "es" ? "Contactar Ahora" : "Contact Now"}
               </Button>
             </div>
