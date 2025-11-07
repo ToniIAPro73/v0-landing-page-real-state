@@ -878,8 +878,8 @@ export default function PlayaVivaLanding() {
           {/* Header */}
           <div className="text-center mb-16 max-w-4xl mx-auto">
             <div className="inline-block mb-4">
-              <div className="bg-gold-warm/20 border border-gold-warm/40 rounded-full px-6 py-2">
-                <p className="text-gold-warm text-sm font-semibold tracking-widest uppercase">
+              <div className="bg-gold-warm/70 border-2 border-gold-warm rounded-full px-6 py-3 shadow-lg shadow-gold-warm/30">
+                <p className="text-brown-dark text-base font-bold tracking-widest uppercase">
                   {language === "es" ? "Oportunidad Histórica" : "Historic Opportunity"}
                 </p>
               </div>
@@ -927,7 +927,7 @@ export default function PlayaVivaLanding() {
             {t.wynnEffect.stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-br from-gold-warm/10 to-gold-warm/5 backdrop-blur-sm border-2 border-gold-warm/30 rounded-2xl p-8 text-center hover:border-gold-warm/60 hover:shadow-2xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-2"
+                className="bg-gradient-to-br from-gold-warm/25 to-gold-warm/15 backdrop-blur-sm border-2 border-gold-warm/70 rounded-2xl p-8 text-center shadow-lg shadow-gold-warm/20 hover:border-gold-warm hover:shadow-2xl hover:shadow-gold-warm/40 transition-all duration-300 hover:-translate-y-2"
                 style={{
                   opacity: visibleSections.wynnEffect ? 1 : 0,
                   transform: visibleSections.wynnEffect
