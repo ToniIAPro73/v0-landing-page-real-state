@@ -433,7 +433,7 @@ export default function PlayaVivaLanding() {
       </div>
 
       {/* Sticky Navigation Menu - Uniestate UK Style */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo Uniestate */}
@@ -512,7 +512,7 @@ export default function PlayaVivaLanding() {
 
           {/* Mobile Menu Dropdown */}
           {showMenu && (
-            <div className="md:hidden py-4 border-t border-brown-dark/10 bg-white">
+            <div className="md:hidden py-4 border-t border-brown-dark/10 bg-cream-light">
               <div className="flex flex-col space-y-3">
                 <button
                   onClick={() => scrollToSection("wynn-effect")}
@@ -711,7 +711,7 @@ export default function PlayaVivaLanding() {
                     className="bg-gold-warm text-brown-dark font-bold antialiased tracking-wide px-10 py-4 text-base sm:text-lg rounded-xl border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 shadow-2xl transition-all duration-200 hover:bg-gold-warm/80 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(0,0,0,0.55),0_0_48px_rgba(162,144,96,0.65)] hover:ring-gold-warm/85 hover:scale-105"
                   >
                     <span className="flex items-center gap-3">
-                      <span className="text-2xl">📥</span>
+                      <span className="text-2xl">⬇️</span>
                       <span>{language === "es" ? "Dossier Exclusivo" : "Exclusive Dossier"}</span>
                     </span>
                   </Button>
