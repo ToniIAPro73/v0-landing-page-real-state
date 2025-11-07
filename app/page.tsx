@@ -6,7 +6,7 @@ import { Globe, MapPin, Home, Star, Users, Phone, TrendingUp, Calendar, DollarSi
 
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
-  const [activeGalleryTab, setActiveGalleryTab] = useState<"servicios" | "interior" | "sitios">("servicios");
+  const [activeGalleryTab, setActiveGalleryTab] = useState<"servicios" | "interior" | "sitios" | "video">("servicios");
   const [animationStates, setAnimationStates] = useState({
     backgroundImage: false,
     logo: false,
@@ -1104,6 +1104,16 @@ export default function PlayaVivaLanding() {
             >
               {language === "es" ? "Sitios de Interés" : "Points of Interest"}
             </button>
+            <button
+              onClick={() => setActiveGalleryTab("video")}
+              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                activeGalleryTab === "video"
+                  ? "bg-gold-warm text-brown-dark shadow-lg"
+                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+              }`}
+            >
+              {language === "es" ? "Video" : "Video"}
+            </button>
           </div>
 
           {/* Servicios e Instalaciones */}
@@ -1156,6 +1166,23 @@ export default function PlayaVivaLanding() {
                   alt="Sitios de interes cercanos a Playa Viva"
                   className="w-full h-auto"
                 />
+              </div>
+            </div>
+          )}
+
+          {/* Video */}
+          {activeGalleryTab === "video" && (
+            <div className="max-w-6xl mx-auto">
+              <div className="relative rounded-3xl overflow-hidden border-2 border-gold-warm/40 shadow-2xl bg-black aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/KbazzvTtRkY?rel=0&modestbranding=1"
+                  title="Playa Viva Overview"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-transparent" />
               </div>
             </div>
           )}
