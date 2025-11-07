@@ -12,7 +12,7 @@ HUB_API_URL = f"https://api.hsforms.com/submissions/v3/integration/submit/{HUB_I
 
 # --- CONFIGURACIÓN DEL PDF ---
 PDF_BASE_PATH = "Dossier-Personalizado.pdf"
-PDF_OUTPUT_DIR = "dossiers_personalizados" 
+PDF_OUTPUT_DIR = r"C:\Users\tu_usuario\Documentos\Dossiers_PlayaViva" 
 CAMPO_PDF_A_RELLENAR = "nombre_personalizacion_lead"
 
 def personalizar_y_enviar(data_from_landing_page):
