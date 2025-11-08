@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Globe, MapPin, Home, Star, Users, Phone, TrendingUp, Calendar, DollarSign, Award, CheckCircle2, Download, Mail } from "lucide-react";
 
+const SITE_URL = "https://landing-page-playa-viva.vercel.app";
+
 type LeadAutomationPayload = {
   firstName: string;
   lastName: string;
@@ -862,6 +864,10 @@ export default function PlayaVivaLanding() {
   const t = content[language];
   const priceString = language === "es" ? "192.000€" : "£172,000";
   const pricePrefix = language === "es" ? "Desde" : "Starting from";
+  const mobileMenuLabels =
+    language === "es"
+      ? { open: "Abrir menú de navegación", close: "Cerrar menú de navegación" }
+      : { open: "Open navigation menu", close: "Close navigation menu" };
 
   const apartmentConfigs = {
     studio: {
@@ -941,6 +947,46 @@ export default function PlayaVivaLanding() {
   const activeApartmentConfig = apartmentConfigs[activeApartment];
   const activeApartmentPrice = apartmentPrices[activeApartment][language];
   const highlightItems = [...apartmentCopy.highlights, t.apartments.note];
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Residence",
+    name: "Playa Viva Residences",
+    description:
+      language === "es"
+        ? "Residencias frente al mar en Al Marjan Island con entrega llave en mano y plan 1% mensual."
+        : "Seafront residences in Al Marjan Island with turnkey delivery and a 1% monthly plan.",
+    url: SITE_URL,
+    image: `${SITE_URL}/assets/imagenes/hero-image.webp`,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Al Marjan Island",
+      addressLocality: "Ras Al Khaimah",
+      addressCountry: "AE",
+    },
+    offers: [
+      {
+        "@type": "AggregateOffer",
+        priceCurrency: "GBP",
+        lowPrice: "172000",
+        highPrice: "795000",
+        offerCount: 4,
+        availability: "https://schema.org/InStock",
+      },
+      {
+        "@type": "AggregateOffer",
+        priceCurrency: "EUR",
+        lowPrice: "192000",
+        highPrice: "905000",
+        offerCount: 4,
+        availability: "https://schema.org/InStock",
+      },
+    ],
+    seller: {
+      "@type": "Organization",
+      name: "Uniestate",
+      url: "https://www.uniestate.co.uk",
+    },
+  };
   const featureColumns = [
     t.leadForm.features.slice(0, 2),
     t.leadForm.features.slice(2),
@@ -1041,6 +1087,11 @@ export default function PlayaVivaLanding() {
 
   return (
     <div className="min-h-screen bg-cream-light">
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       {/* Language Toggle - Fixed Bottom Right */}
       <div className="fixed bottom-6 right-6 z-[100]">
         <Button
@@ -1130,8 +1181,12 @@ export default function PlayaVivaLanding() {
 
             {/* Mobile Menu Button */}
             <button
+              type="button"
               onClick={() => setShowMenu(!showMenu)}
               className="md:hidden text-brown-dark hover:text-gold-warm p-2"
+              aria-label={showMenu ? mobileMenuLabels.close : mobileMenuLabels.open}
+              aria-expanded={showMenu}
+              aria-controls="mobile-nav-menu"
             >
               <svg
                 className="w-6 h-6"
@@ -1153,7 +1208,10 @@ export default function PlayaVivaLanding() {
 
           {/* Mobile Menu Dropdown */}
           {showMenu && (
-            <div className="md:hidden py-4 border-t border-brown-dark/10 bg-cream-light">
+            <div
+              id="mobile-nav-menu"
+              className="md:hidden py-4 border-t border-brown-dark/10 bg-cream-light"
+            >
               <div className="flex flex-col space-y-3">
                 <button
                   onClick={() => scrollToSection("wynn-effect")}
@@ -1650,6 +1708,9 @@ export default function PlayaVivaLanding() {
                   src="/assets/imagenes/Collage-servicios-instalaciones.png"
                   alt="Servicios e Instalaciones - Playa Viva"
                   className="w-full h-auto"
+                  width={1210}
+                  height={968}
+                  loading="lazy"
                 />
               </div>
             </div>
@@ -2112,12 +2173,18 @@ export default function PlayaVivaLanding() {
                   src="/assets/imagenes/areamap.webp"
                   alt="Al Marjan Island Area Map"
                   className="w-full h-auto"
+                  width={1200}
+                  height={704}
+                  loading="lazy"
                 />
               ) : (
                 <img
                   src="/assets/imagenes/Collage_Al_Marjan_Island.png"
                   alt="Al Marjan Island Collage"
                   className="w-full h-auto"
+                  width={1200}
+                  height={900}
+                  loading="lazy"
                 />
               )}
             </div>
