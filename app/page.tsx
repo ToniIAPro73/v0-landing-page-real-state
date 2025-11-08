@@ -860,7 +860,7 @@ export default function PlayaVivaLanding() {
   };
 
   const t = content[language];
-  const priceString = language === "es" ? "170.000€" : "£150,000";
+  const priceString = language === "es" ? "192.000€" : "£172,000";
   const pricePrefix = language === "es" ? "Desde" : "Starting from";
 
   const apartmentConfigs = {
@@ -888,6 +888,13 @@ export default function PlayaVivaLanding() {
       bedrooms: 3,
       bathrooms: 2,
     },
+  } as const;
+
+  const apartmentPrices = {
+    studio: { en: "£172,000", es: "192.000€" },
+    oneBed: { en: "£325,000", es: "370.000€" },
+    twoBed: { en: "£526,000", es: "598.000€" },
+    threeBed: { en: "£795,000", es: "905.000€" },
   } as const;
 
   const formatSizeRange = (range: [number, number]) => {
@@ -921,14 +928,19 @@ export default function PlayaVivaLanding() {
 
   const infoLabels = {
     size: language === "es" ? "Superficie" : "Interior size",
-    price: language === "es" ? "Precio orientativo" : "Price guidance",
+    price: language === "es" ? "Desde" : "From",
     bedrooms: language === "es" ? "Dormitorios" : "Bedrooms",
     bathrooms: language === "es" ? "Baños" : "Bathrooms",
     parking: "Parking",
   };
 
+  const statCardBaseClasses =
+    "rounded-2xl border border-gold-warm/30 p-4 shadow-sm bg-gradient-to-br from-[#fdf9f3] via-[#f7ede1] to-[#f1e2d3] text-brown-dark transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:brightness-95";
+
   const apartmentCopy = t.apartments.tabs[activeApartment];
   const activeApartmentConfig = apartmentConfigs[activeApartment];
+  const activeApartmentPrice = apartmentPrices[activeApartment][language];
+  const highlightItems = [...apartmentCopy.highlights, t.apartments.note];
   const featureColumns = [
     t.leadForm.features.slice(0, 2),
     t.leadForm.features.slice(2),
@@ -1777,7 +1789,7 @@ export default function PlayaVivaLanding() {
                     {apartmentCopy.description}
                   </p>
                   <div className="space-y-3 pt-4">
-                    {apartmentCopy.highlights.map((highlight, index) => (
+                    {highlightItems.map((highlight, index) => (
                       <div key={index} className="flex items-start gap-3">
                         <div className="bg-gold-warm/20 rounded-full p-1 mt-0.5">
                           <CheckCircle2 className="h-4 w-4 text-gold-warm" />
@@ -1789,7 +1801,7 @@ export default function PlayaVivaLanding() {
                 </div>
 
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="rounded-2xl border border-gold-warm/30 p-4">
+                  <div className={statCardBaseClasses}>
                     <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
                       {infoLabels.size}
                     </p>
@@ -1797,15 +1809,15 @@ export default function PlayaVivaLanding() {
                       {formatSizeRange(activeApartmentConfig.sizeSqftRange)}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-gold-warm/30 p-4">
+                  <div className={statCardBaseClasses}>
                     <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
                       {infoLabels.price}
                     </p>
-                    <p className="text-sm font-semibold text-brown-dark leading-relaxed">
-                      {t.apartments.note}
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {activeApartmentPrice}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-gold-warm/30 p-4">
+                  <div className={statCardBaseClasses}>
                     <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
                       {infoLabels.bedrooms}
                     </p>
@@ -1813,7 +1825,7 @@ export default function PlayaVivaLanding() {
                       {formatBedroomValue(activeApartmentConfig.bedrooms)}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-gold-warm/30 p-4">
+                  <div className={statCardBaseClasses}>
                     <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
                       {infoLabels.bathrooms}
                     </p>
@@ -1821,7 +1833,7 @@ export default function PlayaVivaLanding() {
                       {formatBathroomValue(activeApartmentConfig.bathrooms)}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-gold-warm/30 p-4 sm:col-span-2">
+                  <div className={`${statCardBaseClasses} sm:col-span-2`}>
                     <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
                       {infoLabels.parking}
                     </p>
