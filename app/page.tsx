@@ -2164,12 +2164,20 @@ export default function PlayaVivaLanding() {
                 {language === "es" ? "Dossier de Inversión Exclusivo" : "Exclusive Investment Dossier"}
               </div>
             </div>
-            <p className="text-cream-light text-base md:text-lg leading-relaxed">
+            <p className="text-white/95 text-base md:text-lg leading-relaxed font-light">
               {t.leadForm.intro}
             </p>
           </div>
 
-          <div className="mt-8 w-full max-w-2xl mx-auto grid md:[grid-template-columns:0.85fr_1.15fr] gap-4">
+          {/* Texto descriptivo debajo del subtítulo */}
+          <div className="mt-6 max-w-3xl mx-auto">
+            <p className="text-cream-light/85 text-sm leading-relaxed text-center">
+              {t.leadForm.description}
+            </p>
+          </div>
+
+          {/* Checks en dos columnas FUERA del card */}
+          <div className="mt-6 w-full max-w-2xl mx-auto grid md:[grid-template-columns:0.85fr_1.15fr] gap-4">
             {featureColumns.map((column, columnIndex) => (
               <div key={columnIndex} className="space-y-3 text-left">
                 {column.map((feature) => (
@@ -2184,12 +2192,25 @@ export default function PlayaVivaLanding() {
             ))}
           </div>
 
+          {/* Card del CTA con efectos premium */}
           <div className="mt-10 w-full flex justify-center">
-            <div className="w-full max-w-[620px] rounded-[24px] border border-gold-warm/35 bg-white/96 shadow-[0_45px_90px_rgba(0,0,0,0.32)] px-5 md:px-7 py-7">
-              <form onSubmit={handleLeadSubmit} className="space-y-6 text-left">
-                <div className="grid md:[grid-template-columns:0.7fr_1.3fr] gap-4">
+            <div className="w-full max-w-[500px] rounded-3xl border-2 border-gold-warm/40 bg-gradient-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] shadow-[0_20px_60px_rgba(162,144,96,0.35),0_0_80px_rgba(162,144,96,0.15),0_0_0_1px_rgba(255,255,255,0.8)_inset] backdrop-blur-sm px-6 md:px-8 py-6 relative overflow-hidden transition-all duration-500 hover:shadow-[0_25px_70px_rgba(162,144,96,0.45),0_0_100px_rgba(162,144,96,0.2),0_0_0_1px_rgba(255,255,255,0.9)_inset] hover:scale-[1.01]">
+              {/* Efecto de brillo dorado animado en el borde superior */}
+              <div className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none"
+                   style={{
+                     background: 'radial-gradient(circle at top right, rgba(162,144,96,0.25), transparent 60%)',
+                   }}
+              />
+              {/* Efecto de brillo secundario inferior */}
+              <div className="absolute inset-0 rounded-3xl opacity-30 pointer-events-none"
+                   style={{
+                     background: 'radial-gradient(circle at bottom left, rgba(184,166,115,0.2), transparent 50%)',
+                   }}
+              />
+              <form onSubmit={handleLeadSubmit} className="space-y-4 text-left relative z-10">
+                <div className="grid md:[grid-template-columns:0.7fr_1.3fr] gap-3">
                   <div>
-                    <label className="block text-brown-dark font-medium mb-2 text-sm">
+                    <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
                       {t.leadForm.form.firstNamePlaceholder}
                     </label>
                     <input
@@ -2197,12 +2218,12 @@ export default function PlayaVivaLanding() {
                       required
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      className="w-full px-3.5 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
+                      className="w-full px-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
                       placeholder={t.leadForm.form.firstNamePlaceholder}
                     />
                   </div>
                   <div>
-                    <label className="block text-brown-dark font-medium mb-2 text-sm">
+                    <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
                       {t.leadForm.form.lastNamePlaceholder}
                     </label>
                     <input
@@ -2210,24 +2231,24 @@ export default function PlayaVivaLanding() {
                       required
                       value={formData.lastName}
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                      className="w-full px-3.5 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
+                      className="w-full px-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
                       placeholder={t.leadForm.form.lastNamePlaceholder}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-brown-dark font-medium mb-2 text-sm">
+                  <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
                     {t.leadForm.form.emailPlaceholder}
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-brown-dark/40" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-dark/40" />
                     <input
                       type="email"
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full pl-12 pr-3.5 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
+                      className="w-full pl-10 pr-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
                       placeholder={t.leadForm.form.emailPlaceholder}
                     />
                   </div>
@@ -2235,17 +2256,19 @@ export default function PlayaVivaLanding() {
 
                 <Button
                   type="submit"
-                  size="lg"
                   disabled={isSubmitting}
-                  className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duraci�n-200 text-base disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full bg-gradient-to-r from-gold-warm to-[#b8a673] hover:from-[#b8a673] hover:to-gold-warm text-white font-semibold py-2.5 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group"
                 >
-                  <Download className={`mr-2 h-5 w-5 ${isSubmitting ? "animate-pulse" : ""}`} />
-                  {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
+                  <span className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                  <span className="relative flex items-center justify-center">
+                    <Download className={`mr-2 h-4 w-4 ${isSubmitting ? "animate-pulse" : ""}`} />
+                    {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
+                  </span>
                 </Button>
 
                 {automationFeedback && (
                   <div
-                    className={`text-sm rounded-2xl border px-4 py-3 ${
+                    className={`text-xs rounded-xl border px-3 py-2 ${
                       automationFeedback.type === "success"
                         ? "border-emerald-400 text-emerald-600 bg-emerald-50"
                         : "border-red-400 text-red-600 bg-red-50"
@@ -2255,7 +2278,7 @@ export default function PlayaVivaLanding() {
                   </div>
                 )}
 
-                <p className="text-taupe-warm text-xs text-center leading-relaxed">
+                <p className="text-brown-dark/60 text-[11px] text-center leading-relaxed mt-2">
                   {t.leadForm.form.privacy}
                 </p>
               </form>
