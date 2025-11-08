@@ -28,7 +28,6 @@ export default function PlayaVivaLanding() {
     priceBox: false,
     ctaButtons: false,
     scrollIndicator: false,
-    logoBlur: true,
   });
   const [visibleSections, setVisibleSections] = useState({
     wynnEffect: false,
@@ -44,6 +43,8 @@ export default function PlayaVivaLanding() {
   });
 
   const [showMenu, setShowMenu] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "" });
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -67,28 +68,38 @@ export default function PlayaVivaLanding() {
 
   useEffect(() => {
     const startAnimationSequence = () => {
+      // Background aparece inmediatamente y se espera 3seg
       setAnimationStates((prev) => ({ ...prev, backgroundImage: true }));
+
+      // Logo aparece después de 3seg de espera, dura 2.5seg
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, logo: true }));
-      }, 500);
-      setTimeout(() => {
-        setAnimationStates((prev) => ({ ...prev, logoBlur: false }));
-      }, 1200);
+      }, 3000);
+
+      // Subtítulo (AL MARJAN ISLAND) - empieza después del logo (3+2.5=5.5seg), dura 2seg
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, subtitle: true }));
-      }, 1000);
+      }, 5500);
+
+      // Descripción - empieza después del subtítulo (5.5+2=7.5seg), dura 2seg
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, description: true }));
-      }, 1500);
+      }, 7500);
+
+      // Price box - empieza después de descripción (7.5+2=9.5seg), dura 2seg
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, priceBox: true }));
-      }, 2000);
+      }, 9500);
+
+      // Botón CTA - empieza después de price box (9.5+2=11.5seg), dura 2seg
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, ctaButtons: true }));
-      }, 2500);
+      }, 11500);
+
+      // Scroll indicator - empieza después del botón (11.5+2=13.5seg)
       setTimeout(() => {
         setAnimationStates((prev) => ({ ...prev, scrollIndicator: true }));
-      }, 3000);
+      }, 13500);
     };
     startAnimationSequence();
   }, []);
@@ -105,15 +116,19 @@ export default function PlayaVivaLanding() {
       window.removeEventListener("orientationchange", onResize);
     };
   }, []);
-  useEffect(() => {
-    if (animationStates.ctaButtons) {
-      setTimeout(() => fitHeroToViewport(), 0);
-    }
-  }, [animationStates.ctaButtons]);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
+
+      // Calculate scroll progress for hero section (0 to 1)
+      const heroHeight = window.innerHeight;
+      const progress = Math.min(currentScroll / heroHeight, 1);
+      setScrollProgress(progress);
+
+      // Show navbar after scrolling past hero section
+      setShowNavbar(currentScroll > window.innerHeight * 0.8);
+
       const checkSectionVisibility = (
         ref: React.RefObject<HTMLDivElement | null>,
         sectionKey: keyof typeof visibleSections
@@ -1028,7 +1043,7 @@ export default function PlayaVivaLanding() {
       </div>
 
       {/* Sticky Navigation Menu - Uniestate UK Style */}
-      <nav className="landing-nav fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm">
+      <nav className={`landing-nav fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="landing-nav__inner container mx-auto px-4 md:px-6">
           <div className="landing-nav__bar flex items-center justify-between h-14 md:h-16">
             {/* Logo Uniestate */}
@@ -1094,9 +1109,10 @@ export default function PlayaVivaLanding() {
             <div className="hidden md:block flex-shrink-0">
               <Button
                 onClick={() => scrollToSection("dossier")}
-                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm rounded-md shadow-md transition-all duration-200"
+                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm rounded-md shadow-md transition-all duration-200 flex items-center gap-2"
               >
-                {language === "es" ? "Reservar Ahora" : "Book Now"}
+                <Download className="w-4 h-4" />
+                {language === "es" ? "Dossier Exclusivo" : "Exclusive Dossier"}
               </Button>
             </div>
 
@@ -1178,9 +1194,10 @@ export default function PlayaVivaLanding() {
                 <Button
                   onClick={() => scrollToSection("dossier")}
                   size="sm"
-                  className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 py-1.5 text-xs rounded-md shadow-md w-full mt-2"
+                  className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 py-1.5 text-xs rounded-md shadow-md w-full mt-2 flex items-center justify-center gap-2"
                 >
-                  {language === "es" ? "Reservar Ahora" : "Book Now"}
+                  <Download className="w-4 h-4" />
+                  {language === "es" ? "Dossier Exclusivo" : "Exclusive Dossier"}
                 </Button>
               </div>
             </div>
@@ -1192,17 +1209,16 @@ export default function PlayaVivaLanding() {
       <section className="hero-section relative min-h-svh overflow-hidden pt-14 md:pt-0">
         {/* Background */}
         <div
-          className="absolute inset-0 z-0 transition-all duration-700 ease-out"
+          className="absolute inset-0 z-0 transition-all ease-out"
           style={{
             opacity: animationStates.backgroundImage ? 1 : 0,
             transform: animationStates.backgroundImage
               ? "scale(1)"
               : "scale(1.05)",
             filter: animationStates.logo
-              ? animationStates.logoBlur
-                ? "brightness(1) saturate(1)"
-                : "brightness(0.6) saturate(0.8) blur(1px)"
-              : "brightness(1) saturate(1)",
+              ? `brightness(${0.55 + (scrollProgress * 0.45)}) saturate(${0.4 + (scrollProgress * 0.6)}) blur(${3 - (scrollProgress * 3)}px)`
+              : "brightness(1) saturate(1) blur(0px)",
+            transitionDuration: animationStates.logo ? "2000ms" : "700ms",
           }}
         >
           <img
@@ -1217,14 +1233,16 @@ export default function PlayaVivaLanding() {
               target.src = "/fixed-hero-background.png";
             }}
           />
-          <div
-            className="absolute inset-0 bg-linear-to-b from-transparent via-black/10 to-black/30"
-            style={{ opacity: animationStates.backgroundImage ? 0.2 : 0 }}
-          />
         </div>
 
         {/* Content */}
-        <div className="hero-content relative z-10 h-full flex flex-col items-center justify-center px-4">
+        <div
+          className="hero-content relative z-10 h-full flex flex-col items-center justify-center px-4"
+          style={{
+            opacity: 1 - scrollProgress,
+            transition: "opacity 0.1s linear",
+          }}
+        >
           <div
             ref={heroStackRef}
             className="hero-container container max-w-6xl mx-auto"
@@ -1233,44 +1251,38 @@ export default function PlayaVivaLanding() {
               transformOrigin: "top center",
             }}
           >
-            <div className="hero-stack flex flex-col items-center justify-center text-center space-y-5 mt-0">
+            <div className="hero-stack flex flex-col items-center justify-center text-center space-y-2 mt-0">
               {/* Logo */}
               <div
-                className="transition-all duration-1000 ease-out"
+                className="transition-all ease-out mt-12"
                 style={{
                   opacity: animationStates.logo ? 1 : 0,
-                  transform: animationStates.logo
-                    ? "translateY(30px) scale(1.1)"
-                    : "translateY(50px) scale(1.0)",
+                  transform: animationStates.logo ? "scale(1)" : "scale(0.3)",
+                  filter: animationStates.logo ? "blur(0px)" : "blur(12px)",
+                  transitionDuration: "2500ms",
                 }}
               >
                 <div className="flex justify-center">
                   <img
                     src="/logo-playa-viva.png"
                     alt="Playa Viva Logo"
-                    className="w-auto h-28 sm:h-40 md:h-48 lg:h-56 xl:h-64 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110"
-                    style={{
-                      filter: `brightness(110%) contrast(110%) ${
-                        animationStates.logoBlur ? "blur(4px)" : "blur(0px)"
-                      }`,
-                      transition: "filter 1.5s ease-out",
-                    }}
+                    className="w-auto h-36 sm:h-48 md:h-56 lg:h-64 xl:h-72 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110"
                   />
                 </div>
               </div>
 
               {/* Subtitle pill: stronger background for readability + gold halo */}
               <div
-                className="transition-all duration-700 ease-out"
+                className="transition-all ease-out"
                 style={{
                   opacity: animationStates.subtitle ? 1 : 0,
-                  transform: animationStates.subtitle
-                    ? "translateY(0px)"
-                    : "translateY(30px)",
+                  transform: animationStates.subtitle ? "scale(1)" : "scale(0.3)",
+                  filter: animationStates.subtitle ? "blur(0px)" : "blur(12px)",
+                  transitionDuration: "2000ms",
                 }}
               >
                 <div className="hero-subtitle inline-block bg-black/65 sm:bg-black/55 rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 border border-gold-warm/60 ring-2 ring-gold-warm/75 shadow-[0_0_40px_rgba(162,144,96,0.7)]">
-                  <p className="font-arabic text-gold-warm text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-[0.04em] sm:tracking-[0.06em] uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.65)] sm:whitespace-nowrap">
+                  <p className="font-arabic text-gold-warm text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-semibold tracking-[0.02em] sm:tracking-[0.04em] md:tracking-[0.06em] uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.65)] whitespace-nowrap">
                     {t.hero.subtitle}
                   </p>
                 </div>
@@ -1278,17 +1290,16 @@ export default function PlayaVivaLanding() {
 
               {/* Description - Sophisticated styling and legibility */}
               <div
-                className="transition-all duration-700 ease-out max-w-4xl"
+                className="transition-all ease-out max-w-5xl"
                 style={{
                   opacity: animationStates.description ? 1 : 0,
-                  transform: animationStates.description
-                    ? "translateY(0px)"
-                    : "translateY(30px)",
+                  transform: animationStates.description ? "scale(1)" : "scale(0.3)",
+                  filter: animationStates.description ? "blur(0px)" : "blur(12px)",
+                  transitionDuration: "2000ms",
                 }}
               >
-                <div className="hero-description relative max-w-[94vw] sm:max-w-3xl mx-auto px-2">
-                  <div className="absolute inset-0 bg-black/40 rounded-lg" />
-                  <p className="relative text-[#FFFFFF] text-[clamp(0.85rem,3.2vw,1.15rem)] font-medium leading-relaxed px-3 sm:px-6 py-2 sm:py-3 tracking-[0.01em] text-center">
+                <div className="hero-description relative mx-auto px-2">
+                  <p className="relative text-[#FFFFFF] text-sm sm:text-base md:text-lg font-medium px-3 sm:px-6 py-2 sm:py-3 tracking-[0.01em] text-center whitespace-nowrap [@media(max-width:768px)]:whitespace-normal">
                     {t.hero.description}
                   </p>
                 </div>
@@ -1296,12 +1307,12 @@ export default function PlayaVivaLanding() {
 
               {/* Price Card: solid background enforced + stronger gold halo on hover */}
               <div
-                className="transition-all duration-700 ease-out"
+                className="transition-all ease-out"
                 style={{
                   opacity: animationStates.priceBox ? 1 : 0,
-                  transform: animationStates.priceBox
-                    ? "translateY(0px)"
-                    : "translateY(30px)",
+                  transform: animationStates.priceBox ? "scale(1)" : "scale(0.3)",
+                  filter: animationStates.priceBox ? "blur(0px)" : "blur(12px)",
+                  transitionDuration: "2000ms",
                 }}
               >
                 <div className="relative">
@@ -1328,12 +1339,12 @@ export default function PlayaVivaLanding() {
 
               {/* CTA Button: Single Dossier download button centered */}
               <div
-                className="transition-all duration-700 ease-out"
+                className="transition-all ease-out"
                 style={{
                   opacity: animationStates.ctaButtons ? 1 : 0,
-                  transform: animationStates.ctaButtons
-                    ? "translateY(0px)"
-                    : "translateY(30px)",
+                  transform: animationStates.ctaButtons ? "scale(1)" : "scale(0.3)",
+                  filter: animationStates.ctaButtons ? "blur(0px)" : "blur(12px)",
+                  transitionDuration: "2000ms",
                 }}
               >
                 <div className="flex flex-col gap-3 items-center">
@@ -2159,7 +2170,7 @@ export default function PlayaVivaLanding() {
                     {qa.question}
                   </p>
                   <div
-                    className={`text-[11px] md:text-xs text-[#6E5F46]/85 leading-relaxed transition-all duration-300 ${
+                    className={`text-[11px] md:text-xs text-[#4a3f30] leading-relaxed transition-all duration-300 ${
                       activeFaq === index
                         ? "max-h-40 opacity-100 mt-2"
                         : "max-h-0 opacity-0 mt-0 pointer-events-none"
@@ -2306,17 +2317,19 @@ export default function PlayaVivaLanding() {
                   />
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={isSubmitting || !formData.firstName.trim() || !formData.lastName.trim() || !formData.email.trim()}
-                  className="w-full bg-gradient-to-r from-gold-warm to-[#b8a673] hover:from-[#b8a673] hover:to-gold-warm text-brown-dark font-semibold py-2.5 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group"
-                >
-                  <span className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                  <span className="relative flex items-center justify-center">
-                    <Download className={`mr-2 h-4 w-4 ${isSubmitting ? "animate-pulse" : ""}`} />
-                    {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
-                  </span>
-                </Button>
+                <div className="flex justify-center mt-6">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting || !formData.firstName.trim() || !formData.lastName.trim() || !formData.email.trim()}
+                    className="bg-gradient-to-r from-[#8a7a4f] to-[#9a8a60] hover:from-[#9a8a60] hover:to-[#8a7a4f] text-[#1f1509] font-semibold py-2 px-6 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group"
+                  >
+                    <span className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                    <span className="relative flex items-center justify-center">
+                      <Download className={`mr-2 h-4 w-4 ${isSubmitting ? "animate-pulse" : ""}`} />
+                      {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
+                    </span>
+                  </Button>
+                </div>
 
                 {automationFeedback && (
                   <div
