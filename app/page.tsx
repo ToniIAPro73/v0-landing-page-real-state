@@ -47,8 +47,9 @@ export default function PlayaVivaLanding() {
   const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "" });
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [automationFeedback, setAutomationFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [automationFeedback, setAutomationFeedback] = useState<{ type: "success" | "error"; userName: string } | null>(null);
   const [activeApartment, setActiveApartment] = useState<"studio" | "oneBed" | "twoBed" | "threeBed">("studio");
+  const [locationView, setLocationView] = useState<"map" | "collage">("map");
 
   // Fit hero to viewport height (especially for mobile landscape)
   const heroStackRef = useRef<HTMLDivElement>(null);
@@ -440,7 +441,7 @@ export default function PlayaVivaLanding() {
       },
       faq: {
         eyebrow: "Preguntas estratégicas",
-        title: "FAQ curadas por nuestros asesores",
+        title: "Preguntas Frecuentes",
         subtitle:
           "Respuestas detalladas basadas en conversaciones con inversores internacionales.",
         highlights: [
@@ -783,14 +784,14 @@ export default function PlayaVivaLanding() {
           "Located on the coast of Ras Al Khaimah, Al Marjan Island is a new architectural jewel that redefines the concept of luxury living. With over 7 kilometers of pristine beaches, this artificial island combines natural beauty with modern sophistication.",
       },
       faq: {
-        eyebrow: "Essential answers",
+        eyebrow: "Strategic Questions",
         title: "Frequently Asked Questions",
         subtitle:
-          "Our advisors condensed the most requested insights so you can evaluate Playa Viva with confidence.",
+          "Detailed answers based on conversations with international investors",
         highlights: [
-          "Curated directly from investor conversations",
-          "Reviewed quarterly with marketing and legal",
-          "Delivered bilingually upon request",
+          "Information validated alongside marketing, legal, and sales",
+          "Data updated quarterly according to commercial progress",
+          "Available in Spanish and English upon request",
         ],
         cta: "Speak with a specialist",
         questions: [
@@ -987,18 +988,25 @@ export default function PlayaVivaLanding() {
       await orchestrateLeadAutomation(leadData);
       setAutomationFeedback({
         type: "success",
-        message: t.leadForm.form.successMessage.replace(
-          "{{name}}",
-          trimmedFirstName || fallbackName
-        ),
+        userName: trimmedFirstName || fallbackName,
       });
       setFormData({ firstName: "", lastName: "", email: "" });
+
+      // Ocultar mensaje después de 5 segundos
+      setTimeout(() => {
+        setAutomationFeedback(null);
+      }, 5000);
     } catch (error) {
       console.error("Lead automation failed", error);
       setAutomationFeedback({
         type: "error",
-        message: t.leadForm.form.errorMessage,
+        userName: "",
       });
+
+      // Ocultar mensaje de error después de 5 segundos
+      setTimeout(() => {
+        setAutomationFeedback(null);
+      }, 5000);
     } finally {
       setIsSubmitting(false);
     }
@@ -2038,25 +2046,57 @@ export default function PlayaVivaLanding() {
       >
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
+            <div className="text-center mb-8">
+              <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-4">
                 {t.location.title}
               </h2>
-              <h3 className="text-2xl text-gold-warm mb-8">
+              <h3 className="text-xl text-gold-warm mb-4">
                 {t.location.subtitle}
               </h3>
-              <p className="text-taupe-warm text-lg leading-relaxed max-w-4xl mx-auto">
+              <p className="text-taupe-warm text-base leading-relaxed max-w-4xl mx-auto">
                 {t.location.description}
               </p>
             </div>
 
-            {/* Area Map */}
-            <div className="mt-12 rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30">
-              <img
-                src="/assets/imagenes/areamap.webp"
-                alt="Al Marjan Island Area Map"
-                className="w-full h-auto"
-              />
+            {/* Botones de navegación */}
+            <div className="flex justify-center gap-4 mb-8">
+              <button
+                onClick={() => setLocationView("collage")}
+                className={`px-8 py-3.5 rounded-[20px] font-medium text-sm transition-all duration-300 shadow-md ${
+                  locationView === "collage"
+                    ? "bg-[#9d8c5f] text-[#3a2f1f] shadow-lg"
+                    : "bg-[#e3ded4] text-[#5a4f3d] hover:bg-[#d8d3c9]"
+                }`}
+              >
+                Al Marjan Island
+              </button>
+              <button
+                onClick={() => setLocationView("map")}
+                className={`px-8 py-3.5 rounded-[20px] font-medium text-sm transition-all duration-300 shadow-md ${
+                  locationView === "map"
+                    ? "bg-[#9d8c5f] text-[#3a2f1f] shadow-lg"
+                    : "bg-[#e3ded4] text-[#5a4f3d] hover:bg-[#d8d3c9]"
+                }`}
+              >
+                {language === "es" ? "Mapa del Área" : "Area Map"}
+              </button>
+            </div>
+
+            {/* Vista condicional */}
+            <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30">
+              {locationView === "map" ? (
+                <img
+                  src="/assets/imagenes/areamap.webp"
+                  alt="Al Marjan Island Area Map"
+                  className="w-full h-auto"
+                />
+              ) : (
+                <img
+                  src="/assets/imagenes/Collage_Al_Marjan_Island.png"
+                  alt="Al Marjan Island Collage"
+                  className="w-full h-auto"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -2066,48 +2106,45 @@ export default function PlayaVivaLanding() {
       <section
         id="faq"
         ref={faqRef}
-        className="relative py-20 bg-[#f8f3ec]"
+        className="relative py-12 md:py-16 bg-[#d4c5a8]"
         style={{
           opacity: visibleSections.faq ? 1 : 0,
           transform: visibleSections.faq ? "translateY(0px)" : "translateY(50px)",
           transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        <div className="absolute inset-0 opacity-50 pointer-events-none">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div
             className="w-full h-full"
             style={{
               backgroundImage:
-                "radial-gradient(circle at 1px 1px, rgba(132,104,71,0.18) 1px, transparent 0)",
-              backgroundSize: "160px 160px",
+                "radial-gradient(circle at 1px 1px, rgba(162,144,96,0.3) 1px, transparent 0)",
+              backgroundSize: "80px 80px",
             }}
           />
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-[0.8fr,1.2fr] gap-10 items-start">
-            <div className="rounded-[28px] bg-white/85 border border-gold-warm/25 shadow-[0_30px_60px_rgba(90,72,50,0.15)] p-8">
-              <p className="text-[11px] uppercase tracking-[0.55em] text-gold-warm mb-5">
-                {t.faq.eyebrow}
-              </p>
-              <h2 className="text-3xl md:text-4xl font-light text-brown-dark leading-tight font-arabic">
-                {t.faq.title}
-              </h2>
-              <p className="mt-4 text-base md:text-lg text-brown-dark/80 leading-relaxed">
-                {t.faq.subtitle}
-              </p>
-              <div className="mt-6 space-y-3">
-                {t.faq.highlights.map((item) => (
-                  <p key={item} className="text-sm md:text-base text-brown-dark/70">
-                    {item}
-                  </p>
-                ))}
-              </div>
-            </div>
-            <div className="rounded-[28px] bg-white shadow-[0_30px_70px_rgba(0,0,0,0.12)] border border-brown-dark/10 divide-y divide-brown-dark/10">
+          {/* Títulos centrados */}
+          <div className="text-center mb-8 md:mb-10">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-brown-dark mb-3 md:mb-4">
+              {t.faq.title}
+            </h2>
+            <p className="text-base md:text-lg text-[#6d5d42] font-medium">
+              {t.faq.subtitle}
+            </p>
+          </div>
+
+          {/* Card con preguntas - centrado y más estrecho */}
+          <div className="max-w-3xl mx-auto">
+            <div className="rounded-2xl bg-gradient-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 border-2 border-[#A29060]/40 shadow-[0_16px_48px_rgba(162,144,96,0.25),0_0_0_1px_rgba(255,255,255,0.5)_inset] divide-y divide-[#A29060]/15 overflow-hidden">
               {t.faq.questions.map((qa, index) => (
                 <div
                   key={qa.question}
-                  className="p-5 md:p-6 transition-all duration-300 cursor-default"
+                  className={`px-4 md:px-5 py-3 md:py-4 transition-all duration-300 cursor-default group/item relative ${
+                    activeFaq === index
+                      ? "bg-[#e8dcc8] shadow-[0_4px_16px_rgba(162,144,96,0.2)] scale-[1.02] z-10"
+                      : "hover:bg-gradient-to-r hover:from-[#A29060]/5 hover:to-transparent"
+                  }`}
                   onMouseEnter={() => setActiveFaq(index)}
                   onMouseLeave={() => setActiveFaq(null)}
                   onFocus={() => setActiveFaq(index)}
@@ -2115,16 +2152,16 @@ export default function PlayaVivaLanding() {
                   tabIndex={0}
                 >
                   <p
-                    className={`text-sm md:text-base font-medium ${
-                      activeFaq === index ? "text-brown-dark" : "text-brown-dark/70"
+                    className={`text-xs md:text-sm font-semibold transition-colors duration-300 ${
+                      activeFaq === index ? "text-[#271c13]" : "text-[#6E5F46]"
                     }`}
                   >
                     {qa.question}
                   </p>
                   <div
-                    className={`text-xs md:text-sm text-brown-dark/75 leading-relaxed transition-all duration-300 ${
+                    className={`text-[11px] md:text-xs text-[#6E5F46]/85 leading-relaxed transition-all duration-300 ${
                       activeFaq === index
-                        ? "max-h-40 opacity-100 mt-3"
+                        ? "max-h-40 opacity-100 mt-2"
                         : "max-h-0 opacity-0 mt-0 pointer-events-none"
                     }`}
                   >
@@ -2160,32 +2197,42 @@ export default function PlayaVivaLanding() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto flex flex-col items-center text-center space-y-3">
             <div className="inline-flex">
-              <div className="px-8 py-3 rounded-full border border-gold-warm bg-white/10 text-gold-warm font-semibold tracking-[0.35em] shadow-[0_18px_36px_rgba(0,0,0,0.35)] backdrop-blur">
-                {language === "es" ? "Dossier de Inversión Exclusivo" : "Exclusive Investment Dossier"}
+              <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-gradient-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
+                {/* Brillo dorado superior */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
+                {/* Efecto de brillo animado intenso */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
+                {/* Resplandor de fondo al hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
+                {/* Textura sutil */}
+                <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)', backgroundSize: '16px 16px'}}></div>
+                <span className="relative z-10 group-hover:drop-shadow-[0_0_8px_rgba(162,144,96,0.4)] transition-all duration-500">
+                  {language === "es" ? "Dossier de Inversión Exclusivo" : "Exclusive Investment Dossier"}
+                </span>
               </div>
             </div>
-            <p className="text-white/95 text-base md:text-lg leading-relaxed font-light">
+            <p className="text-[#271c13] text-base md:text-lg leading-relaxed font-medium">
               {t.leadForm.intro}
             </p>
           </div>
 
           {/* Texto descriptivo debajo del subtítulo */}
-          <div className="mt-6 max-w-3xl mx-auto">
-            <p className="text-cream-light/85 text-sm leading-relaxed text-center">
+          <div className="mt-5 max-w-3xl mx-auto">
+            <p className="text-cream-light text-sm leading-relaxed text-center">
               {t.leadForm.description}
             </p>
           </div>
 
           {/* Checks en dos columnas FUERA del card */}
-          <div className="mt-6 w-full max-w-2xl mx-auto grid md:[grid-template-columns:0.85fr_1.15fr] gap-4">
+          <div className="mt-5 w-full max-w-2xl mx-auto grid md:[grid-template-columns:0.85fr_1.15fr] gap-3">
             {featureColumns.map((column, columnIndex) => (
-              <div key={columnIndex} className="space-y-3 text-left">
+              <div key={columnIndex} className="space-y-2.5 text-left">
                 {column.map((feature) => (
                   <div key={feature} className="flex items-start gap-2">
                     <div className="bg-gold-warm/25 rounded-full p-1.5 mt-0.5">
                       <CheckCircle2 className="h-3.5 w-3.5 text-gold-warm" />
                     </div>
-                    <p className="text-cream-light/85 text-sm leading-relaxed">{feature}</p>
+                    <p className="text-[#c9b896] text-sm leading-relaxed">{feature}</p>
                   </div>
                 ))}
               </div>
@@ -2193,25 +2240,33 @@ export default function PlayaVivaLanding() {
           </div>
 
           {/* Card del CTA con efectos premium */}
-          <div className="mt-10 w-full flex justify-center">
-            <div className="w-full max-w-[500px] rounded-3xl border-2 border-gold-warm/40 bg-gradient-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] shadow-[0_20px_60px_rgba(162,144,96,0.35),0_0_80px_rgba(162,144,96,0.15),0_0_0_1px_rgba(255,255,255,0.8)_inset] backdrop-blur-sm px-6 md:px-8 py-6 relative overflow-hidden transition-all duration-500 hover:shadow-[0_25px_70px_rgba(162,144,96,0.45),0_0_100px_rgba(162,144,96,0.2),0_0_0_1px_rgba(255,255,255,0.9)_inset] hover:scale-[1.01]">
+          <div className="mt-8 w-full flex justify-center">
+            <div className="w-full max-w-[500px] rounded-3xl border-2 border-gold-warm/40 bg-gradient-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] shadow-[0_20px_60px_rgba(162,144,96,0.35),0_0_80px_rgba(162,144,96,0.15),0_0_0_1px_rgba(255,255,255,0.8)_inset] backdrop-blur-sm px-6 md:px-8 py-6 relative overflow-hidden group transition-all duration-500 hover:shadow-[0_28px_80px_rgba(162,144,96,0.6),0_0_120px_rgba(162,144,96,0.35),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-[1.02] hover:border-[#d4b876]">
+              {/* Brillo dorado superior */}
+              <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-3xl bg-gradient-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
+              {/* Efecto de brillo animado intenso que cruza el card */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1200 ease-out"></div>
               {/* Efecto de brillo dorado animado en el borde superior */}
-              <div className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none"
+              <div className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none group-hover:opacity-70 transition-opacity duration-500"
                    style={{
                      background: 'radial-gradient(circle at top right, rgba(162,144,96,0.25), transparent 60%)',
                    }}
               />
               {/* Efecto de brillo secundario inferior */}
-              <div className="absolute inset-0 rounded-3xl opacity-30 pointer-events-none"
+              <div className="absolute inset-0 rounded-3xl opacity-30 pointer-events-none group-hover:opacity-50 transition-opacity duration-500"
                    style={{
                      background: 'radial-gradient(circle at bottom left, rgba(184,166,115,0.2), transparent 50%)',
                    }}
               />
+              {/* Resplandor de fondo al hover */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/8 group-hover:via-white/15 group-hover:to-[#d4b876]/8 transition-all duration-500"></div>
+              {/* Textura sutil de puntos */}
+              <div className="absolute inset-0 rounded-3xl opacity-[0.02] group-hover:opacity-[0.04] transition-opacity duration-500" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)', backgroundSize: '20px 20px'}}></div>
               <form onSubmit={handleLeadSubmit} className="space-y-4 text-left relative z-10">
                 <div className="grid md:[grid-template-columns:0.7fr_1.3fr] gap-3">
                   <div>
                     <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
-                      {t.leadForm.form.firstNamePlaceholder}
+                      {t.leadForm.form.firstNamePlaceholder} <span className="text-brown-dark/80">*</span>
                     </label>
                     <input
                       type="text"
@@ -2224,7 +2279,7 @@ export default function PlayaVivaLanding() {
                   </div>
                   <div>
                     <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
-                      {t.leadForm.form.lastNamePlaceholder}
+                      {t.leadForm.form.lastNamePlaceholder} <span className="text-brown-dark/80">*</span>
                     </label>
                     <input
                       type="text"
@@ -2237,27 +2292,24 @@ export default function PlayaVivaLanding() {
                   </div>
                 </div>
 
-                <div>
+                <div className="text-left">
                   <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
-                    {t.leadForm.form.emailPlaceholder}
+                    {t.leadForm.form.emailPlaceholder} <span className="text-brown-dark/80">*</span>
                   </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-dark/40" />
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full pl-10 pr-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
-                      placeholder={t.leadForm.form.emailPlaceholder}
-                    />
-                  </div>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
+                    placeholder={t.leadForm.form.emailPlaceholder}
+                  />
                 </div>
 
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-gold-warm to-[#b8a673] hover:from-[#b8a673] hover:to-gold-warm text-white font-semibold py-2.5 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group"
+                  disabled={isSubmitting || !formData.firstName.trim() || !formData.lastName.trim() || !formData.email.trim()}
+                  className="w-full bg-gradient-to-r from-gold-warm to-[#b8a673] hover:from-[#b8a673] hover:to-gold-warm text-brown-dark font-semibold py-2.5 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group"
                 >
                   <span className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                   <span className="relative flex items-center justify-center">
@@ -2268,13 +2320,15 @@ export default function PlayaVivaLanding() {
 
                 {automationFeedback && (
                   <div
-                    className={`text-xs rounded-xl border px-3 py-2 ${
+                    className={`text-xs rounded-xl border px-3 py-2 text-left ${
                       automationFeedback.type === "success"
-                        ? "border-emerald-400 text-emerald-600 bg-emerald-50"
+                        ? "border-brown-dark/20 text-[#5a4f3d] bg-[#ddd4c6]"
                         : "border-red-400 text-red-600 bg-red-50"
                     }`}
                   >
-                    {automationFeedback.message}
+                    {automationFeedback.type === "success"
+                      ? t.leadForm.form.successMessage.replace("{{name}}", automationFeedback.userName)
+                      : t.leadForm.form.errorMessage}
                   </div>
                 )}
 
@@ -2288,10 +2342,10 @@ export default function PlayaVivaLanding() {
       </section>
 
 
-      {/* Footer CTA */}
+      {/* Uniestate Section */}
       <section
         ref={footerRef}
-        className="relative py-20 bg-gradient-to-br from-brown-dark via-brown-dark to-olive-brown"
+        className="relative py-16 md:py-20 bg-[#f8f5f0]"
         style={{
           opacity: visibleSections.footer ? 1 : 0,
           transform: visibleSections.footer
@@ -2300,25 +2354,77 @@ export default function PlayaVivaLanding() {
           transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto space-y-8">
-            <h3 className="text-3xl md:text-4xl text-gold-warm font-semibold">
-              {language === "es" ? "¿Listo para invertir?" : "Ready to invest?"}
-            </h3>
-            <p className="text-cream-light text-base md:text-lg leading-relaxed font-medium">
-              {language === "es"
-                ? "Contacta con nuestro equipo de expertos para obtener información personalizada sobre Playa Viva."
-                : "Contact our expert team for personalized information about Playa Viva."}
-            </p>
-            <div className="flex justify-center">
-              <Button
-                onClick={() => scrollToSection("dossier")}
-                size="lg"
-                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-bold px-10 py-6 text-base md:text-lg rounded-xl shadow-2xl hover:scale-105 transition-all duration-300"
-              >
-                <Phone className="mr-2 h-6 w-6" />
-                {language === "es" ? "Contactar Ahora" : "Contact Now"}
-              </Button>
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            {/* Logo Uniestate centrado */}
+            <div className="flex flex-col items-center mb-4 md:mb-6 space-y-2">
+              <img
+                src="/assets/imagenes/uniestate.png"
+                alt="Uniestate"
+                className="h-40 md:h-52 lg:h-64 object-contain"
+              />
+            </div>
+
+            <div className="text-center mb-4 md:mb-5">
+              <h2 className="text-2xl md:text-3xl font-medium text-[#5a4f3d] tracking-[0.15em] uppercase">
+                UNIESTATE
+              </h2>
+            </div>
+
+            {/* Textos descriptivos */}
+            <div className="max-w-4xl mx-auto text-center space-y-4 mb-12">
+              <p className="text-sm md:text-base text-[#6E5F46] leading-relaxed">
+                {language === "es"
+                  ? "Desde 1995, Uniestate ha sido un nombre líder en el desarrollo inmobiliario, creando espacios de alta calidad e innovadores que se convierten en hogares preciados y comunidades vibrantes. Nuestro compromiso con la calidad y la innovación garantiza que superemos las expectativas de los clientes, ofreciendo espacios residenciales y comerciales excepcionales."
+                  : "Since 1995, Uniestate has been a leading name in real estate development, creating high-quality, innovative living spaces that become cherished homes and vibrant communities. Our commitment to quality and innovation ensures we exceed client expectations, delivering exceptional residential and commercial spaces."}
+              </p>
+              <p className="text-sm md:text-base text-[#6E5F46] leading-relaxed">
+                {language === "es"
+                  ? "Durante 30 años, nuestro éxito ha sido impulsado por una estrategia clara: identificar y asegurar ubicaciones privilegiadas para maximizar el crecimiento del capital."
+                  : "For 30 years, our success has been driven by a clear strategy: identifying and securing prime locations to maximize capital growth."}
+              </p>
+            </div>
+
+            {/* Franja con tagline y stats */}
+            <div className="bg-[#e8dcc8] py-10 md:py-12 px-6 md:px-8 rounded-2xl">
+              {/* Tagline */}
+              <div className="text-center mb-10 md:mb-12">
+                <h3 className="text-xl md:text-2xl font-light text-[#271c13] tracking-wide uppercase">
+                  {language === "es"
+                    ? "Experiencia. Profesionalismo. Dedicación."
+                    : "Expertise. Professionalism. Dedication."}
+                </h3>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto">
+                <div className="text-center">
+                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">+ 50,000</p>
+                  <p className="text-xs md:text-sm text-[#6E5F46]">
+                    {language === "es" ? "Clientes Satisfechos" : "Satisfied Clients"}
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">+ 3,000</p>
+                  <p className="text-xs md:text-sm text-[#6E5F46]">
+                    {language === "es" ? "Unidades" : "Units"}
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">
+                    {language === "es" ? "+ 325.000 m²" : "+ 3.5 MM SQ.FT"}
+                  </p>
+                  <p className="text-xs md:text-sm text-[#6E5F46]">
+                    {language === "es" ? "Metros Cuadrados" : "Square Feet"}
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">30 {language === "es" ? "AÑOS" : "YEARS"}</p>
+                  <p className="text-xs md:text-sm text-[#6E5F46]">
+                    {language === "es" ? "Desde 1995" : "Since 1995"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
