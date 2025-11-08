@@ -2,20 +2,38 @@
 
 ## Project Structure & Module Organization
 
-This Next.js 16 App Router project keeps route segments, layout logic, and server components under `app/`. Shared UI pieces generated from v0 live in `components/`, while reusable helpers sit in `lib/`. Static marketing copy, CSVs, and downloadable assets go into `public/` for direct serving and `assets/` for raw design exports. Tailwind layers, tokens, and one-off overrides reside in `styles/`. Keep screenshots or large captures out of Git by parking them inside `assets/capturas/` and referencing optimized variants within `public/`.
+- `app/`: rutas App Router de Next 14; cada carpeta agrupa layout, página y componentes asociados.
+- `components/`: bloques reutilizables (hero, sliders, tabs) generados en v0 y refinados a mano.
+- `lib/`: utilidades (formatos de precios, conversiones metrificadas, helpers de idioma).
+- `public/`: imágenes optimizadas, favicon y PDFs listos para servir; subcarpetas `assets/imagenes` y `public-assets-imagenes` cubren galerías y soportes de ventas.
+- `styles/`: capa global de Tailwind (`globals.css`) y ajustes específicos (animaciones, efectos hover).
 
-## Build, Test, and Development Commands
+## Build, Test & Development Commands
 
-Run `npm install` once per environment. `npm run dev` starts the local Vercel-style dev server on port 3000 with hot reloading. `npm run build` performs the production Next.js build used by Vercel (failures block deploys). `npm run start` serves the output of `next build` for smoke tests. `npm run lint` executes ESLint with the Next.js config and TypeScript checks; treat warnings as blockers before pushing.
+- `npm install`: instala dependencias (ejecútalo tras cada pull).
+- `npm run dev`: servidor local en `http://localhost:3000` con hot reload.
+- `npm run lint`: ESLint + TypeScript; no dejes warnings antes de subir cambios.
+- `npm run build` y `npm run start`: cadena de producción idéntica a Vercel; úsala para pruebas de humo previas al deploy.
 
 ## Coding Style & Naming Conventions
 
-Use TypeScript + React Server Components where practical; client components must include "use client". Stick to functional components, hooks, and 2-space indentation. Component files should be PascalCase (e.g., `HeroBanner.tsx`), hooks use `useVerbNoun`, and utility modules are camelCase. Tailwind classes belong in `className` strings; extract shared styles into `styles/*.css` only when utility-first composition becomes noisy. Run `npm run lint` before committing to auto-fix trivial style issues.
+- Componentes funcionales en TypeScript; marca como `use client` solo lo imprescindible.
+- Indentación de 2 espacios; strings Tailwind ordenados por bloques semánticos (layout → color → efectos). PascalCase para componentes, camelCase para helpers, hooks prefijados con `use`.
+- Mantén assets nuevos en `public/assets/imagenes` comprimidos (<300 KB) y reutiliza efectos de sombra/elevación definidos en Tailwind.
 
 ## Testing Guidelines
 
-There is no dedicated test runner yet, so combine `npm run lint` with manual responsive checks using Vercel previews. Document new components with quick viewport notes (e.g., "validated at 390px and 1440px") inside the pull request. Add unit tests under `__tests__/` if you introduce logic-heavy helpers in `lib/`; name files `<module>.test.ts`.
+- No hay suite automatizada aún: valida con `npm run lint` + revisiones manuales en iPhone 12 Pro (vertical/landscape), iPad y desktop 1440 px.
+- Documenta en el PR qué tabs (Galería, Apartamentos) y qué idioma revisaste.
+- Para lógica en `lib/`, añade pruebas Jest bajo `__tests__/nombre.test.ts`.
 
-## Commit & Pull Request Guidelines
+## Commit & PR Guidelines
 
-Recent history favors short, imperative Spanish summaries (e.g., `Balance padding iPhone landscape`). Keep commits scoped to a single UI or layout concern and reference the screen width/device touched. Pull requests should include: purpose, affected routes or sections, screenshots for each breakpoint touched, and links to any related Vercel preview or issue. Request a review before merging even for minor styling changes.
+- Commits cortos, imperativos, bilingües si afecta copies (ej. `Refina tabs Apartamentos ES/EN`).
+- Cada PR debe incluir: objetivo, secciones impactadas, capturas por breakpoint e idioma, enlace al preview de Vercel y checklist de pruebas manuales.
+- Relaciona issues o tareas Notion y menciona a quien deba revisar UX/Contenido antes del merge.
+
+## Optional: Security & Assets
+
+- No expongas claves; usa variables de entorno prefijadas `NEXT_PUBLIC_`.
+- Los PDFs (`public-assets/dossier/*.pdf`) deben verificarse tras cada actualización de marketing para evitar enlaces rotos.
