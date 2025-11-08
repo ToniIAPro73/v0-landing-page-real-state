@@ -2158,22 +2158,18 @@ export default function PlayaVivaLanding() {
           />
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
-            <div className="inline-flex mb-3">
-              <div className="px-7 py-2.5 rounded-full border border-gold-warm/80 bg-white/5 text-gold-warm font-semibold tracking-[0.28em] shadow-[0_18px_36px_rgba(0,0,0,0.35)] backdrop-blur">
-                {t.leadForm.badge}
+          <div className="max-w-3xl mx-auto flex flex-col items-center text-center space-y-3">
+            <div className="inline-flex">
+              <div className="px-8 py-3 rounded-full border border-gold-warm bg-white/10 text-gold-warm font-semibold tracking-[0.35em] shadow-[0_18px_36px_rgba(0,0,0,0.35)] backdrop-blur">
+                {language === "es" ? "Dossier de Inversi�n Exclusivo" : "Exclusive Investment Dossier"}
               </div>
             </div>
-            <p className="text-gold-warm text-base font-semibold mb-2">{t.leadForm.intro}</p>
-            <h2 className="text-3xl md:text-4xl font-light text-cream-light mb-3 font-arabic">
-              {t.leadForm.title}
-            </h2>
-            <p className="text-cream-light/90 text-sm md:text-base leading-relaxed">
-              {t.leadForm.description}
+            <p className="text-cream-light text-base md:text-lg leading-relaxed">
+              {t.leadForm.intro}
             </p>
           </div>
 
-          <div className="mt-8 w-full max-w-3xl mx-auto grid md:grid-cols-2 gap-4">
+          <div className="mt-8 w-full max-w-2xl mx-auto grid md:[grid-template-columns:0.85fr_1.15fr] gap-4">
             {featureColumns.map((column, columnIndex) => (
               <div key={columnIndex} className="space-y-3 text-left">
                 {column.map((feature) => (
@@ -2189,9 +2185,9 @@ export default function PlayaVivaLanding() {
           </div>
 
           <div className="mt-10 w-full flex justify-center">
-            <div className="w-full max-w-3xl rounded-[28px] border border-gold-warm/35 bg-white/96 shadow-[0_45px_90px_rgba(0,0,0,0.32)] px-6 md:px-10 py-8">
+            <div className="w-full max-w-[620px] rounded-[24px] border border-gold-warm/35 bg-white/96 shadow-[0_45px_90px_rgba(0,0,0,0.32)] px-5 md:px-7 py-7">
               <form onSubmit={handleLeadSubmit} className="space-y-6 text-left">
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid md:[grid-template-columns:0.7fr_1.3fr] gap-4">
                   <div>
                     <label className="block text-brown-dark font-medium mb-2 text-sm">
                       {t.leadForm.form.firstNamePlaceholder}
@@ -2201,7 +2197,7 @@ export default function PlayaVivaLanding() {
                       required
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      className="w-full px-4 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
+                      className="w-full px-3.5 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
                       placeholder={t.leadForm.form.firstNamePlaceholder}
                     />
                   </div>
@@ -2214,7 +2210,7 @@ export default function PlayaVivaLanding() {
                       required
                       value={formData.lastName}
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                      className="w-full px-4 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
+                      className="w-full px-3.5 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
                       placeholder={t.leadForm.form.lastNamePlaceholder}
                     />
                   </div>
@@ -2231,7 +2227,7 @@ export default function PlayaVivaLanding() {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full pl-12 pr-4 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
+                      className="w-full pl-12 pr-3.5 py-3 border border-brown-dark/20 rounded-2xl focus:border-gold-warm focus:ring-2 focus:ring-gold-warm/15 outline-none transition-all duration-200 bg-white text-brown-dark text-base"
                       placeholder={t.leadForm.form.emailPlaceholder}
                     />
                   </div>
@@ -2241,7 +2237,7 @@ export default function PlayaVivaLanding() {
                   type="submit"
                   size="lg"
                   disabled={isSubmitting}
-                  className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold py-3.5 rounded-2xl shadow-lg hover:shadow-xl transition-all duraci�n-200 text-base disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duraci�n-200 text-base disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <Download className={`mr-2 h-5 w-5 ${isSubmitting ? "animate-pulse" : ""}`} />
                   {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
@@ -2307,6 +2303,7 @@ export default function PlayaVivaLanding() {
     </div>
   );
 }
+
 
 
 
