@@ -2161,7 +2161,7 @@ export default function PlayaVivaLanding() {
           <div className="max-w-3xl mx-auto flex flex-col items-center text-center space-y-3">
             <div className="inline-flex">
               <div className="px-8 py-3 rounded-full border border-gold-warm bg-white/10 text-gold-warm font-semibold tracking-[0.35em] shadow-[0_18px_36px_rgba(0,0,0,0.35)] backdrop-blur">
-                {language === "es" ? "Dossier de Inversi�n Exclusivo" : "Exclusive Investment Dossier"}
+                {language === "es" ? "Dossier de Inversión Exclusivo" : "Exclusive Investment Dossier"}
               </div>
             </div>
             <p className="text-cream-light text-base md:text-lg leading-relaxed">
