@@ -1,22 +1,38 @@
 import json
 import os
 import sys
+import subprocess
 from pathlib import Path
 
 # Install required dependencies (handles missing libraries)
+def install_package(package_name):
+    """Helper function to install packages"""
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package_name])
+        return True
+    except subprocess.CalledProcessError:
+        print(f"Failed to install {package_name}")
+        return False
+
 try:
     import requests
 except ImportError:
     print("Installing requests library...")
-    os.system(f"{sys.executable} -m pip install requests")
-    import requests
+    if install_package("requests"):
+        import requests
+    else:
+        print("ERROR: Could not install requests library")
+        sys.exit(1)
 
 try:
-    from pypdf import PdfReader, PdfWriter # type: ignore
+    from pypdf import PdfReader, PdfWriter  # type: ignore
 except ImportError:
     print("Installing pypdf library...")
-    os.system(f"{sys.executable} -m pip install pypdf")
-    from pypdf import PdfReader, PdfWriter
+    if install_package("pypdf"):
+        from pypdf import PdfReader, PdfWriter  # type: ignore
+    else:
+        print("ERROR: Could not install pypdf library")
+        sys.exit(1)
 
 # --- CONFIGURACIÓN DE HUBSPOT ---
 # DEBES REEMPLAZAR ESTOS VALORES REALES (DEL PASO 4)
@@ -28,7 +44,7 @@ HUB_API_URL = f"https://api.hsforms.com/submissions/v3/integration/submit/{HUB_I
 # --- CONFIGURACIÓN DEL PDF ---
 # Usar paths relativos basados en la ubicación del script
 SCRIPT_DIR = Path(__file__).parent.absolute()
-PDF_BASE_PATH = SCRIPT_DIR / "Dossier-Personalizado.pdf.pdf"  # Corregido: doble extensión
+PDF_BASE_PATH = SCRIPT_DIR / "Dossier-Personalizado.pdf"  # Fixed: removed duplicate extension
 PDF_OUTPUT_DIR = SCRIPT_DIR / "dossiers_generados"  # Directorio relativo
 CAMPO_PDF_A_RELLENAR = "nombre_personalizacion_lead"
 
@@ -42,7 +58,7 @@ def verificar_dependencias():
         dependencias_faltantes.append("requests")
     
     try:
-        from pypdf import PdfReader, PdfWriter
+        from pypdf import PdfReader, PdfWriter  # type: ignore
     except ImportError:
         dependencias_faltantes.append("pypdf")
     
@@ -61,7 +77,7 @@ def personalizar_y_enviar(data_from_landing_page):
     
     # Verificar dependencias antes de proceder
     if not verificar_dependencias():
-        return {"success": False, "message": "Faltan dependencias requeridas."}, 500
+        return {"success": False, "message": "Faltan dependencias requeridas."}
     
     # 1. Extracción de datos clave para ambas operaciones
     nombre_completo = data_from_landing_page.get('fullname', '').strip()
@@ -69,11 +85,11 @@ def personalizar_y_enviar(data_from_landing_page):
     hutk = data_from_landing_page.get('hubspotutk', '').strip()
     
     if not all([nombre_completo, email, hutk]):
-        return {"success": False, "message": "Faltan campos esenciales (fullname, email, hutk)."}, 400
+        return {"success": False, "message": "Faltan campos esenciales (fullname, email, hutk)."}
 
     # 2. Verificar que el archivo PDF base existe
     if not PDF_BASE_PATH.exists():
-        return {"success": False, "message": f"Archivo PDF base no encontrado: {PDF_BASE_PATH}"}, 500
+        return {"success": False, "message": f"Archivo PDF base no encontrado: {PDF_BASE_PATH}"}
 
     # ----------------------------------------------------
     # ACCIÓN PARALELA 1: SINCRONIZACIÓN DE LEADS CON HUBSPOT
