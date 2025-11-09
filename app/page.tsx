@@ -1001,6 +1001,7 @@ export default function PlayaVivaLanding() {
       setShowMenu(false);
     }
   };
+  const showBackToHero = scrollProgress >= 0.95;
 
   const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
     const simulateCall = (label: string, delay = 650) =>
@@ -1094,17 +1095,19 @@ export default function PlayaVivaLanding() {
       />
       {/* Language Toggle - Fixed Bottom Right */}
       <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3">
-        <Button
-          size="sm"
-          onClick={() => scrollToSection("hero")}
-          aria-label={language === "es" ? "Volver al hero" : "Back to hero section"}
-          className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 py-2 text-xs rounded-md shadow-[0_8px_18px_rgba(0,0,0,0.25)] transition-all duration-200 flex items-center gap-2 border border-brown-dark/20"
-        >
-          <ArrowUpRight className="w-4 h-4" />
-          <span className="tracking-wide">
-            {language === "es" ? "Subir al Hero" : "Back to Hero"}
-          </span>
-        </Button>
+        {showBackToHero && (
+          <Button
+            size="sm"
+            onClick={() => scrollToSection("hero")}
+            aria-label={language === "es" ? "Volver arriba" : "Back to top"}
+            className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 py-2 text-xs rounded-md shadow-[0_8px_18px_rgba(0,0,0,0.25)] transition-all duration-200 flex items-center gap-2 border border-brown-dark/20"
+          >
+            <ArrowUpRight className="w-4 h-4" />
+            <span className="tracking-wide">
+              {language === "es" ? "Atrás" : "Back"}
+            </span>
+          </Button>
+        )}
         <Button
           variant="outline"
           size="sm"
