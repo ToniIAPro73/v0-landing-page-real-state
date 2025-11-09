@@ -65,10 +65,15 @@ git checkout $mainBranch
 git merge $currentBranch --no-ff -m "Auto-sync: merge $currentBranch into $mainBranch"
 git push origin $mainBranch
 
-# 8️⃣ Merge principal → rama (para dejar ambas idénticas)
-Write-Host "`n🔁 Fusionando $mainBranch → $currentBranch..." -ForegroundColor Cyan
+# 8️⃣ Rebase final para igualar historiales (elimina diferencias de hash)
+Write-Host "`n🔁 Rebase final de $currentBranch sobre $mainBranch para igualar historial..." -ForegroundColor Cyan
 git checkout $currentBranch
-git merge $mainBranch --no-ff -m "Auto-sync: merge $mainBranch into $currentBranch"
+git fetch origin $mainBranch
+git rebase origin/$mainBranch
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "⚠️ Se detectaron conflictos en el rebase final. Corrige y ejecuta 'git rebase --continue'." -ForegroundColor Red
+    exit 1
+}
 git push origin $currentBranch --force-with-lease
 
 # 9️⃣ Sincronizar rama v0 (si existe)
@@ -87,15 +92,12 @@ if ($v0Branch) {
     Write-Host "`nℹ️ No se encontró rama tipo v0/* — se omite esta parte." -ForegroundColor DarkGray
 }
 
-# 🔟 Verificación final
+# 🔟 Verificación final mejorada
 Write-Host "`n🔍 Verificando sincronización final..." -ForegroundColor Cyan
-$statusMain  = git rev-parse origin/$mainBranch
-$statusLocal = git rev-parse origin/$currentBranch
-
-if ($statusMain -eq $statusLocal) {
-    Write-Host "`n✅ Ramas '$currentBranch' y '$mainBranch' perfectamente sincronizadas (sin ahead/behind)." -ForegroundColor Green
+$mainHash  = git rev-parse origin/$mainBranch
+$branchHash = git rev-parse origin/$currentBranch
+if ($mainHash -eq $branchHash) {
+    Write-Host "`n✅ Todo perfecto: '$currentBranch' y '$mainBranch' son idénticas. (Sin PRs ni diferencias de historial)" -ForegroundColor Green
 } else {
-    Write-Host "`n⚠️ GitHub aún detecta diferencias de historial. Ejecuta un rebase manual si el mensaje persiste." -ForegroundColor DarkYellow
+    Write-Host "`n⚠️ Aún existen commits divergentes. Vuelve a ejecutar el script o revisa manualmente." -ForegroundColor Yellow
 }
-
-Write-Host "`n🏁 Proceso completado." -ForegroundColor Cyan
