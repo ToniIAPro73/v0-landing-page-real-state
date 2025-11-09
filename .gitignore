@@ -94,3 +94,4 @@ junit.xml
 # 🔹 Excepciones útiles
 # ───────────────────────────────
 !.env.example
+public/assets/dossier/dossiers_generados/
