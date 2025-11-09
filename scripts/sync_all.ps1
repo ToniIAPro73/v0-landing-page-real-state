@@ -1,81 +1,101 @@
 <#
 .SYNOPSIS
-  Sincroniza la rama actual y main bidireccionalmente.
-  - Actualiza main desde remoto
-  - Rebase de la rama actual sobre main
-  - Merge rama → main
-  - Merge main → rama (para igualarlas)
-  - Push de ambas ramas
-  - Sincroniza también rama v0 (si existe)
+  Sincronización universal entre la rama actual y la rama principal (main/master).
+  - Detecta automáticamente si la rama principal se llama 'main' o 'master'.
+  - Actualiza el remoto.
+  - Rebase de la rama actual sobre la principal.
+  - Merge bidireccional para garantizar igualdad total.
+  - Sincroniza opcionalmente ramas espejo (como v0/).
+  - Evita divergencias, commits behind/ahead y PR vacíos.
 
 .DESCRIPTION
-  Ejecutar en la raíz del repo:
-    ./sync_all.ps1
+  Ejecutar desde la raíz de cualquier repositorio:
+      ./sync_all.ps1
+
+  El script detectará automáticamente la configuración y dejará ambas ramas (principal y actual)
+  perfectamente sincronizadas, tanto en contenido como en historial.
 #>
 
-Write-Host "`n⚓ Iniciando sincronización completa (rama ↔ main ↔ v0)..." -ForegroundColor Cyan
+Write-Host "`n⚓ Iniciando sincronización inteligente de repositorio..." -ForegroundColor Cyan
 
-# 1️⃣ Validar entorno
+# 1️⃣ Validar entorno Git
 if (-not (Test-Path ".git")) {
     Write-Host "❌ No estás dentro de un repositorio Git." -ForegroundColor Red
     exit 1
 }
 
-# 2️⃣ Identificar rama actual
+# 2️⃣ Detectar rama actual
 $currentBranch = (git rev-parse --abbrev-ref HEAD).Trim()
+if (-not $currentBranch) {
+    Write-Host "❌ No se pudo detectar la rama actual." -ForegroundColor Red
+    exit 1
+}
 Write-Host "📍 Rama actual: $currentBranch" -ForegroundColor Yellow
 
-if ($currentBranch -eq "main") {
-    Write-Host "⚠️ Estás en main. Cambia a tu rama de trabajo y vuelve a ejecutar." -ForegroundColor DarkYellow
+# 3️⃣ Detectar si la principal es 'main' o 'master'
+$mainBranch = if ((git branch -r | Select-String "origin/main")) { "main" } else { "master" }
+Write-Host "🔹 Rama principal detectada: $mainBranch" -ForegroundColor Cyan
+
+if ($currentBranch -eq $mainBranch) {
+    Write-Host "⚠️ Estás en la rama principal. No hay nada que sincronizar." -ForegroundColor DarkYellow
     exit 0
 }
 
-# 3️⃣ Fetch general
-Write-Host "`n🔄 Actualizando información del remoto..." -ForegroundColor Cyan
+# 4️⃣ Fetch general
+Write-Host "`n🔄 Actualizando referencias remotas..." -ForegroundColor Cyan
 git fetch origin
 
-# 4️⃣ Actualizar main con remoto
-Write-Host "`n🧭 Alineando main con remoto..." -ForegroundColor Cyan
-git checkout main
-git pull origin main
+# 5️⃣ Actualizar rama principal
+Write-Host "`n🧭 Alineando $mainBranch con remoto..." -ForegroundColor Cyan
+git checkout $mainBranch
+git pull origin $mainBranch
 
-# 5️⃣ Rebase de tu rama sobre main
-Write-Host "`n🔧 Rebasing $currentBranch sobre main..." -ForegroundColor Cyan
+# 6️⃣ Rebase de la rama actual sobre la principal
+Write-Host "`n🔧 Rebasing $currentBranch sobre $mainBranch..." -ForegroundColor Cyan
 git checkout $currentBranch
-git rebase origin/main
+git rebase $mainBranch
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "⚠️ Conflictos durante rebase. Corrige y ejecuta 'git rebase --continue'." -ForegroundColor Red
+    Write-Host "`n⚠️ Conflictos detectados durante rebase. Corrige y ejecuta 'git rebase --continue'." -ForegroundColor Red
     exit 1
 }
 
-# 6️⃣ Merge rama → main (tu trabajo hacia main)
-Write-Host "`n🔁 Fusionando $currentBranch → main..." -ForegroundColor Cyan
-git checkout main
-git merge $currentBranch --no-ff -m "Auto-sync: merge $currentBranch into main"
-git push origin main
+# 7️⃣ Merge rama → principal
+Write-Host "`n🔁 Fusionando $currentBranch → $mainBranch..." -ForegroundColor Cyan
+git checkout $mainBranch
+git merge $currentBranch --no-ff -m "Auto-sync: merge $currentBranch into $mainBranch"
+git push origin $mainBranch
 
-# 7️⃣ Merge main → rama (para dejarlas idénticas)
-Write-Host "`n🔁 Fusionando main → $currentBranch..." -ForegroundColor Cyan
+# 8️⃣ Merge principal → rama (para dejar ambas idénticas)
+Write-Host "`n🔁 Fusionando $mainBranch → $currentBranch..." -ForegroundColor Cyan
 git checkout $currentBranch
-git merge main --no-ff -m "Auto-sync: merge main into $currentBranch"
-git push origin $currentBranch
+git merge $mainBranch --no-ff -m "Auto-sync: merge $mainBranch into $currentBranch"
+git push origin $currentBranch --force-with-lease
 
-# 8️⃣ Sincronizar rama v0 si existe
-$v0Branch = "v0/playa-viva-landing-page"
-$existsV0 = git branch -r | Select-String "origin/$v0Branch"
-if ($existsV0) {
-    Write-Host "`n⚓ Sincronizando rama v0 ($v0Branch)..." -ForegroundColor Cyan
+# 9️⃣ Sincronizar rama v0 (si existe)
+$v0Branch = (git branch -r | Select-String "origin/v0" | ForEach-Object { ($_ -split '/')[1] } | Select-Object -First 1)
+if ($v0Branch) {
+    Write-Host "`n⚓ Sincronizando rama espejo v0 ($v0Branch)..." -ForegroundColor Cyan
+    git fetch origin $v0Branch
     git checkout $v0Branch 2>$null
     if ($LASTEXITCODE -ne 0) {
         git checkout -b $v0Branch origin/$v0Branch
     }
     git pull origin $v0Branch
-    git merge main --no-ff -m "Auto-sync: merge main into $v0Branch"
+    git merge $mainBranch --no-ff -m "Auto-sync: merge $mainBranch into $v0Branch"
     git push origin $v0Branch
 } else {
-    Write-Host "`nℹ️ No se encontró la rama v0/playa-viva-landing-page, omitiendo..." -ForegroundColor DarkGray
+    Write-Host "`nℹ️ No se encontró rama tipo v0/* — se omite esta parte." -ForegroundColor DarkGray
 }
 
-# 9️⃣ Volver a tu rama
-git checkout $currentBranch
-Write-Host "`n✅ Sincronización completada: main y $currentBranch están 100% alineadas." -ForegroundColor Green
+# 🔟 Verificación final
+Write-Host "`n🔍 Verificando sincronización final..." -ForegroundColor Cyan
+$statusMain  = git rev-parse origin/$mainBranch
+$statusLocal = git rev-parse origin/$currentBranch
+
+if ($statusMain -eq $statusLocal) {
+    Write-Host "`n✅ Ramas '$currentBranch' y '$mainBranch' perfectamente sincronizadas (sin ahead/behind)." -ForegroundColor Green
+} else {
+    Write-Host "`n⚠️ GitHub aún detecta diferencias de historial. Ejecuta un rebase manual si el mensaje persiste." -ForegroundColor DarkYellow
+}
+
+Write-Host "`n🏁 Proceso completado." -ForegroundColor Cyan
