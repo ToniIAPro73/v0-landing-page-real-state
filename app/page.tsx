@@ -312,7 +312,7 @@ export default function PlayaVivaLanding() {
         title: "Respaldado por Líderes Inmobiliarios",
         subtitle: "Uniestate y partners de confianza",
         description:
-          "Comercializado por Uniestate.co.uk con sede en Londres y Dubai, y respaldado por las principales firmas del sector inmobiliario de lujo.",
+          "Uniestate Properties es una promotora inmobiliaria consolidada y de confianza en los Emiratos Árabes Unidos (EAU) con una trayectoria que se remonta a 1995. Uniestate UK es la agencia elegida por Uniestate para la comercialización de Playa Viva por su amplia trayectoria en el sector inmobiliario de lujo.",
         partners: "Cobertura en medios especializados",
         readMore: "Leer en el medio",
         articles: [
@@ -656,7 +656,7 @@ export default function PlayaVivaLanding() {
         title: "Backed by Real Estate Leaders",
         subtitle: "Uniestate and trusted partners",
         description:
-          "Marketed by Uniestate.co.uk based in London and Dubai, and supported by leading luxury real estate firms.",
+          "Uniestate Properties is a trusted, established developer in the United Arab Emirates dating back to 1995. Uniestate UK is the agency chosen by Uniestate to market Playa Viva thanks to its extensive pedigree within the luxury real estate sector.",
         partners: "Featured in regional media",
         readMore: "Read full article",
         articles: [
