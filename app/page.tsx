@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
-import { Globe, MapPin, Home, Star, Users, Phone, TrendingUp, Calendar, DollarSign, Award, CheckCircle2, Download, Mail } from "lucide-react";
+import { Globe, MapPin, Home, Star, Users, Phone, TrendingUp, Calendar, DollarSign, Award, CheckCircle2, Download, Mail, ArrowUpRight } from "lucide-react";
 
 const SITE_URL = "https://landing-page-playa-viva.vercel.app";
 
@@ -1093,7 +1093,18 @@ export default function PlayaVivaLanding() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       {/* Language Toggle - Fixed Bottom Right */}
-      <div className="fixed bottom-6 right-6 z-[100]">
+      <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3">
+        <Button
+          size="sm"
+          onClick={() => scrollToSection("hero")}
+          aria-label={language === "es" ? "Volver al hero" : "Back to hero section"}
+          className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 py-2 text-xs rounded-md shadow-[0_8px_18px_rgba(0,0,0,0.25)] transition-all duration-200 flex items-center gap-2 border border-brown-dark/20"
+        >
+          <ArrowUpRight className="w-4 h-4" />
+          <span className="tracking-wide">
+            {language === "es" ? "Subir al Hero" : "Back to Hero"}
+          </span>
+        </Button>
         <Button
           variant="outline"
           size="sm"
@@ -1276,7 +1287,7 @@ export default function PlayaVivaLanding() {
       </nav>
 
       {/* Hero Section */}
-      <section className="hero-section relative min-h-svh overflow-hidden pt-14 md:pt-0">
+      <section id="hero" className="hero-section relative min-h-svh overflow-hidden pt-14 md:pt-0">
         {/* Background */}
         <div
           className="absolute inset-0 z-0 transition-all ease-out"
@@ -1474,11 +1485,18 @@ export default function PlayaVivaLanding() {
         <div className="container mx-auto px-4 relative z-10">
           {/* Header */}
           <div className="text-center mb-16 max-w-4xl mx-auto">
-            <div className="inline-block mb-4">
-              <div className="bg-gold-warm/70 border-2 border-gold-warm rounded-full px-6 py-3 shadow-lg shadow-gold-warm/30">
-                <p className="text-brown-dark text-base font-bold tracking-widest uppercase">
+            <div className="inline-flex justify-center mb-4">
+              <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-gradient-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
+                <div
+                  className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
+                  style={{ backgroundImage: "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)", backgroundSize: "16px 16px" }}
+                ></div>
+                <span className="relative z-10 group-hover:drop-shadow-[0_0_8px_rgba(162,144,96,0.4)] transition-all duration-500 uppercase tracking-[0.35em] text-xs md:text-sm">
                   {language === "es" ? "Oportunidad Histórica" : "Historic Opportunity"}
-                </p>
+                </span>
               </div>
             </div>
             <h2
