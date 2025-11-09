@@ -3,6 +3,12 @@ import os
 import sys
 import subprocess
 from pathlib import Path
+from typing import TYPE_CHECKING, Optional
+
+# Type imports for static analysis
+if TYPE_CHECKING: # pragma: no cover
+    import requests
+    from pypdf import PdfReader, PdfWriter
 
 # Install required dependencies (handles missing libraries)
 def install_package(package_name):
@@ -14,6 +20,7 @@ def install_package(package_name):
         print(f"Failed to install {package_name}")
         return False
 
+# Import dependencies with automatic installation
 try:
     import requests
 except ImportError:
@@ -50,29 +57,22 @@ CAMPO_PDF_A_RELLENAR = "nombre_personalizacion_lead"
 
 def verificar_dependencias():
     """Verificar que todas las dependencias están disponibles"""
-    dependencias_faltantes = []
-    
     try:
-        import requests
-    except ImportError:
-        dependencias_faltantes.append("requests")
-    
-    try:
-        from pypdf import PdfReader, PdfWriter  # type: ignore
-    except ImportError:
-        dependencias_faltantes.append("pypdf")
-    
-    if dependencias_faltantes:
-        print(f"Missing dependencies: {', '.join(dependencias_faltantes)}")
+        # Test if modules are available (already imported at module level)
+        requests
+        PdfReader
+        PdfWriter
+        return True
+    except NameError as e:
+        print(f"Missing dependencies: {str(e)}")
         print("Execute: pip install requests pypdf")
         return False
-    
-    return True
 
-def personalizar_y_enviar(data_from_landing_page):
+def personalizar_y_enviar(data_from_landing_page: dict) -> dict:
     """
     Función principal que ejecuta la lógica paralela.
     Recibe un diccionario con los datos del formulario (nombre, email, hutk, etc.).
+    Returns a dictionary with operation results.
     """
     
     # Verificar dependencias antes de proceder
@@ -85,11 +85,25 @@ def personalizar_y_enviar(data_from_landing_page):
     hutk = data_from_landing_page.get('hubspotutk', '').strip()
     
     if not all([nombre_completo, email, hutk]):
-        return {"success": False, "message": "Faltan campos esenciales (fullname, email, hutk)."}
+        return {
+            "success": False,
+            "message": "Faltan campos esenciales (fullname, email, hutk).",
+            "hubspot_success": False,
+            "pdf_success": False,
+            "pdf_path": None,
+            "pdf_delivery_url": None
+        }
 
     # 2. Verificar que el archivo PDF base existe
     if not PDF_BASE_PATH.exists():
-        return {"success": False, "message": f"Archivo PDF base no encontrado: {PDF_BASE_PATH}"}
+        return {
+            "success": False,
+            "message": f"Archivo PDF base no encontrado: {PDF_BASE_PATH}",
+            "hubspot_success": False,
+            "pdf_success": False,
+            "pdf_path": None,
+            "pdf_delivery_url": None
+        }
 
     # ----------------------------------------------------
     # ACCIÓN PARALELA 1: SINCRONIZACIÓN DE LEADS CON HUBSPOT
