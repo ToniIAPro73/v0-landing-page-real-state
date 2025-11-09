@@ -62,7 +62,9 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`font-sans antialiased`} suppressHydrationWarning>
-        {/* HubSpot Embed Code */}
+        {children}
+        <Analytics />
+        {/* HubSpot Tracking Code - ANTES de cierre body */}
         <Script
           id="hubspot-script"
           src="//js-eu1.hs-scripts.com/147219365.js"
@@ -70,8 +72,6 @@ export default function RootLayout({
           async
           defer
         />
-        {children}
-        <Analytics />
       </body>
     </html>
   );

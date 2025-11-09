@@ -3,7 +3,22 @@
 import { useState, useEffect, useRef, FormEvent } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Globe, MapPin, Home, Star, Users, Phone, TrendingUp, Calendar, DollarSign, Award, CheckCircle2, Download, Mail, ArrowUpRight } from "lucide-react";
+import {
+  Globe,
+  MapPin,
+  Home,
+  Star,
+  Users,
+  Phone,
+  TrendingUp,
+  Calendar,
+  DollarSign,
+  Award,
+  CheckCircle2,
+  Download,
+  Mail,
+  ArrowUpRight,
+} from "lucide-react";
 
 const SITE_URL = "https://landing-page-playa-viva.vercel.app";
 
@@ -22,7 +37,9 @@ type LeadAutomationPayload = {
 
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
-  const [activeGalleryTab, setActiveGalleryTab] = useState<"servicios" | "interior" | "sitios" | "video">("servicios");
+  const [activeGalleryTab, setActiveGalleryTab] = useState<
+    "servicios" | "interior" | "sitios" | "video"
+  >("servicios");
   const [animationStates, setAnimationStates] = useState({
     backgroundImage: false,
     logo: false,
@@ -48,11 +65,20 @@ export default function PlayaVivaLanding() {
   const [showMenu, setShowMenu] = useState(false);
   const [showNavbar, setShowNavbar] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "" });
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [automationFeedback, setAutomationFeedback] = useState<{ type: "success" | "error"; userName: string } | null>(null);
-  const [activeApartment, setActiveApartment] = useState<"studio" | "oneBed" | "twoBed" | "threeBed">("studio");
+  const [automationFeedback, setAutomationFeedback] = useState<{
+    type: "success" | "error";
+    userName: string;
+  } | null>(null);
+  const [activeApartment, setActiveApartment] = useState<
+    "studio" | "oneBed" | "twoBed" | "threeBed"
+  >("studio");
   const [locationView, setLocationView] = useState<"map" | "collage">("map");
 
   // Fit hero to viewport height (especially for mobile landscape)
@@ -255,7 +281,8 @@ export default function PlayaVivaLanding() {
       gallery: {
         title: "El Proyecto",
         subtitle: "Diseño arquitectónico excepcional en Al Marjan Island",
-        description: "Explore la elegancia y sofisticación de Playa Viva a través de renders de alta resolución y fotografías del entorno.",
+        description:
+          "Explore la elegancia y sofisticación de Playa Viva a través de renders de alta resolución y fotografías del entorno.",
       },
       apartments: {
         title: "Colección de Apartamentos",
@@ -267,7 +294,8 @@ export default function PlayaVivaLanding() {
           studio: {
             label: "Estudio",
             headline: "Estudios boutique frente al mar",
-            description: "Distribución abierta con cocina integrada, ventanales de piso a techo y balcón privado hacia el Golfo.",
+            description:
+              "Distribución abierta con cocina integrada, ventanales de piso a techo y balcón privado hacia el Golfo.",
             highlights: [
               "Entrega totalmente amueblada con domótica y electrodomésticos premium",
               "Baño hotelero con acabados de piedra natural",
@@ -278,7 +306,8 @@ export default function PlayaVivaLanding() {
           oneBed: {
             label: "1 Habitación",
             headline: "Suite residencial con sala independiente",
-            description: "Salón comedor con cocina lineal, dormitorio en suite y balcón profundo para disfrutar del skyline.",
+            description:
+              "Salón comedor con cocina lineal, dormitorio en suite y balcón profundo para disfrutar del skyline.",
             highlights: [
               "Vestidor cerrado y baño principal con doble lavabo",
               "Zona de lavandería y almacenamiento oculto",
@@ -289,7 +318,8 @@ export default function PlayaVivaLanding() {
           twoBed: {
             label: "2 Habitaciones",
             headline: "Plantas angulares con vistas duales",
-            description: "Dos dormitorios en suite, cocina con isla y sala envolvente que accede a dos balcones panorámicos.",
+            description:
+              "Dos dormitorios en suite, cocina con isla y sala envolvente que accede a dos balcones panorámicos.",
             highlights: [
               "Dormitorio principal tipo master con lounge privado",
               "Baño secundario con ventilación natural y tocador doble",
@@ -300,7 +330,8 @@ export default function PlayaVivaLanding() {
           threeBed: {
             label: "3 Habitaciones",
             headline: "Residencias familiares con terraza envolvente",
-            description: "Amplia zona social, cocina cerrada y tres suites con acceso directo a una terraza de más de 25 m².",
+            description:
+              "Amplia zona social, cocina cerrada y tres suites con acceso directo a una terraza de más de 25 m².",
             highlights: [
               "Habitación principal con baño spa y walk-in closet de 6 metros",
               "Cuarto de servicio con baño independiente",
@@ -309,7 +340,8 @@ export default function PlayaVivaLanding() {
             parking: "2 plazas de parking incluidas",
           },
         },
-      },      trust: {
+      },
+      trust: {
         title: "Respaldado por Líderes Inmobiliarios",
         subtitle: "Uniestate y partners de confianza",
         description:
@@ -349,43 +381,81 @@ export default function PlayaVivaLanding() {
       specifications: {
         title: "Especificaciones",
         subtitle: "Unidades diseñadas para el inversor sofisticado",
-        description: "Desde estudios compactos hasta amplios apartamentos de 3 dormitorios, todas las unidades incluyen acabados premium, domótica y entrega totalmente amueblada.",
+        description:
+          "Desde estudios compactos hasta amplios apartamentos de 3 dormitorios, todas las unidades incluyen acabados premium, domótica y entrega totalmente amueblada.",
         units: [
           {
             type: "Studio",
             size: "37-45 m²",
             price: "Desde €170,000",
-            features: ["Smart Home", "Totalmente amueblado", "Balcón privado", "Cocina equipada"],
+            features: [
+              "Smart Home",
+              "Totalmente amueblado",
+              "Balcón privado",
+              "Cocina equipada",
+            ],
           },
           {
             type: "1 Dormitorio",
             size: "65-75 m²",
             price: "Desde €240,000",
-            features: ["Smart Home", "Totalmente amueblado", "Balcón amplio", "Dormitorio principal en-suite"],
+            features: [
+              "Smart Home",
+              "Totalmente amueblado",
+              "Balcón amplio",
+              "Dormitorio principal en-suite",
+            ],
           },
           {
             type: "2 Dormitorios",
             size: "95-110 m²",
             price: "Desde €350,000",
-            features: ["Smart Home", "Totalmente amueblado", "2 Balcones", "Dormitorios en-suite"],
+            features: [
+              "Smart Home",
+              "Totalmente amueblado",
+              "2 Balcones",
+              "Dormitorios en-suite",
+            ],
           },
           {
             type: "3 Dormitorios",
             size: "135-160 m²",
             price: "Desde €480,000",
-            features: ["Smart Home", "Totalmente amueblado", "Terraza amplia", "3 Baños completos"],
+            features: [
+              "Smart Home",
+              "Totalmente amueblado",
+              "Terraza amplia",
+              "3 Baños completos",
+            ],
           },
         ],
       },
       paymentPlan: {
         title: "Plan de Pago Flexible",
         subtitle: "Solo 1% mensual durante 5 años",
-        description: "Un esquema de financiamiento diseñado para inversores internacionales, permitiéndole posicionarse en Al Marjan Island con pagos mensuales mínimos.",
+        description:
+          "Un esquema de financiamiento diseñado para inversores internacionales, permitiéndole posicionarse en Al Marjan Island con pagos mensuales mínimos.",
         timeline: [
-          { stage: "Reserva", amount: "€5,000", description: "Reserva tu unidad" },
-          { stage: "Contrato", amount: "15%", description: "Al firmar contrato" },
-          { stage: "Durante construcción", amount: "1% mensual", description: "60 meses (5 años)" },
-          { stage: "Entrega Q2 2026", amount: "Saldo", description: "Balance al entregar llaves" },
+          {
+            stage: "Reserva",
+            amount: "€5,000",
+            description: "Reserva tu unidad",
+          },
+          {
+            stage: "Contrato",
+            amount: "15%",
+            description: "Al firmar contrato",
+          },
+          {
+            stage: "Durante construcción",
+            amount: "1% mensual",
+            description: "60 meses (5 años)",
+          },
+          {
+            stage: "Entrega Q2 2026",
+            amount: "Saldo",
+            description: "Balance al entregar llaves",
+          },
         ],
         note: "* Plan sujeto a aprobación. Consulte con nuestro equipo para opciones personalizadas.",
       },
@@ -446,9 +516,12 @@ export default function PlayaVivaLanding() {
           emailPlaceholder: "Email",
           ctaButton: "Descargar Dossier Exclusivo",
           sending: "Personalizando dossier...",
-          privacy: "Usamos tus datos solo para enviar el dossier personalizado y activar la automatización descrita.",
-          successMessage: "Gracias, {{name}}. Tu dossier personalizado se está enviando a tu bandeja.",
-          errorMessage: "No pudimos completar el envío. Inténtalo de nuevo o contáctanos.",
+          privacy:
+            "Usamos tus datos solo para enviar el dossier personalizado y activar la automatización descrita.",
+          successMessage:
+            "Gracias, {{name}}. Tu dossier personalizado se está enviando a tu bandeja.",
+          errorMessage:
+            "No pudimos completar el envío. Inténtalo de nuevo o contáctanos.",
         },
       },
       location: {
@@ -511,7 +584,8 @@ export default function PlayaVivaLanding() {
           },
           {
             question: "¿Cuáles son las cuotas de servicio?",
-            answer: "Las cuotas de servicio se estiman en 18 AED por pie cuadrado.",
+            answer:
+              "Las cuotas de servicio se estiman en 18 AED por pie cuadrado.",
           },
         ],
       },
@@ -598,7 +672,8 @@ export default function PlayaVivaLanding() {
       gallery: {
         title: "The Project",
         subtitle: "Exceptional architectural design in Al Marjan Island",
-        description: "Explore the elegance and sophistication of Playa Viva through high-resolution renders and environmental photography.",
+        description:
+          "Explore the elegance and sophistication of Playa Viva through high-resolution renders and environmental photography.",
       },
       apartments: {
         title: "Apartment Collection",
@@ -610,7 +685,8 @@ export default function PlayaVivaLanding() {
           studio: {
             label: "Studio",
             headline: "Boutique studios facing the sea",
-            description: "Open-plan living with integrated kitchen, floor-to-ceiling glazing, and a private balcony overlooking the Gulf.",
+            description:
+              "Open-plan living with integrated kitchen, floor-to-ceiling glazing, and a private balcony overlooking the Gulf.",
             highlights: [
               "Fully furnished delivery with smart-home package and premium appliances",
               "Hotel-inspired bathroom wrapped in natural stone",
@@ -621,7 +697,8 @@ export default function PlayaVivaLanding() {
           oneBed: {
             label: "1 Bedroom",
             headline: "One-bedroom suite with defined living zones",
-            description: "Separate living/dining area, en-suite bedroom, and a deep balcony to capture the skyline.",
+            description:
+              "Separate living/dining area, en-suite bedroom, and a deep balcony to capture the skyline.",
             highlights: [
               "Walk-in wardrobe plus primary bathroom with double vanity",
               "Dedicated laundry and concealed storage",
@@ -632,7 +709,8 @@ export default function PlayaVivaLanding() {
           twoBed: {
             label: "2 Bedrooms",
             headline: "Corner layouts with dual-aspect views",
-            description: "Two en-suite bedrooms, island kitchen, and wraparound living room opening onto twin panoramic balconies.",
+            description:
+              "Two en-suite bedrooms, island kitchen, and wraparound living room opening onto twin panoramic balconies.",
             highlights: [
               "Primary suite with private lounge corner",
               "Secondary bath with natural ventilation and twin vanity",
@@ -643,7 +721,8 @@ export default function PlayaVivaLanding() {
           threeBed: {
             label: "3 Bedrooms",
             headline: "Family residences with sweeping terrace",
-            description: "Expansive great room, closed kitchen, and three suites that spill onto a 25 m² terrace.",
+            description:
+              "Expansive great room, closed kitchen, and three suites that spill onto a 25 m² terrace.",
             highlights: [
               "Owner's suite with spa bathroom and 6-metre walk-in wardrobe",
               "Maid's room with dedicated bathroom",
@@ -693,43 +772,81 @@ export default function PlayaVivaLanding() {
       specifications: {
         title: "Specifications",
         subtitle: "Units designed for the sophisticated investor",
-        description: "From compact studios to spacious 3-bedroom apartments, all units include premium finishes, home automation and fully furnished delivery.",
+        description:
+          "From compact studios to spacious 3-bedroom apartments, all units include premium finishes, home automation and fully furnished delivery.",
         units: [
           {
             type: "Studio",
             size: "37-45 m²",
             price: "From £150,000",
-            features: ["Smart Home", "Fully furnished", "Private balcony", "Equipped kitchen"],
+            features: [
+              "Smart Home",
+              "Fully furnished",
+              "Private balcony",
+              "Equipped kitchen",
+            ],
           },
           {
             type: "1 Bedroom",
             size: "65-75 m²",
             price: "From £210,000",
-            features: ["Smart Home", "Fully furnished", "Spacious balcony", "Master bedroom en-suite"],
+            features: [
+              "Smart Home",
+              "Fully furnished",
+              "Spacious balcony",
+              "Master bedroom en-suite",
+            ],
           },
           {
             type: "2 Bedrooms",
             size: "95-110 m²",
             price: "From £310,000",
-            features: ["Smart Home", "Fully furnished", "2 Balconies", "En-suite bedrooms"],
+            features: [
+              "Smart Home",
+              "Fully furnished",
+              "2 Balconies",
+              "En-suite bedrooms",
+            ],
           },
           {
             type: "3 Bedrooms",
             size: "135-160 m²",
             price: "From £420,000",
-            features: ["Smart Home", "Fully furnished", "Large terrace", "3 Full bathrooms"],
+            features: [
+              "Smart Home",
+              "Fully furnished",
+              "Large terrace",
+              "3 Full bathrooms",
+            ],
           },
         ],
       },
       paymentPlan: {
         title: "Flexible Payment Plan",
         subtitle: "Only 1% monthly for 5 years",
-        description: "A financing scheme designed for international investors, allowing you to position yourself in Al Marjan Island with minimum monthly payments.",
+        description:
+          "A financing scheme designed for international investors, allowing you to position yourself in Al Marjan Island with minimum monthly payments.",
         timeline: [
-          { stage: "Booking", amount: "£5,000", description: "Reserve your unit" },
-          { stage: "Contract", amount: "15%", description: "Upon signing contract" },
-          { stage: "During construction", amount: "1% monthly", description: "60 months (5 years)" },
-          { stage: "Handover Q2 2026", amount: "Balance", description: "Balance upon key handover" },
+          {
+            stage: "Booking",
+            amount: "£5,000",
+            description: "Reserve your unit",
+          },
+          {
+            stage: "Contract",
+            amount: "15%",
+            description: "Upon signing contract",
+          },
+          {
+            stage: "During construction",
+            amount: "1% monthly",
+            description: "60 months (5 years)",
+          },
+          {
+            stage: "Handover Q2 2026",
+            amount: "Balance",
+            description: "Balance upon key handover",
+          },
         ],
         note: "* Plan subject to approval. Consult with our team for custom options.",
       },
@@ -790,9 +907,12 @@ export default function PlayaVivaLanding() {
           emailPlaceholder: "Email",
           ctaButton: "Download Exclusive Dossier",
           sending: "Preparing your dossier...",
-          privacy: "We only use your details to personalize the dossier and trigger the described automation.",
-          successMessage: "Thank you, {{name}}. Your personalized dossier is on its way to your inbox.",
-          errorMessage: "We couldn't finalize the send. Please try again or contact our team.",
+          privacy:
+            "We only use your details to personalize the dossier and trigger the described automation.",
+          successMessage:
+            "Thank you, {{name}}. Your personalized dossier is on its way to your inbox.",
+          errorMessage:
+            "We couldn't finalize the send. Please try again or contact our team.",
         },
       },
       location: {
@@ -873,29 +993,29 @@ export default function PlayaVivaLanding() {
   const apartmentConfigs = {
     studio: {
       image: "/assets/imagenes/studio.webp",
-      sizeSqftRange: [300, 462],
+      sizeSqftRange: [300, 462] as [number, number],
       bedrooms: 0,
       bathrooms: 1,
     },
     oneBed: {
       image: "/assets/imagenes/1-bedroom.webp",
-      sizeSqftRange: [600, 850],
+      sizeSqftRange: [600, 850] as [number, number],
       bedrooms: 1,
       bathrooms: 1,
     },
     twoBed: {
       image: "/assets/imagenes/2-bedroom.webp",
-      sizeSqftRange: [1100, 1200],
+      sizeSqftRange: [1100, 1200] as [number, number],
       bedrooms: 2,
       bathrooms: 1,
     },
     threeBed: {
       image: "/assets/imagenes/3-bedroom.png",
-      sizeSqftRange: [1700, 1800],
+      sizeSqftRange: [1700, 1800] as [number, number],
       bedrooms: 3,
       bathrooms: 2,
     },
-  } as const;
+  };
 
   const apartmentPrices = {
     studio: { en: "£172,000", es: "192.000€" },
@@ -924,9 +1044,7 @@ export default function PlayaVivaLanding() {
 
   const formatBathroomValue = (count: number) => {
     const valueString =
-      language === "es"
-        ? count.toString().replace(".", ",")
-        : count.toString();
+      language === "es" ? count.toString().replace(".", ",") : count.toString();
     const plural = count > 1;
     return language === "es"
       ? `${valueString} ${plural ? "baños" : "baño"}`
@@ -1037,9 +1155,9 @@ export default function PlayaVivaLanding() {
     const trimmedLastName = formData.lastName.trim();
     const fallbackName = language === "es" ? "inversor" : "investor";
 
-    const dossierFileNameBase = `Playa-Viva-Dossier-${trimmedFirstName || "Investor"}-${
-      trimmedLastName || "Lead"
-    }`
+    const dossierFileNameBase = `Playa-Viva-Dossier-${
+      trimmedFirstName || "Investor"
+    }-${trimmedLastName || "Lead"}`
       .trim()
       .replace(/\s+/g, "-");
 
@@ -1121,12 +1239,22 @@ export default function PlayaVivaLanding() {
       </div>
 
       {/* Sticky Navigation Menu - Uniestate UK Style */}
-      <nav className={`landing-nav fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
+      <nav
+        className={`landing-nav fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm transition-transform duration-300 ${
+          showNavbar ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
         <div className="landing-nav__inner container mx-auto px-4 md:px-6">
           <div className="landing-nav__bar flex items-center justify-between h-14 md:h-16">
             {/* Logo Uniestate */}
             <div className="flex-shrink-0">
-              <span className="text-brown-dark text-base md:text-lg font-bold tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif', letterSpacing: '0.02em' }}>
+              <span
+                className="text-brown-dark text-base md:text-lg font-bold tracking-tight"
+                style={{
+                  fontFamily: "system-ui, -apple-system, sans-serif",
+                  letterSpacing: "0.02em",
+                }}
+              >
                 UNIESTATE
               </span>
             </div>
@@ -1199,7 +1327,9 @@ export default function PlayaVivaLanding() {
               type="button"
               onClick={() => setShowMenu(!showMenu)}
               className="md:hidden text-brown-dark hover:text-gold-warm p-2"
-              aria-label={showMenu ? mobileMenuLabels.close : mobileMenuLabels.open}
+              aria-label={
+                showMenu ? mobileMenuLabels.close : mobileMenuLabels.open
+              }
               aria-expanded={showMenu}
               aria-controls="mobile-nav-menu"
             >
@@ -1282,7 +1412,9 @@ export default function PlayaVivaLanding() {
                   className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 py-1.5 text-xs rounded-md shadow-md w-full mt-2 flex items-center justify-center gap-2"
                 >
                   <Download className="w-4 h-4" />
-                  {language === "es" ? "Dossier Exclusivo" : "Exclusive Dossier"}
+                  {language === "es"
+                    ? "Dossier Exclusivo"
+                    : "Exclusive Dossier"}
                 </Button>
               </div>
             </div>
@@ -1291,7 +1423,10 @@ export default function PlayaVivaLanding() {
       </nav>
 
       {/* Hero Section */}
-      <section id="hero" className="hero-section relative min-h-svh overflow-hidden pt-14 md:pt-0">
+      <section
+        id="hero"
+        className="hero-section relative min-h-svh overflow-hidden pt-14 md:pt-0"
+      >
         {/* Background */}
         <div
           className="absolute inset-0 z-0 transition-all ease-out"
@@ -1301,7 +1436,9 @@ export default function PlayaVivaLanding() {
               ? "scale(1)"
               : "scale(1.05)",
             filter: animationStates.logo
-              ? `brightness(${0.55 + scrollProgress * 0.45}) saturate(${0.4 + scrollProgress * 0.6}) blur(${3 - scrollProgress * 3}px)`
+              ? `brightness(${0.55 + scrollProgress * 0.45}) saturate(${
+                  0.4 + scrollProgress * 0.6
+                }) blur(${3 - scrollProgress * 3}px)`
               : "brightness(1) saturate(1) blur(0px)",
             transitionDuration: animationStates.logo ? "2000ms" : "700ms",
           }}
@@ -1364,7 +1501,9 @@ export default function PlayaVivaLanding() {
                 className="transition-all ease-out"
                 style={{
                   opacity: animationStates.subtitle ? 1 : 0,
-                  transform: animationStates.subtitle ? "scale(1)" : "scale(0.3)",
+                  transform: animationStates.subtitle
+                    ? "scale(1)"
+                    : "scale(0.3)",
                   filter: animationStates.subtitle ? "blur(0px)" : "blur(12px)",
                   transitionDuration: "2000ms",
                 }}
@@ -1381,8 +1520,12 @@ export default function PlayaVivaLanding() {
                 className="transition-all ease-out max-w-5xl"
                 style={{
                   opacity: animationStates.description ? 1 : 0,
-                  transform: animationStates.description ? "scale(1)" : "scale(0.3)",
-                  filter: animationStates.description ? "blur(0px)" : "blur(12px)",
+                  transform: animationStates.description
+                    ? "scale(1)"
+                    : "scale(0.3)",
+                  filter: animationStates.description
+                    ? "blur(0px)"
+                    : "blur(12px)",
                   transitionDuration: "2000ms",
                 }}
               >
@@ -1398,7 +1541,9 @@ export default function PlayaVivaLanding() {
                 className="transition-all ease-out"
                 style={{
                   opacity: animationStates.priceBox ? 1 : 0,
-                  transform: animationStates.priceBox ? "scale(1)" : "scale(0.3)",
+                  transform: animationStates.priceBox
+                    ? "scale(1)"
+                    : "scale(0.3)",
                   filter: animationStates.priceBox ? "blur(0px)" : "blur(12px)",
                   transitionDuration: "2000ms",
                 }}
@@ -1430,8 +1575,12 @@ export default function PlayaVivaLanding() {
                 className="transition-all ease-out"
                 style={{
                   opacity: animationStates.ctaButtons ? 1 : 0,
-                  transform: animationStates.ctaButtons ? "scale(1)" : "scale(0.3)",
-                  filter: animationStates.ctaButtons ? "blur(0px)" : "blur(12px)",
+                  transform: animationStates.ctaButtons
+                    ? "scale(1)"
+                    : "scale(0.3)",
+                  filter: animationStates.ctaButtons
+                    ? "blur(0px)"
+                    : "blur(12px)",
                   transitionDuration: "2000ms",
                 }}
               >
@@ -1443,7 +1592,11 @@ export default function PlayaVivaLanding() {
                   >
                     <span className="flex items-center gap-3">
                       <Download className="h-5 w-5" />
-                      <span>{language === "es" ? "Dossier Exclusivo" : "Exclusive Dossier"}</span>
+                      <span>
+                        {language === "es"
+                          ? "Dossier Exclusivo"
+                          : "Exclusive Dossier"}
+                      </span>
                     </span>
                   </Button>
 
@@ -1483,10 +1636,13 @@ export default function PlayaVivaLanding() {
       >
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, ${`var(--gold-warm)`} 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, ${`var(--gold-warm)`} 1px, transparent 0)`,
+              backgroundSize: "40px 40px",
+            }}
+          />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -1499,10 +1655,16 @@ export default function PlayaVivaLanding() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
                 <div
                   className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
-                  style={{ backgroundImage: "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)", backgroundSize: "16px 16px" }}
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)",
+                    backgroundSize: "16px 16px",
+                  }}
                 ></div>
                 <span className="relative z-10 group-hover:drop-shadow-[0_0_8px_rgba(162,144,96,0.4)] transition-all duration-500 uppercase tracking-[0.35em] text-xs md:text-sm">
-                  {language === "es" ? "Oportunidad Histórica" : "Historic Opportunity"}
+                  {language === "es"
+                    ? "Oportunidad Histórica"
+                    : "Historic Opportunity"}
                 </span>
               </div>
             </div>
@@ -1571,9 +1733,7 @@ export default function PlayaVivaLanding() {
                 <h4 className="text-brown-dark text-lg md:text-xl font-semibold mb-2">
                   {stat.label}
                 </h4>
-                <p className="text-taupe-warm text-sm">
-                  {stat.sublabel}
-                </p>
+                <p className="text-taupe-warm text-sm">{stat.sublabel}</p>
               </div>
             ))}
           </div>
@@ -1691,7 +1851,9 @@ export default function PlayaVivaLanding() {
                   : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
               }`}
             >
-              {language === "es" ? "Servicios e Instalaciones" : "Services & Facilities"}
+              {language === "es"
+                ? "Servicios e Instalaciones"
+                : "Services & Facilities"}
             </button>
             <button
               onClick={() => setActiveGalleryTab("interior")}
@@ -1746,7 +1908,10 @@ export default function PlayaVivaLanding() {
           {activeGalleryTab === "interior" && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
               {[
-                { src: "/assets/imagenes/studio.webp", span: "md:col-span-2 md:row-span-2" },
+                {
+                  src: "/assets/imagenes/studio.webp",
+                  span: "md:col-span-2 md:row-span-2",
+                },
                 { src: "/assets/imagenes/1-bedroom.webp", span: "" },
                 { src: "/assets/imagenes/2-bedroom.webp", span: "" },
                 { src: "/assets/imagenes/foto%20galeria%201.jpg", span: "" },
@@ -1815,7 +1980,9 @@ export default function PlayaVivaLanding() {
         className="relative py-24 bg-gradient-to-br from-cream-light via-white to-cream-light"
         style={{
           opacity: visibleSections.apartments ? 1 : 0,
-          transform: visibleSections.apartments ? "translateY(0px)" : "translateY(50px)",
+          transform: visibleSections.apartments
+            ? "translateY(0px)"
+            : "translateY(50px)",
           transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
@@ -1834,19 +2001,21 @@ export default function PlayaVivaLanding() {
             </div>
 
             <div className="flex justify-center gap-4 mb-12 flex-wrap">
-              {(["studio", "oneBed", "twoBed", "threeBed"] as const).map((key) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveApartment(key)}
-                  className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
-                    activeApartment === key
-                      ? "bg-gold-warm text-brown-dark shadow-lg"
-                      : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
-                  }`}
-                >
-                  {t.apartments.tabs[key].label}
-                </button>
-              ))}
+              {(["studio", "oneBed", "twoBed", "threeBed"] as const).map(
+                (key) => (
+                  <button
+                    key={key}
+                    onClick={() => setActiveApartment(key)}
+                    className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                      activeApartment === key
+                        ? "bg-gold-warm text-brown-dark shadow-lg"
+                        : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+                    }`}
+                  >
+                    {t.apartments.tabs[key].label}
+                  </button>
+                )
+              )}
             </div>
 
             <div className="space-y-10">
@@ -1854,7 +2023,9 @@ export default function PlayaVivaLanding() {
                 className="relative max-w-5xl mx-auto rounded-3xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_30px_60px_rgba(0,0,0,0.25)]"
                 style={{
                   opacity: visibleSections.apartments ? 1 : 0,
-                  transform: visibleSections.apartments ? undefined : "translateY(30px)",
+                  transform: visibleSections.apartments
+                    ? undefined
+                    : "translateY(30px)",
                   transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
@@ -1890,7 +2061,9 @@ export default function PlayaVivaLanding() {
                         <div className="bg-gold-warm/20 rounded-full p-1 mt-0.5">
                           <CheckCircle2 className="h-4 w-4 text-gold-warm" />
                         </div>
-                        <p className="text-brown-dark/80 text-sm">{highlight}</p>
+                        <p className="text-brown-dark/80 text-sm">
+                          {highlight}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -2145,7 +2318,9 @@ export default function PlayaVivaLanding() {
                   }}
                 >
                   <CheckCircle2 className="h-6 w-6 text-gold-warm mr-3 shrink-0 mt-0.5" />
-                  <span className="text-brown-dark text-left text-sm md:text-base">{benefit}</span>
+                  <span className="text-brown-dark text-left text-sm md:text-base">
+                    {benefit}
+                  </span>
                 </div>
               ))}
             </div>
@@ -2239,7 +2414,9 @@ export default function PlayaVivaLanding() {
         className="relative py-12 md:py-16 bg-[#d4c5a8]"
         style={{
           opacity: visibleSections.faq ? 1 : 0,
-          transform: visibleSections.faq ? "translateY(0px)" : "translateY(50px)",
+          transform: visibleSections.faq
+            ? "translateY(0px)"
+            : "translateY(50px)",
           transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
@@ -2311,7 +2488,9 @@ export default function PlayaVivaLanding() {
         className="relative py-20 bg-gradient-to-b from-brown-dark via-[#22170f] to-brown-dark overflow-hidden"
         style={{
           opacity: visibleSections.leadForm ? 1 : 0,
-          transform: visibleSections.leadForm ? "translateY(0px)" : "translateY(50px)",
+          transform: visibleSections.leadForm
+            ? "translateY(0px)"
+            : "translateY(50px)",
           transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
@@ -2335,9 +2514,18 @@ export default function PlayaVivaLanding() {
                 {/* Resplandor de fondo al hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
                 {/* Textura sutil */}
-                <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)', backgroundSize: '16px 16px'}}></div>
+                <div
+                  className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)",
+                    backgroundSize: "16px 16px",
+                  }}
+                ></div>
                 <span className="relative z-10 group-hover:drop-shadow-[0_0_8px_rgba(162,144,96,0.4)] transition-all duration-500">
-                  {language === "es" ? "Dossier de Inversión Exclusivo" : "Exclusive Investment Dossier"}
+                  {language === "es"
+                    ? "Dossier de Inversión Exclusivo"
+                    : "Exclusive Investment Dossier"}
                 </span>
               </div>
             </div>
@@ -2362,7 +2550,9 @@ export default function PlayaVivaLanding() {
                     <div className="bg-gold-warm/25 rounded-full p-1.5 mt-0.5">
                       <CheckCircle2 className="h-3.5 w-3.5 text-gold-warm" />
                     </div>
-                    <p className="text-[#c9b896] text-sm leading-relaxed">{feature}</p>
+                    <p className="text-[#c9b896] text-sm leading-relaxed">
+                      {feature}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -2377,45 +2567,65 @@ export default function PlayaVivaLanding() {
               {/* Efecto de brillo animado intenso que cruza el card */}
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1200 ease-out"></div>
               {/* Efecto de brillo dorado animado en el borde superior */}
-              <div className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none group-hover:opacity-70 transition-opacity duration-500"
-                   style={{
-                     background: 'radial-gradient(circle at top right, rgba(162,144,96,0.25), transparent 60%)',
-                   }}
+              <div
+                className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none group-hover:opacity-70 transition-opacity duration-500"
+                style={{
+                  background:
+                    "radial-gradient(circle at top right, rgba(162,144,96,0.25), transparent 60%)",
+                }}
               />
               {/* Efecto de brillo secundario inferior */}
-              <div className="absolute inset-0 rounded-3xl opacity-30 pointer-events-none group-hover:opacity-50 transition-opacity duration-500"
-                   style={{
-                     background: 'radial-gradient(circle at bottom left, rgba(184,166,115,0.2), transparent 50%)',
-                   }}
+              <div
+                className="absolute inset-0 rounded-3xl opacity-30 pointer-events-none group-hover:opacity-50 transition-opacity duration-500"
+                style={{
+                  background:
+                    "radial-gradient(circle at bottom left, rgba(184,166,115,0.2), transparent 50%)",
+                }}
               />
               {/* Resplandor de fondo al hover */}
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/8 group-hover:via-white/15 group-hover:to-[#d4b876]/8 transition-all duration-500"></div>
               {/* Textura sutil de puntos */}
-              <div className="absolute inset-0 rounded-3xl opacity-[0.02] group-hover:opacity-[0.04] transition-opacity duration-500" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)', backgroundSize: '20px 20px'}}></div>
-              <form onSubmit={handleLeadSubmit} className="space-y-4 text-left relative z-10">
+              <div
+                className="absolute inset-0 rounded-3xl opacity-[0.02] group-hover:opacity-[0.04] transition-opacity duration-500"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)",
+                  backgroundSize: "20px 20px",
+                }}
+              ></div>
+              <form
+                onSubmit={handleLeadSubmit}
+                className="space-y-4 text-left relative z-10"
+              >
                 <div className="grid md:[grid-template-columns:0.7fr_1.3fr] gap-3">
                   <div>
                     <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
-                      {t.leadForm.form.firstNamePlaceholder} <span className="text-brown-dark/80">*</span>
+                      {t.leadForm.form.firstNamePlaceholder}{" "}
+                      <span className="text-brown-dark/80">*</span>
                     </label>
                     <input
                       type="text"
                       required
                       value={formData.firstName}
-                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, firstName: e.target.value })
+                      }
                       className="w-full px-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
                       placeholder={t.leadForm.form.firstNamePlaceholder}
                     />
                   </div>
                   <div>
                     <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
-                      {t.leadForm.form.lastNamePlaceholder} <span className="text-brown-dark/80">*</span>
+                      {t.leadForm.form.lastNamePlaceholder}{" "}
+                      <span className="text-brown-dark/80">*</span>
                     </label>
                     <input
                       type="text"
                       required
                       value={formData.lastName}
-                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, lastName: e.target.value })
+                      }
                       className="w-full px-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
                       placeholder={t.leadForm.form.lastNamePlaceholder}
                     />
@@ -2424,13 +2634,16 @@ export default function PlayaVivaLanding() {
 
                 <div className="text-left">
                   <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
-                    {t.leadForm.form.emailPlaceholder} <span className="text-brown-dark/80">*</span>
+                    {t.leadForm.form.emailPlaceholder}{" "}
+                    <span className="text-brown-dark/80">*</span>
                   </label>
                   <input
                     type="email"
                     required
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
                     placeholder={t.leadForm.form.emailPlaceholder}
                   />
@@ -2439,13 +2652,24 @@ export default function PlayaVivaLanding() {
                 <div className="flex justify-center mt-6">
                   <Button
                     type="submit"
-                    disabled={isSubmitting || !formData.firstName.trim() || !formData.lastName.trim() || !formData.email.trim()}
+                    disabled={
+                      isSubmitting ||
+                      !formData.firstName.trim() ||
+                      !formData.lastName.trim() ||
+                      !formData.email.trim()
+                    }
                     className="bg-gradient-to-r from-[#8a7a4f] to-[#9a8a60] hover:from-[#9a8a60] hover:to-[#8a7a4f] text-[#1f1509] font-semibold py-2 px-6 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group"
                   >
                     <span className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                     <span className="relative flex items-center justify-center">
-                      <Download className={`mr-2 h-4 w-4 ${isSubmitting ? "animate-pulse" : ""}`} />
-                      {isSubmitting ? t.leadForm.form.sending : t.leadForm.form.ctaButton}
+                      <Download
+                        className={`mr-2 h-4 w-4 ${
+                          isSubmitting ? "animate-pulse" : ""
+                        }`}
+                      />
+                      {isSubmitting
+                        ? t.leadForm.form.sending
+                        : t.leadForm.form.ctaButton}
                     </span>
                   </Button>
                 </div>
@@ -2459,7 +2683,10 @@ export default function PlayaVivaLanding() {
                     }`}
                   >
                     {automationFeedback.type === "success"
-                      ? t.leadForm.form.successMessage.replace("{{name}}", automationFeedback.userName)
+                      ? t.leadForm.form.successMessage.replace(
+                          "{{name}}",
+                          automationFeedback.userName
+                        )
                       : t.leadForm.form.errorMessage}
                   </div>
                 )}
@@ -2472,7 +2699,6 @@ export default function PlayaVivaLanding() {
           </div>
         </div>
       </section>
-
 
       {/* Uniestate Section */}
       <section
@@ -2534,13 +2760,19 @@ export default function PlayaVivaLanding() {
               {/* Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto">
                 <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">+ 50,000</p>
+                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">
+                    + 50,000
+                  </p>
                   <p className="text-xs md:text-sm text-[#6E5F46]">
-                    {language === "es" ? "Clientes Satisfechos" : "Satisfied Clients"}
+                    {language === "es"
+                      ? "Clientes Satisfechos"
+                      : "Satisfied Clients"}
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">+ 3,000</p>
+                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">
+                    + 3,000
+                  </p>
                   <p className="text-xs md:text-sm text-[#6E5F46]">
                     {language === "es" ? "Unidades" : "Units"}
                   </p>
@@ -2554,7 +2786,9 @@ export default function PlayaVivaLanding() {
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">30 {language === "es" ? "AÑOS" : "YEARS"}</p>
+                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">
+                    30 {language === "es" ? "AÑOS" : "YEARS"}
+                  </p>
                   <p className="text-xs md:text-sm text-[#6E5F46]">
                     {language === "es" ? "Desde 1995" : "Since 1995"}
                   </p>
