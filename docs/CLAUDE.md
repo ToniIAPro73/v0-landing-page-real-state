@@ -10,7 +10,7 @@ The landing page features bilingual content (Spanish/English), animated hero sec
 
 ## Development Commands
 
-```powershell
+\`\`\`powershell
 # Install dependencies (run after each pull)
 npm install
 
@@ -23,7 +23,7 @@ npm run lint
 # Production build and start (identical to Vercel deployment)
 npm run build
 npm run start
-```
+\`\`\`
 
 ## Project Architecture
 

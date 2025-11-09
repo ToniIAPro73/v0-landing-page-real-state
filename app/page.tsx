@@ -2524,11 +2524,3 @@ export default function PlayaVivaLanding() {
     </div>
   );
 }
-
-
-
-
-
-
-
-

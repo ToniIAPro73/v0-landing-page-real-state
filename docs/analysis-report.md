@@ -20,7 +20,7 @@ The error occurs because TypeScript's path resolution from `node_modules/@vercel
 
 Modify the root tsconfig.json to allow extending configurations from node_modules:
 
-```json
+\`\`\`json
 {
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -57,13 +57,13 @@ Modify the root tsconfig.json to allow extending configurations from node_module
   ],
   "exclude": ["node_modules"]
 }
-```
+\`\`\`
 
 ### Solution 2: Remove Redundant Module Configuration
 
 The @vercel/analytics tsconfig.json should be simplified since it inherits most configuration from the root:
 
-```json
+\`\`\`json
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
@@ -72,7 +72,7 @@ The @vercel/analytics tsconfig.json should be simplified since it inherits most 
   },
   "include": ["src", "./test.setup.ts"]
 }
-```
+\`\`\`
 
 ## What Was Fixed
 

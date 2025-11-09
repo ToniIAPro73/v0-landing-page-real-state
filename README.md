@@ -28,3 +28,43 @@ Continue building your app on:
 2. Deploy your chats from the v0 interface
 3. Changes are automatically pushed to this repository
 4. Vercel deploys the latest version from this repository
+
+## Linting
+
+Este proyecto utiliza ESLint para mantener la calidad del código.
+
+### Comandos disponibles:
+
+- `npm run lint` - Ejecuta el linter y muestra los errores
+- `npm run lint:fix` - Ejecuta el linter y corrige automáticamente los errores que sea posible
+
+### Git Hooks automáticos:
+
+El proyecto está configurado con Husky y lint-staged para ejecutar el linter automáticamente:
+
+- **Pre-commit**: Ejecuta `eslint --fix` solo en los archivos que vas a commitear
+- **Pre-push**: Ejecuta `npm run lint` en todo el proyecto antes de hacer push
+
+### Configuración inicial:
+
+Después de clonar el repositorio, ejecuta:
+
+\`\`\`bash
+npm install
+\`\`\`
+
+Esto instalará todas las dependencias y configurará los hooks de Git automáticamente.
+
+## Desarrollo Local
+
+Para ejecutar el proyecto localmente:
+
+\`\`\`bash
+# Instalar dependencias
+npm install
+
+# Ejecutar servidor de desarrollo
+npm run dev
+\`\`\`
+
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
