@@ -1213,7 +1213,7 @@ export default function PlayaVivaLanding() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       {/* Language Toggle - Fixed Bottom Right */}
-      <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3">
+      <div className="fixed bottom-6 right-6 z-100 flex flex-col items-end gap-3">
         {showBackToHero && (
           <Button
             size="sm"
@@ -1247,7 +1247,7 @@ export default function PlayaVivaLanding() {
         <div className="landing-nav__inner container mx-auto px-4 md:px-6">
           <div className="landing-nav__bar flex items-center justify-between h-14 md:h-16">
             {/* Logo Uniestate */}
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <span
                 className="text-brown-dark text-base md:text-lg font-bold tracking-tight"
                 style={{
@@ -1312,7 +1312,7 @@ export default function PlayaVivaLanding() {
             </div>
 
             {/* Book Now Button - Desktop */}
-            <div className="hidden md:block flex-shrink-0">
+            <div className="hidden md:block shrink-0">
               <Button
                 onClick={() => scrollToSection("dossier")}
                 className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm rounded-md shadow-md transition-all duration-200 flex items-center gap-2"
@@ -1625,7 +1625,7 @@ export default function PlayaVivaLanding() {
       <section
         id="wynn-effect"
         ref={wynnEffectRef}
-        className="relative py-20 md:py-32 bg-gradient-to-br from-brown-dark via-brown-dark to-olive-brown overflow-hidden"
+        className="relative py-20 md:py-32 bg-linear-to-br from-brown-dark via-brown-dark to-olive-brown overflow-hidden"
         style={{
           opacity: visibleSections.wynnEffect ? 1 : 0,
           transform: visibleSections.wynnEffect
@@ -1649,10 +1649,10 @@ export default function PlayaVivaLanding() {
           {/* Header */}
           <div className="text-center mb-16 max-w-4xl mx-auto">
             <div className="inline-flex justify-center mb-4">
-              <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-gradient-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
+              <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-linear-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
                 <div
                   className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
                   style={{
@@ -1740,7 +1740,7 @@ export default function PlayaVivaLanding() {
 
           {/* Urgency Banner */}
           <div
-            className="max-w-4xl mx-auto bg-gradient-to-r from-gold-warm/20 via-gold-warm/30 to-gold-warm/20 border-2 border-gold-warm rounded-2xl p-8 md:p-12"
+            className="max-w-4xl mx-auto bg-linear-to-r from-gold-warm/20 via-gold-warm/30 to-gold-warm/20 border-2 border-gold-warm rounded-2xl p-8 md:p-12"
             style={{
               opacity: visibleSections.wynnEffect ? 1 : 0,
               transform: visibleSections.wynnEffect
@@ -1931,7 +1931,7 @@ export default function PlayaVivaLanding() {
                       sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
                     />
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
               ))}
             </div>
@@ -1966,7 +1966,7 @@ export default function PlayaVivaLanding() {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
-                <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                <div className="absolute inset-0 pointer-events-none bg-linear-to-t from-black/20 via-transparent to-transparent" />
               </div>
             </div>
           )}
@@ -1977,7 +1977,7 @@ export default function PlayaVivaLanding() {
       <section
         id="apartments"
         ref={apartmentsRef}
-        className="relative py-24 bg-gradient-to-br from-cream-light via-white to-cream-light"
+        className="relative py-24 bg-linear-to-br from-cream-light via-white to-cream-light"
         style={{
           opacity: visibleSections.apartments ? 1 : 0,
           transform: visibleSections.apartments
@@ -2037,7 +2037,7 @@ export default function PlayaVivaLanding() {
                   className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   sizes="(max-width: 768px) 100vw, 75vw"
                 />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent p-6">
+                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 via-black/10 to-transparent p-6">
                   <p className="text-sm text-white uppercase tracking-[0.3em]">
                     {apartmentCopy.label}
                   </p>
@@ -2443,14 +2443,14 @@ export default function PlayaVivaLanding() {
 
           {/* Card con preguntas - centrado y más estrecho */}
           <div className="max-w-3xl mx-auto">
-            <div className="rounded-2xl bg-gradient-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 border-2 border-[#A29060]/40 shadow-[0_16px_48px_rgba(162,144,96,0.25),0_0_0_1px_rgba(255,255,255,0.5)_inset] divide-y divide-[#A29060]/15 overflow-hidden">
+            <div className="rounded-2xl bg-linear-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 border-2 border-[#A29060]/40 shadow-[0_16px_48px_rgba(162,144,96,0.25),0_0_0_1px_rgba(255,255,255,0.5)_inset] divide-y divide-[#A29060]/15 overflow-hidden">
               {t.faq.questions.map((qa, index) => (
                 <div
                   key={qa.question}
                   className={`px-4 md:px-5 py-3 md:py-4 transition-all duration-300 cursor-default group/item relative ${
                     activeFaq === index
                       ? "bg-[#e8dcc8] shadow-[0_4px_16px_rgba(162,144,96,0.2)] scale-[1.02] z-10"
-                      : "hover:bg-gradient-to-r hover:from-[#A29060]/5 hover:to-transparent"
+                      : "hover:bg-linear-to-r hover:from-[#A29060]/5 hover:to-transparent"
                   }`}
                   onMouseEnter={() => setActiveFaq(index)}
                   onMouseLeave={() => setActiveFaq(null)}
@@ -2485,7 +2485,7 @@ export default function PlayaVivaLanding() {
       <section
         id="dossier"
         ref={leadFormRef}
-        className="relative py-20 bg-gradient-to-b from-brown-dark via-[#22170f] to-brown-dark overflow-hidden"
+        className="relative py-20 bg-linear-to-b from-brown-dark via-[#22170f] to-brown-dark overflow-hidden"
         style={{
           opacity: visibleSections.leadForm ? 1 : 0,
           transform: visibleSections.leadForm
@@ -2506,13 +2506,13 @@ export default function PlayaVivaLanding() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto flex flex-col items-center text-center space-y-3">
             <div className="inline-flex">
-              <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-gradient-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
+              <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-linear-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
                 {/* Brillo dorado superior */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
                 {/* Efecto de brillo animado intenso */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
                 {/* Resplandor de fondo al hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
                 {/* Textura sutil */}
                 <div
                   className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
@@ -2542,7 +2542,7 @@ export default function PlayaVivaLanding() {
           </div>
 
           {/* Checks en dos columnas FUERA del card */}
-          <div className="mt-5 w-full max-w-2xl mx-auto grid md:[grid-template-columns:0.85fr_1.15fr] gap-3">
+          <div className="mt-5 w-full max-w-2xl mx-auto grid md:grid-cols-[0.85fr_1.15fr] gap-3">
             {featureColumns.map((column, columnIndex) => (
               <div key={columnIndex} className="space-y-2.5 text-left">
                 {column.map((feature) => (
@@ -2561,11 +2561,11 @@ export default function PlayaVivaLanding() {
 
           {/* Card del CTA con efectos premium */}
           <div className="mt-8 w-full flex justify-center">
-            <div className="w-full max-w-[500px] rounded-3xl border-2 border-gold-warm/40 bg-gradient-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] shadow-[0_20px_60px_rgba(162,144,96,0.35),0_0_80px_rgba(162,144,96,0.15),0_0_0_1px_rgba(255,255,255,0.8)_inset] backdrop-blur-sm px-6 md:px-8 py-6 relative overflow-hidden group transition-all duration-500 hover:shadow-[0_28px_80px_rgba(162,144,96,0.6),0_0_120px_rgba(162,144,96,0.35),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-[1.02] hover:border-[#d4b876]">
+            <div className="w-full max-w-[500px] rounded-3xl border-2 border-gold-warm/40 bg-linear-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] shadow-[0_20px_60px_rgba(162,144,96,0.35),0_0_80px_rgba(162,144,96,0.15),0_0_0_1px_rgba(255,255,255,0.8)_inset] backdrop-blur-sm px-6 md:px-8 py-6 relative overflow-hidden group transition-all duration-500 hover:shadow-[0_28px_80px_rgba(162,144,96,0.6),0_0_120px_rgba(162,144,96,0.35),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-[1.02] hover:border-[#d4b876]">
               {/* Brillo dorado superior */}
-              <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-3xl bg-gradient-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
+              <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-3xl bg-linear-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
               {/* Efecto de brillo animado intenso que cruza el card */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1200 ease-out"></div>
+              <div className="absolute inset-0 rounded-3xl bg-linear-to-r from-transparent via-white/50 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1200 ease-out"></div>
               {/* Efecto de brillo dorado animado en el borde superior */}
               <div
                 className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none group-hover:opacity-70 transition-opacity duration-500"
@@ -2583,7 +2583,7 @@ export default function PlayaVivaLanding() {
                 }}
               />
               {/* Resplandor de fondo al hover */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/8 group-hover:via-white/15 group-hover:to-[#d4b876]/8 transition-all duration-500"></div>
+              <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/8 group-hover:via-white/15 group-hover:to-[#d4b876]/8 transition-all duration-500"></div>
               {/* Textura sutil de puntos */}
               <div
                 className="absolute inset-0 rounded-3xl opacity-[0.02] group-hover:opacity-[0.04] transition-opacity duration-500"
@@ -2597,7 +2597,7 @@ export default function PlayaVivaLanding() {
                 onSubmit={handleLeadSubmit}
                 className="space-y-4 text-left relative z-10"
               >
-                <div className="grid md:[grid-template-columns:0.7fr_1.3fr] gap-3">
+                <div className="grid md:grid-cols-[0.7fr_1.3fr] gap-3">
                   <div>
                     <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
                       {t.leadForm.form.firstNamePlaceholder}{" "}
@@ -2658,7 +2658,7 @@ export default function PlayaVivaLanding() {
                       !formData.lastName.trim() ||
                       !formData.email.trim()
                     }
-                    className="bg-gradient-to-r from-[#8a7a4f] to-[#9a8a60] hover:from-[#9a8a60] hover:to-[#8a7a4f] text-[#1f1509] font-semibold py-2 px-6 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group"
+                    className="bg-linear-to-r from-[#8a7a4f] to-[#9a8a60] hover:from-[#9a8a60] hover:to-[#8a7a4f] text-[#1f1509] font-semibold py-2 px-6 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group"
                   >
                     <span className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                     <span className="relative flex items-center justify-center">
