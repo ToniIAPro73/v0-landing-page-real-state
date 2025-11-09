@@ -1,6 +1,7 @@
 import type React from "react";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 import "./globals.css";
 
 const siteUrl = "https://landing-page-playa-viva.vercel.app";
@@ -61,6 +62,14 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`font-sans antialiased`} suppressHydrationWarning>
+        {/* HubSpot Embed Code */}
+        <Script
+          id="hubspot-script"
+          src="//js-eu1.hs-scripts.com/147219365.js"
+          strategy="afterInteractive"
+          async
+          defer
+        />
         {children}
         <Analytics />
       </body>
