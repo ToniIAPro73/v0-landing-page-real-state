@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, FormEvent } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Globe, MapPin, Home, Star, Users, Phone, TrendingUp, Calendar, DollarSign, Award, CheckCircle2, Download, Mail, ArrowUpRight } from "lucide-react";
 
@@ -1300,21 +1301,20 @@ export default function PlayaVivaLanding() {
               ? "scale(1)"
               : "scale(1.05)",
             filter: animationStates.logo
-              ? `brightness(${0.55 + (scrollProgress * 0.45)}) saturate(${0.4 + (scrollProgress * 0.6)}) blur(${3 - (scrollProgress * 3)}px)`
+              ? `brightness(${0.55 + scrollProgress * 0.45}) saturate(${0.4 + scrollProgress * 0.6}) blur(${3 - scrollProgress * 3}px)`
               : "brightness(1) saturate(1) blur(0px)",
             transitionDuration: animationStates.logo ? "2000ms" : "700ms",
           }}
         >
-          <img
+          <Image
             src="/hero-background.png"
             alt="Playa Viva Al Marjan Island"
-            className="w-full h-full object-cover"
-            loading="eager"
-            decoding="sync"
-            crossOrigin="anonymous"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
             onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = "/fixed-hero-background.png";
+              e.currentTarget.src = "/fixed-hero-background.png";
             }}
           />
         </div>
@@ -1347,10 +1347,14 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="flex justify-center">
-                  <img
+                  <Image
                     src="/logo-playa-viva.png"
                     alt="Playa Viva Logo"
-                    className="w-auto h-36 sm:h-48 md:h-56 lg:h-64 xl:h-72 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110"
+                    width={640}
+                    height={256}
+                    priority
+                    className="w-auto h-36 sm:h-48 md:h-56 lg:h-64 xl:h-72 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110 object-contain"
+                    sizes="(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 30vw"
                   />
                 </div>
               </div>
@@ -1725,13 +1729,14 @@ export default function PlayaVivaLanding() {
           {activeGalleryTab === "servicios" && (
             <div className="max-w-6xl mx-auto">
               <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
-                <img
+                <Image
                   src="/assets/imagenes/Collage-servicios-instalaciones.png"
                   alt="Servicios e Instalaciones - Playa Viva"
                   className="w-full h-auto"
                   width={1210}
                   height={968}
                   loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 75vw"
                 />
               </div>
             </div>
@@ -1752,11 +1757,13 @@ export default function PlayaVivaLanding() {
                   key={index}
                   className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
                 >
-                  <div className="aspect-square">
-                    <img
+                  <div className="aspect-square relative">
+                    <Image
                       src={image.src}
                       alt={`Interior ${index + 1}`}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
                     />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -1769,10 +1776,14 @@ export default function PlayaVivaLanding() {
           {activeGalleryTab === "sitios" && (
             <div className="max-w-6xl mx-auto">
               <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
-                <img
+                <Image
                   src="/assets/imagenes/Collage_sitios_interes.png"
                   alt="Sitios de interes cercanos a Playa Viva"
                   className="w-full h-auto"
+                  width={1210}
+                  height={968}
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 75vw"
                 />
               </div>
             </div>
@@ -1847,10 +1858,13 @@ export default function PlayaVivaLanding() {
                   transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                <img
+                <Image
                   src={activeApartmentConfig.image}
                   alt={apartmentCopy.headline}
+                  width={1600}
+                  height={1000}
                   className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                  sizes="(max-width: 768px) 100vw, 75vw"
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent p-6">
                   <p className="text-sm text-white uppercase tracking-[0.3em]">
@@ -1977,10 +1991,13 @@ export default function PlayaVivaLanding() {
                       }s`,
                     }}
                   >
-                    <img
+                    <Image
                       src={article.image}
                       alt={article.alt}
+                      width={480}
+                      height={320}
                       className="w-full h-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
+                      sizes="(max-width: 768px) 80vw, 20vw"
                     />
                     <div className="mt-4 space-y-2 flex-1 flex flex-col">
                       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brown-dark/60">
@@ -2190,22 +2207,24 @@ export default function PlayaVivaLanding() {
             {/* Vista condicional */}
             <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30">
               {locationView === "map" ? (
-                <img
+                <Image
                   src="/assets/imagenes/areamap.webp"
                   alt="Al Marjan Island Area Map"
                   className="w-full h-auto"
                   width={1200}
                   height={704}
                   loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 70vw"
                 />
               ) : (
-                <img
+                <Image
                   src="/assets/imagenes/Collage_Al_Marjan_Island.png"
                   alt="Al Marjan Island Collage"
                   className="w-full h-auto"
                   width={1200}
                   height={900}
                   loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 70vw"
                 />
               )}
             </div>
@@ -2471,10 +2490,13 @@ export default function PlayaVivaLanding() {
           <div className="max-w-6xl mx-auto">
             {/* Logo Uniestate centrado */}
             <div className="flex flex-col items-center mb-4 md:mb-6 space-y-2">
-              <img
+              <Image
                 src="/assets/imagenes/uniestate.png"
                 alt="Uniestate"
-                className="h-40 md:h-52 lg:h-64 object-contain"
+                width={320}
+                height={200}
+                className="h-40 md:h-52 lg:h-64 object-contain w-auto"
+                sizes="(max-width: 768px) 60vw, 25vw"
               />
             </div>
 
