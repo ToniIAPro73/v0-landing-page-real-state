@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This landing runs on Next.js 16 (App Router). Page sections, client hooks, and orchestrators live in `app/` (`page.tsx` hosts the entire experience), reusable UI stays in `components/`, and shared logic belongs to `lib/`. Global tokens and Tailwind layers reside in `app/globals.css`, while `styles/` is reserved for legacy utilities. Static assets and the Python dossier generator (`public/assets/dossier/personalizar_dossier.py`) ship from `public/`; the generated files remain ignored under `public/assets/dossier/dossiers_generados/`. Long-form briefs, Lighthouse captures, and internal docs belong in `docs/`.
+This landing runs on Next.js 16 (App Router). Page sections, client hooks, and orchestrators live in `app/` (`page.tsx` hosts the entire experience), reusable UI stays in `components/`, and shared logic belongs to `lib/`. Global tokens and Tailwind layers reside in `app/globals.css`, while `styles/` is reserved for legacy utilities. Static assets and the Python dossier generator (`public/assets/dossier/personalizar_dossier.py`) ship from `public/`. Personalized PDFs are produced by the Node route in `app/api/submit-lead/`; locally they are written to `C:\Users\Usuario\Documents\Dossiers_Personalizados_PlayaViva` (configurable via `DOSSIER_LOCAL_DIR`) and hosted deployments stream them to the S3-compatible bucket referenced by the `S3_*` env vars. Long-form briefs, Lighthouse captures, and internal docs belong in `docs/`.
 
 ## Build, Test, and Development Commands
 - `npm run dev` – hot reload server at `http://localhost:3000`.

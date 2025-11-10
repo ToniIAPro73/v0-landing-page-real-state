@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 import subprocess
 from pathlib import Path
@@ -62,7 +63,24 @@ HUB_API_URL = f"https://api.hsforms.com/submissions/v3/integration/submit/{HUB_I
 # Se utiliza Pathlib para rutas seguras y absolutas
 SCRIPT_DIR = Path(__file__).parent.absolute()
 PDF_BASE_PATH = SCRIPT_DIR / "Dossier-Personalizado.pdf"
-PDF_OUTPUT_DIR = SCRIPT_DIR / "dossiers_generados"  # Carpeta local para los resultados
+
+
+def resolver_directorio_salida() -> Path:
+    """Replica la lógica del runtime de Next para guardar PDFs personalizados."""
+    override_path = os.environ.get("DOSSIER_LOCAL_DIR")
+    if override_path:
+        return Path(override_path).expanduser()
+
+    if os.name == "nt":
+        base_dir = Path(os.environ.get("USERPROFILE", "C:\\Users\\Usuario"))
+        documents_dir = base_dir / "Documents"
+    else:
+        documents_dir = Path.home() / "Documents"
+
+    return documents_dir / "Dossiers_Personalizados_PlayaViva"
+
+
+PDF_OUTPUT_DIR = resolver_directorio_salida()
 CAMPO_PDF_A_RELLENAR = "nombre_personalizacion_lead"
 
 def verificar_dependencias():
@@ -159,7 +177,7 @@ def personalizar_y_enviar(data_from_landing_page: dict) -> dict:
     # ----------------------------------------------------
     
     # Crear el directorio de salida si no existe
-    PDF_OUTPUT_DIR.mkdir(exist_ok=True)
+    PDF_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
     # Generar el nombre de archivo seguro (limpiando caracteres)
     nombre_seguro = "".join(c if c.isalnum() or c in " -_" else "_" for c in nombre_completo)
