@@ -30,7 +30,11 @@ type LeadAutomationPayload = {
   fullName: string;
   email: string;
   language: "es" | "en";
+  page: string;
+  timestamp: string;
+  dossierFileName: string;
   utm: Record<string, string>;
+  workflow: string;
 };
 
 type LeadFieldKey =
@@ -1168,52 +1172,57 @@ export default function PlayaVivaLanding() {
   };
   const showBackToHero = scrollProgress >= 1;
 
+/**
+ * Orquesta el proceso completo de lead:
+ * 1. Captura hubspotutk (cookie de HubSpot)
+ * 2. Envía a HubSpot Forms API (garantiza atribución)
+ * 3. Personaliza PDF
+ * 4. Envía email con dossier
+ */
 const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
-  const getHubSpotCookie = () => {
-    if (typeof document === "undefined") return "";
-    const cookies = document.cookie.split(";");
+  // Capturar cookie hubspotutk de HubSpot
+  const getHubSpotCookie = (): string => {
+    const cookies = document.cookie.split(';');
     for (const cookie of cookies) {
-      const [name, value] = cookie.trim().split("=");
-      if (name === "hubspotutk") {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'hubspotutk') {
         return value;
       }
     }
-    return "";
+    // Si no existe la cookie, generar timestamp como fallback
+    return `generated_${Date.now()}`;
   };
 
-  const hubspotutk = getHubSpotCookie() || `generated_${Date.now()}`;
-  const pageUri =
-    typeof window !== "undefined" ? window.location.href : SITE_URL;
+  const hubspotutk = getHubSpotCookie();
+  const pageUri = window.location.href;
 
-  const response = await fetch("/api/submit-lead", {
-    method: "POST",
+  // Preparar payload para API
+  const apiPayload = {
+    firstName: payload.firstName,
+    lastName: payload.lastName,
+    fullName: payload.fullName,
+    email: payload.email,
+    language: payload.language,
+    hubspotutk,
+    pageUri,
+    utm: payload.utm,
+  };
+
+  // Llamar API route
+  const response = await fetch('/api/submit-lead', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      firstName: payload.firstName,
-      lastName: payload.lastName,
-      fullName: payload.fullName,
-      email: payload.email,
-      language: payload.language,
-      hubspotutk,
-      pageUri,
-      utm: payload.utm,
-    }),
+    body: JSON.stringify(apiPayload),
   });
 
   if (!response.ok) {
-    let errorMessage = "Error procesando lead";
-    try {
-      const errorData = await response.json();
-      errorMessage = errorData?.error || errorMessage;
-    } catch {
-      // swallow
-    }
-    throw new Error(errorMessage);
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Error procesando lead');
   }
 
-  return response.json();
+  return await response.json();
 };
 
   const fieldErrorCopy: Record<LeadFieldKey, string> = {
@@ -1324,13 +1333,23 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
       return;
     }
 
+    const dossierFileNameBase = `Playa-Viva-Dossier-${
+      trimmedFirstName || "Investor"
+    }-${trimmedLastName || "Lead"}`
+      .trim()
+      .replace(/\s+/g, "-");
+
     const leadData: LeadAutomationPayload = {
       firstName: trimmedFirstName,
       lastName: trimmedLastName,
       fullName: `${trimmedFirstName} ${trimmedLastName}`.trim(),
       email: trimmedEmail,
       language,
+      page: "Playa Viva Landing",
+      timestamp: new Date().toISOString(),
+      dossierFileName: `${dossierFileNameBase}.pdf`,
       utm: utmData,
+      workflow: "hubspot+python-dossier+internal-db",
     };
 
     setIsSubmitting(true);
