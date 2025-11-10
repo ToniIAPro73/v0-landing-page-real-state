@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { Resend } from "resend";
 
 export const runtime = "nodejs";
 
@@ -25,6 +26,9 @@ const HUB_API_URL = `https://api.hsforms.com/submissions/v3/integration/submit/$
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
   "https://landing-page-playa-viva.vercel.app";
+const resendClient = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 const PDF_BASE_PATH = path.join(
   process.cwd(),
@@ -179,16 +183,58 @@ async function sendDossierEmail(
     ? pdfUrl
     : `${SITE_URL}${pdfUrl}`;
 
-  const preview = {
-    to: payload.email,
-    subject:
-      payload.language === "es"
-        ? `Tu dossier exclusivo de Playa Viva, ${payload.firstName}`
-        : `Your exclusive Playa Viva dossier, ${payload.firstName}`,
-    body: absoluteUrl,
-  };
+  if (!resendClient) {
+    console.warn("[sendDossierEmail] RESEND_API_KEY not configured.");
+    console.warn(
+      "[sendDossierEmail] Dossier download link:",
+      absoluteUrl,
+    );
+    return;
+  }
 
-  console.log("[sendDossierEmail] Email ready to send:", preview);
+  const subject =
+    payload.language === "es"
+      ? `Tu dossier exclusivo de Playa Viva, ${payload.firstName}`
+      : `Your exclusive Playa Viva dossier, ${payload.firstName}`;
+  const greeting = payload.language === "es" ? "Hola" : "Hello";
+  const intro =
+    payload.language === "es"
+      ? "Gracias por tu interés en Playa Viva. Tu dossier personalizado está listo."
+      : "Thank you for your interest in Playa Viva. Your personalised dossier is ready.";
+  const buttonLabel =
+    payload.language === "es" ? "Descargar dossier" : "Download dossier";
+
+  const html = `
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="font-family: sans-serif;">
+      <tr>
+        <td>
+          <p>${greeting} ${payload.firstName},</p>
+          <p>${intro}</p>
+          <p>
+            <a href="${absoluteUrl}" style="background:linear-gradient(135deg,#d4af37,#c4a037);color:#1f1509;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">
+              ${buttonLabel}
+            </a>
+          </p>
+          <p style="font-size:13px;color:#6e5f46">
+            Si el botón no funciona, copia y pega este enlace en tu navegador:<br/>
+            <a href="${absoluteUrl}">${absoluteUrl}</a>
+          </p>
+          <p style="font-size:12px;color:#9c8a6a">Uniestate UK · inversiones@uniestate.co.uk</p>
+        </td>
+      </tr>
+    </table>
+  `;
+
+  try {
+    await resendClient.emails.send({
+      from: "Uniestate Playa Viva <inversiones@uniestate.co.uk>",
+      to: payload.email,
+      subject,
+      html,
+    });
+  } catch (error) {
+    console.error("[sendDossierEmail] Failed to send email via Resend:", error);
+  }
 }
 
 export async function POST(request: NextRequest) {
