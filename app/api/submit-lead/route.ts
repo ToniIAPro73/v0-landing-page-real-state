@@ -27,6 +27,7 @@ type LeadSubmitPayload = {
   hubspotutk: string;
   pageUri: string;
   utm?: Record<string, string>;
+  recaptchaToken?: string;
 };
 
 const HUB_ID =
@@ -64,6 +65,89 @@ const s3Client = useS3Storage && s3Config.bucket
   : null;
 const PDF_FIELD_NAME = "nombre_personalizacion_lead";
 const PDF_STORAGE_PREFIX = "dossiers";
+const RECAPTCHA_PROJECT_ID =
+  process.env.RECAPTCHA_PROJECT_ID ?? "gen-lang-client-0093228508";
+const RECAPTCHA_SITE_KEY =
+  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "";
+const RECAPTCHA_API_KEY = process.env.RECAPTCHA_API_KEY;
+const RECAPTCHA_MIN_SCORE = Number(
+  process.env.RECAPTCHA_MIN_SCORE ?? "0.5",
+);
+const RECAPTCHA_ACTION = "DOSSIER_DOWNLOAD";
+const IS_DEV = process.env.NODE_ENV !== "production";
+
+type RecaptchaAssessment = {
+  success: boolean;
+  score: number;
+  reasons: string[];
+};
+
+async function verifyRecaptchaToken(
+  token?: string,
+  expectedAction = RECAPTCHA_ACTION,
+): Promise<RecaptchaAssessment> {
+  if (!token) {
+    return { success: false, score: 0, reasons: ["missing_token"] };
+  }
+
+  if (!RECAPTCHA_API_KEY || !RECAPTCHA_SITE_KEY) {
+    if (IS_DEV) {
+      console.warn(
+        "[reCAPTCHA] Missing configuration. Skipping verification in development.",
+      );
+      return { success: true, score: 1, reasons: ["dev_bypass"] };
+    }
+
+    console.error(
+      "[reCAPTCHA] Missing RECAPTCHA_API_KEY or NEXT_PUBLIC_RECAPTCHA_SITE_KEY.",
+    );
+    return { success: false, score: 0, reasons: ["missing_configuration"] };
+  }
+
+  try {
+    const response = await fetch(
+      `https://recaptchaenterprise.googleapis.com/v1/projects/${RECAPTCHA_PROJECT_ID}/assessments?key=${RECAPTCHA_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event: {
+            token,
+            expectedAction,
+            siteKey: RECAPTCHA_SITE_KEY,
+          },
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("[reCAPTCHA] API responded with an error:", errorData);
+      return { success: false, score: 0, reasons: ["api_error"] };
+    }
+
+    const data = await response.json();
+    const tokenProperties = data.tokenProperties ?? {};
+    const riskAnalysis = data.riskAnalysis ?? {};
+
+    const isValid = tokenProperties.valid === true;
+    const actionMatches =
+      !tokenProperties.action || tokenProperties.action === expectedAction;
+    const score = typeof riskAnalysis.score === "number" ? riskAnalysis.score : 0;
+    const reasons: string[] = riskAnalysis.reasons ?? [];
+
+    const meetsThreshold = score >= RECAPTCHA_MIN_SCORE;
+
+    return {
+      success: isValid && actionMatches && meetsThreshold,
+      score,
+      reasons,
+    };
+  } catch (error) {
+    console.error("[reCAPTCHA] Unexpected verification error:", error);
+    return { success: false, score: 0, reasons: ["verification_error"] };
+  }
+}
 
 async function submitToHubSpot(payload: LeadSubmitPayload) {
   const fields = [
@@ -479,6 +563,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const recaptchaResult = await verifyRecaptchaToken(
+      payload.recaptchaToken,
+      RECAPTCHA_ACTION,
+    );
+
+    if (!recaptchaResult.success) {
+      return NextResponse.json(
+        {
+          error: "Verificación de seguridad fallida",
+          details: {
+            recaptcha_score: recaptchaResult.score,
+            recaptcha_reasons: recaptchaResult.reasons,
+          },
+        },
+        { status: 403 },
+      );
+    }
+
     const [hubspotResult, pdfResult] = await Promise.allSettled([
       submitToHubSpot(payload),
       personalizePDF(payload),
@@ -510,6 +612,8 @@ export async function POST(request: NextRequest) {
       pdf_url: pdfUrl,
       pdf_local_path: pdfLocalPath,
       pdf_error: pdfError,
+      recaptcha_score: recaptchaResult.score,
+      recaptcha_reasons: recaptchaResult.reasons,
       message:
         hubspotSuccess && pdfSuccess
           ? "Lead procesado correctamente. Revisa tu email."

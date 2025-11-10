@@ -22,7 +22,23 @@ import {
   Bot,
 } from "lucide-react";
 
+declare global {
+  interface Window {
+    grecaptcha?: {
+      enterprise?: {
+        ready(callback: () => void): void;
+        execute(
+          siteKey: string,
+          options: { action: string },
+        ): Promise<string>;
+      };
+    };
+  }
+}
+
 const SITE_URL = "https://landing-page-playa-viva.vercel.app";
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "";
+const RECAPTCHA_ACTION = "DOSSIER_DOWNLOAD";
 
 type LeadAutomationPayload = {
   firstName: string;
@@ -31,6 +47,7 @@ type LeadAutomationPayload = {
   email: string;
   language: "es" | "en";
   utm: Record<string, string>;
+  recaptchaToken: string;
 };
 
 type LeadAutomationResult = {
@@ -45,8 +62,7 @@ type LeadFieldKey =
   | "firstName"
   | "lastName"
   | "email"
-  | "privacy"
-  | "recaptcha";
+  | "privacy";
 
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
@@ -89,7 +105,6 @@ export default function PlayaVivaLanding() {
     type: "success" | "error";
     userName: string;
   } | null>(null);
-  const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [validationMessage, setValidationMessage] = useState<{
     field: LeadFieldKey;
@@ -103,7 +118,6 @@ export default function PlayaVivaLanding() {
   const lastNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const privacyRef = useRef<HTMLInputElement>(null);
-  const recaptchaRef = useRef<HTMLInputElement>(null);
 
   // Fit hero to viewport height (especially for mobile landscape)
   const heroStackRef = useRef<HTMLDivElement>(null);
@@ -159,6 +173,34 @@ export default function PlayaVivaLanding() {
 
   useEffect(() => {
     fitHeroToViewport();
+  }, []);
+  useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY) {
+      console.warn(
+        "[reCAPTCHA] NEXT_PUBLIC_RECAPTCHA_SITE_KEY is not defined. Invisible protection is disabled.",
+      );
+      return;
+    }
+
+    let createdScript: HTMLScriptElement | null = null;
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      'script[data-playa-viva-recaptcha="enterprise"]',
+    );
+
+    if (!existingScript) {
+      createdScript = document.createElement("script");
+      createdScript.src = `https://www.google.com/recaptcha/enterprise.js?render=${RECAPTCHA_SITE_KEY}`;
+      createdScript.async = true;
+      createdScript.defer = true;
+      createdScript.dataset.playaVivaRecaptcha = "enterprise";
+      document.head.appendChild(createdScript);
+    }
+
+    return () => {
+      if (createdScript && createdScript.parentNode) {
+        createdScript.parentNode.removeChild(createdScript);
+      }
+    };
   }, []);
   useEffect(() => {
     const onResize = () => fitHeroToViewport();
@@ -1209,6 +1251,7 @@ const orchestrateLeadAutomation = async (
       hubspotutk,
       pageUri,
       utm: payload.utm,
+      recaptchaToken: payload.recaptchaToken,
     }),
   });
 
@@ -1243,10 +1286,6 @@ const orchestrateLeadAutomation = async (
       language === "es"
         ? "Debes aceptar la política de privacidad para recibir el dossier."
         : "You must accept the privacy policy before receiving the dossier.",
-    recaptcha:
-      language === "es"
-        ? "Confirma que no eres un robot antes de descargar el dossier."
-        : "Please confirm you are not a robot before receiving the dossier.",
   };
 
   const emailInvalidCopy =
@@ -1255,11 +1294,13 @@ const orchestrateLeadAutomation = async (
       : "Please enter a valid email address.";
 
   const recaptchaTitle =
-    language === "es" ? "Activar reCAPTCHA" : "Enable reCAPTCHA";
+    language === "es"
+      ? "Protección reCAPTCHA Enterprise"
+      : "reCAPTCHA Enterprise Protection";
   const recaptchaCopy =
     language === "es"
-      ? "Activa reCAPTCHA para añadir un paso extra de verificación antes del envío. Ayuda a frenar el spam y refuerza la seguridad del formulario."
-      : "Enable reCAPTCHA to add a discreet verification step before submission. It filters bots and keeps the experience secure.";
+      ? "Validación invisible en segundo plano: detecta bots antes de generar el dossier sin añadir fricción al proceso."
+      : "Invisible background validation that filters bots before your dossier is generated, preserving a frictionless flow.";
   const consentTitle =
     language === "es" ? "Privacidad de datos" : "Data privacy";
   const consentCopy =
@@ -1284,6 +1325,39 @@ const orchestrateLeadAutomation = async (
       }
     });
   };
+
+  const requestRecaptchaToken = () =>
+    new Promise<string>((resolve, reject) => {
+      if (!RECAPTCHA_SITE_KEY) {
+        reject(new Error("Falta la clave pública de reCAPTCHA"));
+        return;
+      }
+
+      if (typeof window === "undefined") {
+        reject(new Error("reCAPTCHA solo puede ejecutarse en el navegador"));
+        return;
+      }
+
+      const enterprise = window.grecaptcha?.enterprise;
+
+      if (!enterprise) {
+        reject(
+          new Error("reCAPTCHA Enterprise no está disponible todavía"),
+        );
+        return;
+      }
+
+      enterprise.ready(async () => {
+        try {
+          const token = await enterprise.execute(RECAPTCHA_SITE_KEY, {
+            action: RECAPTCHA_ACTION,
+          });
+          resolve(token);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
 
   const handleLeadSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1324,30 +1398,28 @@ const orchestrateLeadAutomation = async (
       return;
     }
 
-    if (!isRecaptchaVerified) {
-      focusField(recaptchaRef, "recaptcha", fieldErrorCopy.recaptcha);
-      return;
-    }
-
     if (!privacyAccepted) {
       focusField(privacyRef, "privacy", fieldErrorCopy.privacy);
       return;
     }
-
-    const leadData: LeadAutomationPayload = {
-      firstName: trimmedFirstName,
-      lastName: trimmedLastName,
-      fullName: `${trimmedFirstName} ${trimmedLastName}`.trim(),
-      email: trimmedEmail,
-      language,
-      utm: utmData,
-    };
 
     setIsSubmitting(true);
     setAutomationFeedback(null);
     setValidationMessage(null);
 
     try {
+      const recaptchaToken = await requestRecaptchaToken();
+
+      const leadData: LeadAutomationPayload = {
+        firstName: trimmedFirstName,
+        lastName: trimmedLastName,
+        fullName: `${trimmedFirstName} ${trimmedLastName}`.trim(),
+        email: trimmedEmail,
+        language,
+        utm: utmData,
+        recaptchaToken,
+      };
+
       const result = await orchestrateLeadAutomation(leadData);
 
       if (result?.pdf_url) {
@@ -1368,7 +1440,6 @@ const orchestrateLeadAutomation = async (
         userName: trimmedFirstName || fallbackName,
       });
       setFormData({ firstName: "", lastName: "", email: "" });
-      setIsRecaptchaVerified(false);
       setPrivacyAccepted(false);
 
       setTimeout(() => {
@@ -2858,44 +2929,25 @@ const orchestrateLeadAutomation = async (
                         placeholder={t.leadForm.form.emailPlaceholder}
                       />
                     </div>
-                    <div
-                      className={`rounded-2xl border px-4 py-3 bg-white/85 backdrop-blur-sm text-[13px] text-brown-dark/90 leading-relaxed transition-all duration-200 ${
-                        validationMessage?.field === "recaptcha"
-                          ? "border-[#c07a50]"
-                          : "border-brown-dark/20"
-                      }`}
-                    >
+                    <div className="rounded-2xl border border-brown-dark/20 px-4 py-3 bg-white/85 backdrop-blur-sm text-[13px] text-brown-dark/90 leading-relaxed transition-all duration-200">
                       <div className="flex items-center justify-between gap-3 flex-wrap">
-                        <label className="flex items-center gap-3 cursor-pointer text-sm font-semibold text-brown-dark/80">
-                          <input
-                            ref={recaptchaRef}
-                            type="checkbox"
-                            checked={isRecaptchaVerified}
-                            onChange={(e) => {
-                              setIsRecaptchaVerified(e.target.checked);
-                              if (validationMessage?.field === "recaptcha") {
-                                setValidationMessage(null);
-                              }
-                            }}
-                            aria-invalid={validationMessage?.field === "recaptcha"}
-                            className="h-5 w-5 rounded border-brown-dark/30 text-gold-warm focus:ring-gold-warm/40"
-                          />
-                          <span>
+                        <div className="space-y-1">
+                          <p className="text-sm font-semibold text-brown-dark/90">
                             {language === "es"
-                              ? "No soy un robot"
-                              : "I'm not a robot"}
-                          </span>
-                        </label>
+                              ? "Protección automática reCAPTCHA Enterprise"
+                              : "Automatic reCAPTCHA Enterprise protection"}
+                          </p>
+                          <p className="text-[11px] text-brown-dark/60 leading-relaxed">
+                            {language === "es"
+                              ? "Se ejecuta de forma invisible antes de generar el dossier para mantener el flujo exclusivo y libre de bots."
+                              : "Runs invisibly before the dossier is generated, keeping the premium flow shielded from bots."}
+                          </p>
+                        </div>
                         <div className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-tight text-brown-dark/60">
                           <Bot className="h-4 w-4 text-gold-warm" />
                           <span>reCAPTCHA</span>
                         </div>
                       </div>
-                      <p className="text-[11px] text-brown-dark/60 mt-2">
-                        {language === "es"
-                          ? "Verificación discreta para preservar la exclusividad del proceso."
-                          : "A discreet verification keeps the download flow exclusive."}
-                      </p>
                     </div>
 
                     <div
