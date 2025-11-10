@@ -131,6 +131,14 @@ async function personalizePDF(payload: LeadSubmitPayload) {
     return { success: false, pdf_delivery_url: null };
   }
 
+  console.info(
+    `[personalizePDF] Storage mode: ${
+      useS3Storage && s3Client && s3Config.bucket
+        ? `S3 bucket "${s3Config.bucket}"`
+        : `local directory "${LOCAL_PDF_OUTPUT_DIR}"`
+    }`,
+  );
+
   const displayName =
     payload.fullName?.trim() ||
     `${payload.firstName} ${payload.lastName}`.trim() ||
@@ -196,16 +204,19 @@ async function personalizePDF(payload: LeadSubmitPayload) {
           { expiresIn: 60 * 60 * 24 },
         );
 
+        console.info(
+          `[personalizePDF] Uploaded dossier to S3 bucket "${s3Config.bucket}"`,
+        );
+
         return {
           success: true,
           pdf_delivery_url: signedUrl,
         };
       } catch (error) {
         console.error(
-          "[personalizePDF] Error uploading dossier to S3:",
+          "[personalizePDF] Error uploading dossier to S3, falling back to local storage:",
           error,
         );
-        return { success: false, pdf_delivery_url: null };
       }
     }
 

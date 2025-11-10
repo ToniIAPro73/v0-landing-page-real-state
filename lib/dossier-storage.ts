@@ -131,5 +131,13 @@ export const shouldUseS3Storage = (config?: ResolvedS3Config) => {
   if (enabled) return hasConfig;
 
   const runningOnVercel = Boolean(process.env.VERCEL);
-  return runningOnVercel && hasConfig;
+  const nodeEnv = (process.env.NODE_ENV ?? "").toLowerCase();
+  const runningInProduction = nodeEnv === "production";
+
+  if (!hasConfig) return false;
+  if (runningOnVercel || runningInProduction) {
+    return true;
+  }
+
+  return false;
 };
