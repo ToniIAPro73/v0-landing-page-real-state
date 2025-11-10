@@ -33,6 +33,14 @@ type LeadAutomationPayload = {
   utm: Record<string, string>;
 };
 
+type LeadAutomationResult = {
+  success: boolean;
+  hubspot_success?: boolean;
+  pdf_success?: boolean;
+  pdf_url?: string | null;
+  message?: string;
+};
+
 type LeadFieldKey =
   | "firstName"
   | "lastName"
@@ -1168,7 +1176,9 @@ export default function PlayaVivaLanding() {
   };
   const showBackToHero = scrollProgress >= 1;
 
-const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
+const orchestrateLeadAutomation = async (
+  payload: LeadAutomationPayload,
+): Promise<LeadAutomationResult> => {
   const getHubSpotCookie = () => {
     if (typeof document === "undefined") return "";
     const cookies = document.cookie.split(";");
@@ -1338,7 +1348,21 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
     setValidationMessage(null);
 
     try {
-      await orchestrateLeadAutomation(leadData);
+      const result = await orchestrateLeadAutomation(leadData);
+
+      if (result?.pdf_url) {
+        const absoluteUrl = result.pdf_url.startsWith("http")
+          ? result.pdf_url
+          : `${window.location.origin}${result.pdf_url}`;
+        const link = document.createElement("a");
+        link.href = absoluteUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
       setAutomationFeedback({
         type: "success",
         userName: trimmedFirstName || fallbackName,
