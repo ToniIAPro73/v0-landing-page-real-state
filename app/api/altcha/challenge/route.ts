@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { randomInt } from "crypto";
-import { createChallenge } from "altcha";
+import { createChallenge } from "altcha/server";
 
 const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
 const ALTCHA_CHALLENGE_TTL = Number(
