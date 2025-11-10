@@ -37,6 +37,13 @@ type LeadAutomationPayload = {
   workflow: string;
 };
 
+type LeadFieldKey =
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "privacy"
+  | "recaptcha";
+
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
   const [activeGalleryTab, setActiveGalleryTab] = useState<
@@ -78,9 +85,10 @@ export default function PlayaVivaLanding() {
     type: "success" | "error";
     userName: string;
   } | null>(null);
+  const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [validationMessage, setValidationMessage] = useState<{
-    field: "firstName" | "lastName" | "email" | "privacy";
+    field: LeadFieldKey;
     message: string;
   } | null>(null);
   const [activeApartment, setActiveApartment] = useState<
@@ -91,6 +99,7 @@ export default function PlayaVivaLanding() {
   const lastNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const privacyRef = useRef<HTMLInputElement>(null);
+  const recaptchaRef = useRef<HTMLInputElement>(null);
 
   // Fit hero to viewport height (especially for mobile landscape)
   const heroStackRef = useRef<HTMLDivElement>(null);
@@ -1196,6 +1205,10 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
       language === "es"
         ? "Debes aceptar la política de privacidad para recibir el dossier."
         : "You must accept the privacy policy before receiving the dossier.",
+    recaptcha:
+      language === "es"
+        ? "Confirma que no eres un robot antes de descargar el dossier."
+        : "Please confirm you are not a robot before receiving the dossier.",
   };
 
   const emailInvalidCopy =
@@ -1273,6 +1286,11 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
       return;
     }
 
+    if (!isRecaptchaVerified) {
+      focusField(recaptchaRef, "recaptcha", fieldErrorCopy.recaptcha);
+      return;
+    }
+
     if (!privacyAccepted) {
       focusField(privacyRef, "privacy", fieldErrorCopy.privacy);
       return;
@@ -1308,6 +1326,7 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
         userName: trimmedFirstName || fallbackName,
       });
       setFormData({ firstName: "", lastName: "", email: "" });
+      setIsRecaptchaVerified(false);
       setPrivacyAccepted(false);
 
       setTimeout(() => {
@@ -2798,6 +2817,46 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
                       />
                     </div>
                     <div
+                      className={`rounded-2xl border px-4 py-3 bg-white/85 backdrop-blur-sm text-[13px] text-brown-dark/90 leading-relaxed transition-all duration-200 ${
+                        validationMessage?.field === "recaptcha"
+                          ? "border-[#c07a50]"
+                          : "border-brown-dark/20"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-3 flex-wrap">
+                        <label className="flex items-center gap-3 cursor-pointer text-sm font-semibold text-brown-dark/80">
+                          <input
+                            ref={recaptchaRef}
+                            type="checkbox"
+                            checked={isRecaptchaVerified}
+                            onChange={(e) => {
+                              setIsRecaptchaVerified(e.target.checked);
+                              if (validationMessage?.field === "recaptcha") {
+                                setValidationMessage(null);
+                              }
+                            }}
+                            aria-invalid={validationMessage?.field === "recaptcha"}
+                            className="h-5 w-5 rounded border-brown-dark/30 text-gold-warm focus:ring-gold-warm/40"
+                          />
+                          <span>
+                            {language === "es"
+                              ? "No soy un robot"
+                              : "I'm not a robot"}
+                          </span>
+                        </label>
+                        <div className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-tight text-brown-dark/60">
+                          <Bot className="h-4 w-4 text-gold-warm" />
+                          <span>reCAPTCHA</span>
+                        </div>
+                      </div>
+                      <p className="text-[11px] text-brown-dark/60 mt-2">
+                        {language === "es"
+                          ? "Verificación discreta para preservar la exclusividad del proceso."
+                          : "A discreet verification keeps the download flow exclusive."}
+                      </p>
+                    </div>
+
+                    <div
                       className={`rounded-2xl border px-4 py-3 bg-white/80 backdrop-blur-sm text-[13px] text-brown-dark/90 leading-relaxed transition-all duration-200 ${
                         validationMessage?.field === "privacy"
                           ? "border-[#c07a50]"
@@ -2821,16 +2880,11 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
                         <span>{privacyCheckboxLabel}</span>
                       </label>
                     </div>
+
                     <div className="flex justify-center mt-6">
                       <Button
                         type="submit"
-                        disabled={
-                          isSubmitting ||
-                          !formData.firstName.trim() ||
-                          !formData.lastName.trim() ||
-                          !formData.email.trim() ||
-                          !privacyAccepted
-                        }
+                        disabled={isSubmitting}
                         className="bg-linear-to-r from-[#8a7a4f] to-[#9a8a60] hover:from-[#9a8a60] hover:to-[#8a7a4f] text-[#1f1509] font-semibold py-2 px-6 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group">
                         <span className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                         <span className="relative flex items-center justify-center">
@@ -2845,6 +2899,7 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
                         </span>
                       </Button>
                     </div>
+
                     {automationFeedback && (
                       <div
                         className={`text-xs rounded-xl border px-3 py-2 text-left ${
