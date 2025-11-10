@@ -319,7 +319,21 @@ body {
   }
 }
 
-/* Garantiza que la insignia reCAPTCHA quede por encima del formulario */
-.grecaptcha-badge {
-  z-index: 40;
+altcha-widget {
+  display: block;
+  width: 100%;
+}
+
+altcha-widget::part(container) {
+  border: 1px solid rgba(39, 28, 19, 0.15);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+altcha-widget::part(status) {
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  letter-spacing: 0.05em;
+  color: #5a4f3d;
 }

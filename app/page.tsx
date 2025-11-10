@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, FormEvent } from "react";
+import Script from "next/script";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,24 +22,44 @@ import {
   ShieldCheck,
   Bot,
 } from "lucide-react";
+import "altcha/i18n/all";
+
+const ALTCHA_TRANSLATIONS: Record<
+  "es" | "en",
+  {
+    label: string;
+    verified: string;
+    failed: string;
+  }
+> = {
+  es: {
+    label: "Verificación privada (ALTCHA)",
+    verified: "✓ Verificado",
+    failed: "Intenta nuevamente",
+  },
+  en: {
+    label: "Private verification (ALTCHA)",
+    verified: "✓ Verified",
+    failed: "Try again",
+  },
+};
 
 declare global {
-  interface Window {
-    grecaptcha?: {
-      enterprise?: {
-        ready(callback: () => void): void;
-        execute(
-          siteKey: string,
-          options: { action: string },
-        ): Promise<string>;
+  namespace JSX {
+    interface IntrinsicElements {
+      "altcha-widget": JSX.IntrinsicElements["div"] & {
+        challengeurl: string;
+        name?: string;
+        hidefooter?: string;
+        hidelogo?: string;
+        strings?: string;
+        theme?: string;
       };
-    };
+    }
   }
 }
 
 const SITE_URL = "https://landing-page-playa-viva.vercel.app";
-const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "";
-const RECAPTCHA_ACTION = "DOSSIER_DOWNLOAD";
 
 type LeadAutomationPayload = {
   firstName: string;
@@ -46,8 +67,12 @@ type LeadAutomationPayload = {
   fullName: string;
   email: string;
   language: "es" | "en";
+  page?: string;
+  timestamp?: string;
+  dossierFileName?: string;
   utm: Record<string, string>;
-  recaptchaToken: string;
+  workflow?: string;
+  altchaPayload: string;
 };
 
 type LeadAutomationResult = {
@@ -62,7 +87,8 @@ type LeadFieldKey =
   | "firstName"
   | "lastName"
   | "email"
-  | "privacy";
+  | "privacy"
+  | "captcha";
 
 export default function PlayaVivaLanding() {
   const [language, setLanguage] = useState<"es" | "en">("es");
@@ -118,6 +144,7 @@ export default function PlayaVivaLanding() {
   const lastNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const privacyRef = useRef<HTMLInputElement>(null);
+  const altchaRef = useRef<HTMLDivElement>(null);
 
   // Fit hero to viewport height (especially for mobile landscape)
   const heroStackRef = useRef<HTMLDivElement>(null);
@@ -175,95 +202,6 @@ export default function PlayaVivaLanding() {
     fitHeroToViewport();
   }, []);
   useEffect(() => {
-    if (!RECAPTCHA_SITE_KEY) {
-      console.warn(
-        "[reCAPTCHA] NEXT_PUBLIC_RECAPTCHA_SITE_KEY is not defined. Invisible protection is disabled.",
-      );
-      return;
-    }
-
-    let createdScript: HTMLScriptElement | null = null;
-    const existingScript = document.querySelector<HTMLScriptElement>(
-      'script[data-playa-viva-recaptcha="enterprise"]',
-    );
-
-    if (!existingScript) {
-      createdScript = document.createElement("script");
-      createdScript.src = `https://www.google.com/recaptcha/enterprise.js?render=${RECAPTCHA_SITE_KEY}`;
-      createdScript.async = true;
-      createdScript.defer = true;
-      createdScript.dataset.playaVivaRecaptcha = "enterprise";
-      document.head.appendChild(createdScript);
-    }
-
-    return () => {
-      if (createdScript && createdScript.parentNode) {
-        createdScript.parentNode.removeChild(createdScript);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const sectionElement = leadFormRef.current;
-    if (!sectionElement) return;
-
-    const badgeSelector = ".grecaptcha-badge";
-
-    const placeBadgeInsideSection = () => {
-      const badge = document.querySelector<HTMLElement>(badgeSelector);
-      if (!badge) return;
-
-      if (badge.parentElement !== sectionElement) {
-        sectionElement.appendChild(badge);
-      }
-
-      Object.assign(badge.style, {
-        position: "absolute",
-        left: "auto",
-        right: "32px",
-        bottom: "-60px",
-        width: "auto",
-        transform: "scale(0.95)",
-        transformOrigin: "bottom right",
-        opacity: badge.style.opacity || "0",
-        transition: "opacity 250ms ease",
-        pointerEvents: badge.style.pointerEvents || "none",
-      });
-    };
-
-    const mutationObserver = new MutationObserver(() => {
-      placeBadgeInsideSection();
-    });
-    mutationObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    placeBadgeInsideSection();
-
-    let intersectionObserver: IntersectionObserver | null = null;
-
-    if ("IntersectionObserver" in window) {
-      intersectionObserver = new IntersectionObserver(
-        ([entry]) => {
-          const badge = document.querySelector<HTMLElement>(badgeSelector);
-          if (!badge) return;
-          badge.style.opacity = entry.isIntersecting ? "1" : "0";
-          badge.style.pointerEvents = entry.isIntersecting ? "auto" : "none";
-        },
-        { threshold: 0.35 },
-      );
-
-      intersectionObserver.observe(sectionElement);
-    }
-
-    return () => {
-      mutationObserver.disconnect();
-      intersectionObserver?.disconnect();
-    };
-  }, []);
-  useEffect(() => {
     const onResize = () => fitHeroToViewport();
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", onResize);
@@ -311,6 +249,21 @@ export default function PlayaVivaLanding() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !(globalThis as any).altchaI18n) {
+      return;
+    }
+
+    const registry = (globalThis as any).altchaI18n;
+    (["es", "en"] as const).forEach((locale) => {
+      const current = registry.get(locale) ?? {};
+      registry.set(locale, {
+        ...current,
+        ...ALTCHA_TRANSLATIONS[locale],
+      });
+    });
   }, []);
 
   const wynnEffectRef = useRef<HTMLDivElement>(null);
@@ -1312,7 +1265,7 @@ const orchestrateLeadAutomation = async (
       hubspotutk,
       pageUri,
       utm: payload.utm,
-      recaptchaToken: payload.recaptchaToken,
+      altchaPayload: payload.altchaPayload,
     }),
   });
 
@@ -1347,21 +1300,33 @@ const orchestrateLeadAutomation = async (
       language === "es"
         ? "Debes aceptar la política de privacidad para recibir el dossier."
         : "You must accept the privacy policy before receiving the dossier.",
+    captcha:
+      language === "es"
+        ? "Completa la verificación de seguridad para continuar."
+        : "Please complete the security verification to continue.",
   };
 
   const emailInvalidCopy =
     language === "es"
       ? "Introduce un correo electrónico válido."
       : "Please enter a valid email address.";
+  const altchaErrorCopy =
+    language === "es"
+      ? "Completa la verificación de seguridad antes de solicitar el dossier."
+      : "Please complete the security verification before requesting the dossier.";
 
-  const recaptchaTitle =
+  const altchaTitle =
     language === "es"
-      ? "Protección reCAPTCHA Enterprise"
-      : "reCAPTCHA Enterprise Protection";
-  const recaptchaCopy =
+      ? "Protección ALTCHA sin fricción"
+      : "ALTCHA frictionless protection";
+  const altchaCopy =
     language === "es"
-      ? "Validación invisible en segundo plano: detecta bots antes de generar el dossier sin añadir fricción al proceso."
-      : "Invisible background validation that filters bots before your dossier is generated, preserving a frictionless flow.";
+      ? "ALTCHA verifica silenciosamente en tu dispositivo sin rastrear ni mostrar badges ajenos. Mantiene fuera a los bots sin romper la experiencia de lujo."
+      : "ALTCHA verifies silently on-device with zero tracking or foreign badges, blocking bots without breaking the luxury experience.";
+  const altchaStrings =
+    language === "es"
+      ? '{"label":"Verificando...","verified":"✓ Verificado","failed":"Vuelve a intentarlo"}'
+      : '{"label":"Verifying...","verified":"✓ Verified","failed":"Please try again"}';
   const consentTitle =
     language === "es" ? "Privacidad de datos" : "Data privacy";
   const consentCopy =
@@ -1386,39 +1351,6 @@ const orchestrateLeadAutomation = async (
       }
     });
   };
-
-  const requestRecaptchaToken = () =>
-    new Promise<string>((resolve, reject) => {
-      if (!RECAPTCHA_SITE_KEY) {
-        reject(new Error("Falta la clave pública de reCAPTCHA"));
-        return;
-      }
-
-      if (typeof window === "undefined") {
-        reject(new Error("reCAPTCHA solo puede ejecutarse en el navegador"));
-        return;
-      }
-
-      const enterprise = window.grecaptcha?.enterprise;
-
-      if (!enterprise) {
-        reject(
-          new Error("reCAPTCHA Enterprise no está disponible todavía"),
-        );
-        return;
-      }
-
-      enterprise.ready(async () => {
-        try {
-          const token = await enterprise.execute(RECAPTCHA_SITE_KEY, {
-            action: RECAPTCHA_ACTION,
-          });
-          resolve(token);
-        } catch (error) {
-          reject(error);
-        }
-      });
-    });
 
   const handleLeadSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1459,6 +1391,15 @@ const orchestrateLeadAutomation = async (
       return;
     }
 
+    const formElement = event.currentTarget;
+    const formEntries = new FormData(formElement);
+    const altchaPayload = formEntries.get("altcha_payload")?.toString() ?? "";
+
+    if (!altchaPayload) {
+      focusField(altchaRef, "captcha", altchaErrorCopy);
+      return;
+    }
+
     if (!privacyAccepted) {
       focusField(privacyRef, "privacy", fieldErrorCopy.privacy);
       return;
@@ -1469,8 +1410,6 @@ const orchestrateLeadAutomation = async (
     setValidationMessage(null);
 
     try {
-      const recaptchaToken = await requestRecaptchaToken();
-
       const leadData: LeadAutomationPayload = {
         firstName: trimmedFirstName,
         lastName: trimmedLastName,
@@ -1478,7 +1417,7 @@ const orchestrateLeadAutomation = async (
         email: trimmedEmail,
         language,
         utm: utmData,
-        recaptchaToken,
+        altchaPayload,
       };
 
       const result = await orchestrateLeadAutomation(leadData);
@@ -1527,6 +1466,11 @@ const orchestrateLeadAutomation = async (
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <Script
+        src="https://cdn.jsdelivr.net/npm/altcha/dist/altcha.min.js"
+        type="module"
+        strategy="afterInteractive"
       />
       {/* Language Toggle - Fixed Bottom Right */}
       <div className="fixed bottom-6 right-6 z-100 flex flex-col items-end gap-3">
@@ -2849,10 +2793,10 @@ const orchestrateLeadAutomation = async (
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-cream-light mb-1">
-                          {recaptchaTitle}
+                          {altchaTitle}
                         </p>
                         <p className="text-xs text-cream-light/75 leading-relaxed">
-                          {recaptchaCopy}
+                          {altchaCopy}
                         </p>
                       </div>
                     </div>
@@ -2990,25 +2934,40 @@ const orchestrateLeadAutomation = async (
                         placeholder={t.leadForm.form.emailPlaceholder}
                       />
                     </div>
-                    <div className="rounded-2xl border border-brown-dark/20 px-4 py-3 bg-white/85 backdrop-blur-sm text-[13px] text-brown-dark/90 leading-relaxed transition-all duration-200">
-                      <div className="flex items-center justify-between gap-3 flex-wrap">
-                        <div className="space-y-1">
-                          <p className="text-sm font-semibold text-brown-dark/90">
-                            {language === "es"
-                              ? "Protección automática reCAPTCHA Enterprise"
-                              : "Automatic reCAPTCHA Enterprise protection"}
-                          </p>
-                          <p className="text-[11px] text-brown-dark/60 leading-relaxed">
-                            {language === "es"
-                              ? "Se ejecuta de forma invisible antes de generar el dossier para mantener el flujo exclusivo y libre de bots."
-                              : "Runs invisibly before the dossier is generated, keeping the premium flow shielded from bots."}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-tight text-brown-dark/60">
+                    <div
+                      ref={altchaRef}
+                      className={`rounded-2xl border px-4 py-4 bg-white/90 backdrop-blur-sm text-[13px] text-brown-dark/90 leading-relaxed transition-all duration-200 ${
+                        validationMessage?.field === "captcha"
+                          ? "border-[#c07a50]"
+                          : "border-brown-dark/20"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-3 flex-wrap mb-2">
+                        <p className="text-sm font-semibold text-brown-dark/90 flex items-center gap-2">
                           <Bot className="h-4 w-4 text-gold-warm" />
-                          <span>reCAPTCHA</span>
-                        </div>
+                          {language === "es"
+                            ? "Verificación privada ALTCHA"
+                            : "Private ALTCHA verification"}
+                        </p>
+                        <span className="text-[11px] font-semibold uppercase tracking-tight text-brown-dark/60">
+                          ALTCHA
+                        </span>
                       </div>
+                      <div className="mt-2">
+                        <altcha-widget
+                          challengeurl="/api/altcha/challenge"
+                          name="altcha_payload"
+                          hidefooter="true"
+                          hidelogo="true"
+                          language={language}
+                          strings={altchaStrings}
+                        ></altcha-widget>
+                      </div>
+                      <p className="text-[11px] text-brown-dark/60 mt-2">
+                        {language === "es"
+                          ? "ALTCHA funciona en tu navegador y se regenera cada vez que solicitas el dossier. No rastrea ni muestra logotipos externos."
+                          : "ALTCHA runs in your browser and regenerates for every dossier request. No tracking, no external badges."}
+                      </p>
                     </div>
 
                     <div
