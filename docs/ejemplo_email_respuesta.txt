@@ -1,0 +1,48 @@
+clave de sitio web:
+6LdVoAcsAAAAABmGUpMvdZoVrjje45Xbq62lT5sm
+
+clave secreta:
+6LdVoAcsAAAAADwQDx9nZWWT3dQ883gO6hSbvAnK
+
+clave API render:
+playa-viva-prod:
+re_boM9WsG9_NUGqCcqv3vRncqSaJ9nWuKq6
+
+Endpoint: s3.eu-west-4.idrivee2.com
+Region Code: eu-west-4
+Access Key ID: tIXYZHGuuqtMG9IcCSvy
+Secret Access Key: UqrPCeF8UzchMQagrT319y7txyuxCocGz4FT0wwN
+
+
+
+
+Asunto: Tu Dossier Personalizado de Playa Viva | Siguiente Paso
+
+Cuerpo:
+
+Hola [Nombre del Lead],
+
+Es un placer. Adjunto encontrarás tu dossier personalizado de Playa Viva, tal como solicitaste en nuestra web.
+
+Confío en que este análisis te mostrará la oportunidad única que representa el "Efecto Wynn" y el potencial de Al Marjan Island.
+
+Tu Siguiente Paso
+
+Cuando hayas revisado el dossier, el siguiente paso lógico es una consulta privada de 15 minutos para analizar cómo esta inversión encaja con tus objetivos.
+
+Para agendar tu consulta sin compromiso, por favor, simplemente responde a este email (tony@uniestate.co.uk) con los siguientes detalles y mi equipo se pondrá en contacto
+contigo:
+
+Tu número de teléfono: (incluyendo prefijo de país)
+
+Tipo de apartamento de interés: (ej. Estudio, 1 Habitación, 2 Habitaciones, 3 Habitaciones)
+
+Método de contacto preferido: (Email, Teléfono, Whatsapp, Zoom)
+
+Franja horaria preferida: (ej. Mañana 9-12h, Medio día 12-15, Tarde 15-18h, a cualquier hora)
+
+Quedo a tu disposición.
+
+Saludos,
+
+Tony Agente Oficial, Uniestate UK tony@uniestate.co.uk

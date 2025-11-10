@@ -270,6 +270,21 @@ async function sendDossierEmail(
   const absoluteUrl = pdfUrl.startsWith("http")
     ? pdfUrl
     : `${siteOrigin}${pdfUrl}`;
+  const logoUrl = (() => {
+    try {
+      return new URL("/logo-playa-viva.png", siteOrigin).toString();
+    } catch {
+      return `${SITE_URL}/logo-playa-viva.png`;
+    }
+  })();
+  const compositionUrl = (() => {
+    const assetPath = "/composicion%20fondo%20transparente.png";
+    try {
+      return new URL(assetPath, siteOrigin).toString();
+    } catch {
+      return `${SITE_URL}${assetPath}`;
+    }
+  })();
 
   if (!resendClient) {
     console.warn("[sendDossierEmail] RESEND_API_KEY not configured.");
@@ -280,34 +295,99 @@ async function sendDossierEmail(
     return;
   }
 
-  const subject =
-    payload.language === "es"
-      ? `Tu dossier exclusivo de Playa Viva, ${payload.firstName}`
-      : `Your exclusive Playa Viva dossier, ${payload.firstName}`;
-  const greeting = payload.language === "es" ? "Hola" : "Hello";
-  const intro =
-    payload.language === "es"
-      ? "Gracias por tu interés en Playa Viva. Tu dossier personalizado está listo."
-      : "Thank you for your interest in Playa Viva. Your personalised dossier is ready.";
-  const buttonLabel =
-    payload.language === "es" ? "Descargar dossier" : "Download dossier";
+  const emailCopy = {
+    es: {
+      subject: "Tu Dossier Personalizado de Playa Viva | Siguiente Paso",
+      greeting: `Hola ${payload.firstName},`,
+      intro:
+        "Es un placer. Puedes descargar tu dossier personalizado de Playa Viva con el botón inferior, tal como solicitaste en nuestra web.",
+      effect:
+        "Confío en que este análisis te mostrará la oportunidad única que representa el “Efecto Wynn” y el potencial de Al Marjan Island.",
+      nextStepTitle: "Tu siguiente paso",
+      nextStepBody:
+        "Cuando hayas revisado el dossier, el siguiente paso lógico es una consulta privada de 15 minutos para analizar cómo esta inversión encaja con tus objetivos.",
+      instructions:
+        "Para agendar tu consulta sin compromiso, simplemente responde a este email (tony@uniestate.co.uk) con los siguientes detalles y mi equipo se pondrá en contacto contigo:",
+      fields: [
+        "Tu número de teléfono (incluyendo prefijo de país).",
+        "Tipo de apartamento de interés (ej. Estudio, 1 Habitación, 2 Habitaciones, 3 Habitaciones).",
+        "Método de contacto preferido (Email, Teléfono, WhatsApp, Zoom).",
+        "Franja horaria preferida (ej. Mañana 9-12h, Mediodía 12-15h, Tarde 15-18h, a cualquier hora).",
+      ],
+      closing: "Quedo a tu disposición.",
+      signature: "Tony · Agente Oficial, Uniestate UK · tony@uniestate.co.uk",
+      buttonLabel: "Descargar dossier",
+    },
+    en: {
+      subject: "Your Playa Viva Personalised Dossier | Next Step",
+      greeting: `Hello ${payload.firstName},`,
+      intro:
+        "It’s my pleasure. You can download your personalised Playa Viva dossier with the button below, exactly as requested on our site.",
+      effect:
+        "I trust this briefing will showcase the unique opportunity behind the “Wynn Effect” and the potential of Al Marjan Island.",
+      nextStepTitle: "Your next step",
+      nextStepBody:
+        "Once you’ve reviewed the dossier, the logical next step is a private 15-minute consultation to explore how this investment aligns with your goals.",
+      instructions:
+        "To book your consultation with no obligation, simply reply to this email (tony@uniestate.co.uk) with the details below and my team will reach out:",
+      fields: [
+        "Your phone number (including country code).",
+        "Apartment type of interest (e.g., Studio, 1 Bedroom, 2 Bedrooms, 3 Bedrooms).",
+        "Preferred contact method (Email, Phone, WhatsApp, Zoom).",
+        "Preferred time window (e.g., Morning 9-12h, Midday 12-15h, Afternoon 15-18h, anytime).",
+      ],
+      closing: "I remain at your disposal.",
+      signature: "Tony · Official Agent, Uniestate UK · tony@uniestate.co.uk",
+      buttonLabel: "Download dossier",
+    },
+  }[payload.language];
 
   const html = `
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="font-family: sans-serif;">
       <tr>
         <td>
-          <p>${greeting} ${payload.firstName},</p>
-          <p>${intro}</p>
+          <p style="margin-bottom:24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;">
+            <img
+              src="${logoUrl}"
+              alt="Playa Viva"
+              width="168"
+              style="display:block;width:168px;max-width:60%;height:auto;"
+            />
+            <img
+              src="${compositionUrl}"
+              alt="Playa Viva vista aérea"
+              width="132"
+              style="display:block;width:132px;max-width:40%;height:auto;opacity:0.9;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.08);"
+            />
+          </p>
+          <p>${emailCopy.greeting}</p>
+          <p>${emailCopy.intro}</p>
+          <p>${emailCopy.effect}</p>
+          <p style="text-transform:uppercase;font-size:13px;letter-spacing:0.1em;color:#c2a46d;margin-top:28px;margin-bottom:8px;">
+            ${emailCopy.nextStepTitle}
+          </p>
+          <p>${emailCopy.nextStepBody}</p>
+          <p>${emailCopy.instructions}</p>
+          <ul style="padding-left:18px;color:#4e4332;">
+            ${emailCopy.fields
+              .map((item) => `<li style="margin-bottom:4px;">${item}</li>`)
+              .join("")}
+          </ul>
+          <p>${emailCopy.closing}</p>
+          <p style="margin-bottom:28px;">${emailCopy.signature}</p>
           <p>
             <a href="${absoluteUrl}" style="background:linear-gradient(135deg,#d4af37,#c4a037);color:#1f1509;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">
-              ${buttonLabel}
+              ${emailCopy.buttonLabel}
             </a>
           </p>
           <p style="font-size:13px;color:#6e5f46">
-            Si el botón no funciona, copia y pega este enlace en tu navegador:<br/>
+            ${
+              payload.language === "es"
+                ? "Si el botón no funciona, copia y pega este enlace en tu navegador:"
+                : "If the button does not work, copy and paste this link into your browser:"
+            }<br/>
             <a href="${absoluteUrl}">${absoluteUrl}</a>
           </p>
-          <p style="font-size:12px;color:#9c8a6a">Uniestate UK · inversiones@uniestate.co.uk</p>
         </td>
       </tr>
     </table>
@@ -317,7 +397,7 @@ async function sendDossierEmail(
     await resendClient.emails.send({
       from: "Uniestate Playa Viva <inversiones@uniestate.co.uk>",
       to: payload.email,
-      subject,
+      subject: emailCopy.subject,
       html,
     });
   } catch (error) {
