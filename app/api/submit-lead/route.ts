@@ -123,12 +123,23 @@ const sanitizeFileName = (value: string) =>
     .trim()
     .slice(0, 60) || "lead";
 
-async function personalizePDF(payload: LeadSubmitPayload) {
+type PdfResult = {
+  success: boolean;
+  pdf_delivery_url: string | null;
+  local_path?: string | null;
+  error?: string;
+};
+
+async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
   try {
     await fs.access(PDF_BASE_PATH);
   } catch {
     console.error(`[personalizePDF] Base PDF not found at ${PDF_BASE_PATH}`);
-    return { success: false, pdf_delivery_url: null };
+    return {
+      success: false,
+      pdf_delivery_url: null,
+      error: `Base PDF not found at ${PDF_BASE_PATH}`,
+    };
   }
 
   if (useS3Storage && s3Client && s3Config.bucket) {
@@ -213,12 +224,23 @@ async function personalizePDF(payload: LeadSubmitPayload) {
         return {
           success: true,
           pdf_delivery_url: signedUrl,
+          local_path: null,
         };
       } catch (error) {
         console.error(
           "[personalizePDF] Error uploading dossier to S3, falling back to local storage:",
           error,
         );
+        if (!LOCAL_PDF_OUTPUT_DIR) {
+          return {
+            success: false,
+            pdf_delivery_url: null,
+            error:
+              error instanceof Error
+                ? error.message
+                : "S3 upload failed without fallback directory",
+          };
+        }
       }
     }
 
@@ -229,7 +251,14 @@ async function personalizePDF(payload: LeadSubmitPayload) {
         "[personalizePDF] Cannot create local dossier directory:",
         error,
       );
-      return { success: false, pdf_delivery_url: null };
+      return {
+        success: false,
+        pdf_delivery_url: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Cannot create dossier directory",
+      };
     }
 
     try {
@@ -247,17 +276,27 @@ async function personalizePDF(payload: LeadSubmitPayload) {
         pdf_delivery_url: `/api/local-dossiers/${encodeURIComponent(
           outputFilename,
         )}`,
+        local_path: outputPath,
       };
     } catch (error) {
       console.error(
         "[personalizePDF] Error writing dossier locally:",
         error,
       );
-      return { success: false, pdf_delivery_url: null };
+      return {
+        success: false,
+        pdf_delivery_url: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Unknown error writing dossier",
+      };
     }
   } catch (error) {
-    console.error("[personalizePDF] Error customizing PDF:", error);
-    return { success: false, pdf_delivery_url: null };
+    const message =
+      error instanceof Error ? error.message : "Unknown PDF error";
+    console.error("[personalizePDF] Error customizing PDF:", message);
+    return { success: false, pdf_delivery_url: null, error: message };
   }
 }
 
@@ -447,10 +486,18 @@ export async function POST(request: NextRequest) {
 
     const hubspotSuccess = hubspotResult.status === "fulfilled";
     const pdfSuccess = pdfResult.status === "fulfilled";
-    const pdfUrl =
-      pdfSuccess && pdfResult.value?.pdf_delivery_url
-        ? (pdfResult.value.pdf_delivery_url as string)
-        : null;
+    const pdfValue =
+      pdfSuccess && pdfResult.value ? pdfResult.value : null;
+    const pdfUrl = pdfValue?.pdf_delivery_url ?? null;
+    const pdfLocalPath = pdfValue?.local_path ?? null;
+    const pdfError =
+      pdfSuccess && pdfValue?.error
+        ? pdfValue.error
+        : pdfResult.status === "rejected"
+          ? pdfResult.reason instanceof Error
+            ? pdfResult.reason.message
+            : String(pdfResult.reason)
+          : pdfValue?.error ?? null;
 
     if (pdfSuccess && pdfUrl) {
       await sendDossierEmail(payload, pdfUrl);
@@ -461,6 +508,8 @@ export async function POST(request: NextRequest) {
       hubspot_success: hubspotSuccess,
       pdf_success: pdfSuccess,
       pdf_url: pdfUrl,
+      pdf_local_path: pdfLocalPath,
+      pdf_error: pdfError,
       message:
         hubspotSuccess && pdfSuccess
           ? "Lead procesado correctamente. Revisa tu email."
