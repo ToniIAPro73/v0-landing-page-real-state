@@ -12,6 +12,18 @@ export default function Head() {
       <title>
         Playa Viva - Inversión Inmobiliaria en Al Marjan Island | Uniestate
       </title>
+      <link
+        rel="icon"
+        href="/favicon_playa_viva.png"
+        type="image/png"
+        sizes="512x512"
+      />
+      <link
+        rel="apple-touch-icon"
+        href="/favicon_playa_viva.png"
+        type="image/png"
+      />
+      <link rel="shortcut icon" href="/favicon_playa_viva.png" />
     </>
   );
 }

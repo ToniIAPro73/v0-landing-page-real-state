@@ -15,7 +15,7 @@ import {
   resolveS3Config,
   shouldUseS3Storage,
 } from "@/lib/dossier-storage";
-import { verifyServerSignature } from "altcha";
+import { verifyAltchaPayload } from "@/lib/altcha";
 
 export const runtime = "nodejs";
 
@@ -506,7 +506,7 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      const isValid = await verifyServerSignature(altchaPayload, ALTCHA_SECRET);
+      const isValid = verifyAltchaPayload(altchaPayload, ALTCHA_SECRET);
       if (!isValid) {
         return NextResponse.json(
           { error: "Verificación ALTCHA inválida" },
