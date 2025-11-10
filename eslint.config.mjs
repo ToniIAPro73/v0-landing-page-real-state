@@ -16,7 +16,7 @@ const noopTailwindcssPlugin = {
 
 const config = [
   {
-    ignores: ["node_modules", ".next", "dist"],
+    ignores: ["node_modules", ".next", "dist", "scripts"],
   },
   ...next,
   {
