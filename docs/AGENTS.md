@@ -1,22 +1,23 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-Playa Viva is a Next.js 16 App Router project. Screens live in `app/` (with `layout.tsx` for shared chrome and `page.tsx` for the home experience), shared UI sits in `components/`, and data/helpers belong to `lib/`. Static assets, SEO files, and downloads live under `public/`, while long-form references and analyses stay in `docs/`. Keep Tailwind tokens in `app/globals.css`, and treat `styles/` as the place for rare global overrides or animations that do not fit utility classes.
+This landing runs on Next.js 16 (App Router). Page sections, client hooks, and orchestrators live in `app/` (`page.tsx` hosts the entire experience), reusable UI stays in `components/`, and shared logic belongs to `lib/`. Global tokens and Tailwind layers reside in `app/globals.css`, while `styles/` is reserved for legacy utilities. Static assets and the Python dossier generator (`public/assets/dossier/personalizar_dossier.py`) ship from `public/`; the generated files remain ignored under `public/assets/dossier/dossiers_generados/`. Long-form briefs, Lighthouse captures, and internal docs belong in `docs/`.
 
 ## Build, Test, and Development Commands
-- `npm run dev`: launches the hot-reload dev server at `http://localhost:3000`.
-- `npm run build`: compiles the production bundle and surfaces type/route warnings that Vercel would block on.
-- `npm run start`: serves the last build for smoke tests that mimic the hosted environment.
-- `npm run lint`: runs ESLint + TypeScript rules configured by Next; fix all warnings before pushing.
+- `npm run dev` – hot reload server at `http://localhost:3000`.
+- `npm run build` – production build; surfaces type/route blockers before deploying.
+- `npm run start` – serves the compiled output for smoke tests.
+- `npm run lint` – runs `node ./node_modules/eslint/bin/eslint.js .`, ensuring Windows users do not need a global `eslint`.
+Run `npm install` before hacking so the Tailwind canary and Radix dependencies are in place; the `postinstall` script keeps `tsconfig.json` aligned with tooling expectations.
 
 ## Coding Style & Naming Conventions
-Write everything in TypeScript, defaulting to server components unless the feature needs interactivity (`'use client'`). Use 2-space indentation, `PascalCase` for components, `camelCase` for utilities/hooks, and `kebab-case` for directories. Group Tailwind classes by layout → spacing → color → effects to stay consistent with existing sections. Prefer composable Radix primitives, and colocate component-specific helpers next to the component file when possible. Run `npm run lint` before committing; it catches unused imports, `clsx` mistakes, and Tailwind typos.
+Author everything in TypeScript, defaulting to server components unless the section needs hooks, listeners, or animations (`"use client"`). Use `PascalCase` for components, `camelCase` for utilities/hooks, and `kebab-case` for directories. Tailwind utilities follow the repo ordering: layout → spacing → color → effects. Colocate copy inside the `content` object in `app/page.tsx` so Spanish/English strings stay synchronized. Premium flourishes (hero badge, dossier card) should share helper components rather than duplicating markup.
 
 ## Testing Guidelines
-No automated suite ships yet, so combine `npm run lint` with manual checks on desktop (1440 px), tablet, and iPhone 12 views. Record Lighthouse scores (HTML reports live in `docs/`) when hero, booking CTA, or animation work changes. If you add Jest or Playwright later, place specs beside the feature (`components/Hero/Hero.spec.tsx`) and follow descriptive test names such as `rendersAmenitiesGrid`.
+There is no automated suite yet, so linting plus manual QA is mandatory. After each change, run `npm run lint`, then review the landing at 1440 px desktop and 390 px mobile widths, toggling both languages. Re-run Lighthouse (reports live in `docs/`) whenever you touch hero media, dossier CTA logic, or scripts inside `public/assets/dossier`. If you introduce Jest/Playwright later, colocate specs with the component (`components/Hero/Hero.spec.tsx`) and keep test names narrative (`rendersWynnStatsTimeline`).
 
 ## Commit & Pull Request Guidelines
-History favors short, imperative Spanish messages (e.g., `mejoras organizativas de la documentación`). Keep commits focused on one concern, reference related issues, and include before/after screenshots for UI changes. Pull requests should describe scope, list commands executed (`npm run lint`, `npm run build`, Lighthouse), and attach the latest Vercel preview URL so reviewers can compare deployments.
+Commits should be short, scoped, and imperative (e.g., `sincroniza badge del efecto wynn`). Reference tickets or Vercel deploy IDs when possible. Every PR must outline scope, list the commands executed (`npm run lint`, `npm run build`, Lighthouse), and attach before/after captures for visual shifts. Avoid mixing marketing copy with structural refactors; reviewers prefer one storyline per PR.
 
-## Security & Configuration Tips
-Never commit secrets—store them in `.env.local` and set matching keys in Vercel. When introducing analytics or embeds, document required environment variables in `docs/config.md`. Review `next.config.mjs` when toggling experimental flags to avoid breaking the automatic sync with v0.app.
+## Security & Operations Notes
+Never commit credentials. Store secrets in `.env.local` and mirror them in Vercel. The dossier generator installs `requests`/`pypdf` on demand; document any extra Python dependency in `public/assets/dossier/requirements.txt`. When editing service workers or manifests in `public/`, verify cached asset paths (e.g., `/logo-playa-viva.png`) still exist to keep offline mode healthy.

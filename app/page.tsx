@@ -18,6 +18,8 @@ import {
   Download,
   Mail,
   ArrowUpRight,
+  ShieldCheck,
+  Bot,
 } from "lucide-react";
 
 const SITE_URL = "https://landing-page-playa-viva.vercel.app";
@@ -76,10 +78,19 @@ export default function PlayaVivaLanding() {
     type: "success" | "error";
     userName: string;
   } | null>(null);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [validationMessage, setValidationMessage] = useState<{
+    field: "firstName" | "lastName" | "email" | "privacy";
+    message: string;
+  } | null>(null);
   const [activeApartment, setActiveApartment] = useState<
     "studio" | "oneBed" | "twoBed" | "threeBed"
   >("studio");
   const [locationView, setLocationView] = useState<"map" | "collage">("map");
+  const firstNameRef = useRef<HTMLInputElement>(null);
+  const lastNameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const privacyRef = useRef<HTMLInputElement>(null);
 
   // Fit hero to viewport height (especially for mobile landscape)
   const heroStackRef = useRef<HTMLDivElement>(null);
@@ -1110,6 +1121,36 @@ export default function PlayaVivaLanding() {
     t.leadForm.features.slice(0, 2),
     t.leadForm.features.slice(2),
   ];
+  const LuxuryBadge = ({
+    label,
+    alignment = "center",
+  }: {
+    label: string;
+    alignment?: "start" | "center";
+  }) => (
+    <div
+      className={`inline-flex w-full ${
+        alignment === "center" ? "justify-center" : "justify-start"
+      }`}
+    >
+      <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-linear-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
+        <div
+          className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)",
+            backgroundSize: "16px 16px",
+          }}
+        ></div>
+        <span className="relative z-10 group-hover:drop-shadow-[0_0_8px_rgba(162,144,96,0.4)] transition-all duration-500 uppercase tracking-[0.35em] text-xs md:text-sm">
+          {label}
+        </span>
+      </div>
+    </div>
+  );
   const nameLabel = language === "es" ? "Nombre completo" : "Full name";
   const emailLabel = "Email";
 
@@ -1120,9 +1161,9 @@ export default function PlayaVivaLanding() {
       setShowMenu(false);
     }
   };
-  const showBackToHero = scrollProgress >= 0.95;
+  const showBackToHero = scrollProgress >= 1;
 
-  const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
+const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
     const simulateCall = (label: string, delay = 650) =>
       new Promise<void>((resolve) => {
         console.log(`[Automation] ${label}`, payload);
@@ -1135,7 +1176,62 @@ export default function PlayaVivaLanding() {
       simulateCall("Internal Metrics Storage", 550),
     ]);
 
-    await simulateCall("Email confirmation & gratitude message", 600);
+  await simulateCall("Email confirmation & gratitude message", 600);
+};
+
+  const fieldErrorCopy: Record<LeadFieldKey, string> = {
+    firstName:
+      language === "es"
+        ? "Indica tu nombre para personalizar el dossier."
+        : "Please include your first name so we can personalize the dossier.",
+    lastName:
+      language === "es"
+        ? "Añade tus apellidos para continuar."
+        : "Please add your last name to continue.",
+    email:
+      language === "es"
+        ? "Necesitamos tu email para enviarte el dossier."
+        : "We need your email address to deliver the dossier.",
+    privacy:
+      language === "es"
+        ? "Debes aceptar la política de privacidad para recibir el dossier."
+        : "You must accept the privacy policy before receiving the dossier.",
+  };
+
+  const emailInvalidCopy =
+    language === "es"
+      ? "Introduce un correo electrónico válido."
+      : "Please enter a valid email address.";
+
+  const recaptchaTitle =
+    language === "es" ? "Activar reCAPTCHA" : "Enable reCAPTCHA";
+  const recaptchaCopy =
+    language === "es"
+      ? "Activa reCAPTCHA para añadir un paso extra de verificación antes del envío. Ayuda a frenar el spam y refuerza la seguridad del formulario."
+      : "Enable reCAPTCHA to add a discreet verification step before submission. It filters bots and keeps the experience secure.";
+  const consentTitle =
+    language === "es" ? "Privacidad de datos" : "Data privacy";
+  const consentCopy =
+    language === "es"
+      ? "Añade un campo de privacidad de datos cuando necesites el consentimiento explícito de tus contactos. Refuerza la confianza y mantiene la trazabilidad legal."
+      : "Add a dedicated data-privacy field whenever you need your contacts' consent. It reinforces trust and keeps compliance effortless.";
+  const privacyCheckboxLabel =
+    language === "es"
+      ? "Acepto la política de privacidad y autorizo el uso de mis datos para recibir el dossier personalizado."
+      : "I accept the privacy policy and authorise the use of my data to receive the personalised dossier.";
+
+  const focusField = (
+    ref: { current: HTMLElement | null },
+    field: LeadFieldKey,
+    message: string
+  ) => {
+    setValidationMessage({ field, message });
+    requestAnimationFrame(() => {
+      ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (ref.current instanceof HTMLElement) {
+        ref.current.focus();
+      }
+    });
   };
 
   const handleLeadSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -1153,7 +1249,34 @@ export default function PlayaVivaLanding() {
 
     const trimmedFirstName = formData.firstName.trim();
     const trimmedLastName = formData.lastName.trim();
+    const trimmedEmail = formData.email.trim();
     const fallbackName = language === "es" ? "inversor" : "investor";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!trimmedFirstName) {
+      focusField(firstNameRef, "firstName", fieldErrorCopy.firstName);
+      return;
+    }
+
+    if (!trimmedLastName) {
+      focusField(lastNameRef, "lastName", fieldErrorCopy.lastName);
+      return;
+    }
+
+    if (!trimmedEmail) {
+      focusField(emailRef, "email", fieldErrorCopy.email);
+      return;
+    }
+
+    if (!emailRegex.test(trimmedEmail)) {
+      focusField(emailRef, "email", emailInvalidCopy);
+      return;
+    }
+
+    if (!privacyAccepted) {
+      focusField(privacyRef, "privacy", fieldErrorCopy.privacy);
+      return;
+    }
 
     const dossierFileNameBase = `Playa-Viva-Dossier-${
       trimmedFirstName || "Investor"
@@ -1165,7 +1288,7 @@ export default function PlayaVivaLanding() {
       firstName: trimmedFirstName,
       lastName: trimmedLastName,
       fullName: `${trimmedFirstName} ${trimmedLastName}`.trim(),
-      email: formData.email.trim(),
+      email: trimmedEmail,
       language,
       page: "Playa Viva Landing",
       timestamp: new Date().toISOString(),
@@ -1176,6 +1299,7 @@ export default function PlayaVivaLanding() {
 
     setIsSubmitting(true);
     setAutomationFeedback(null);
+    setValidationMessage(null);
 
     try {
       await orchestrateLeadAutomation(leadData);
@@ -1184,8 +1308,8 @@ export default function PlayaVivaLanding() {
         userName: trimmedFirstName || fallbackName,
       });
       setFormData({ firstName: "", lastName: "", email: "" });
+      setPrivacyAccepted(false);
 
-      // Ocultar mensaje después de 5 segundos
       setTimeout(() => {
         setAutomationFeedback(null);
       }, 5000);
@@ -1196,7 +1320,6 @@ export default function PlayaVivaLanding() {
         userName: "",
       });
 
-      // Ocultar mensaje de error después de 5 segundos
       setTimeout(() => {
         setAutomationFeedback(null);
       }, 5000);
@@ -1648,26 +1771,13 @@ export default function PlayaVivaLanding() {
         <div className="container mx-auto px-4 relative z-10">
           {/* Header */}
           <div className="text-center mb-16 max-w-4xl mx-auto">
-            <div className="inline-flex justify-center mb-4">
-              <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-linear-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
-                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
-                <div className="absolute inset-0 bg-linear-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
-                <div
-                  className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)",
-                    backgroundSize: "16px 16px",
-                  }}
-                ></div>
-                <span className="relative z-10 group-hover:drop-shadow-[0_0_8px_rgba(162,144,96,0.4)] transition-all duration-500 uppercase tracking-[0.35em] text-xs md:text-sm">
-                  {language === "es"
-                    ? "Oportunidad Histórica"
-                    : "Historic Opportunity"}
-                </span>
-              </div>
-            </div>
+            <LuxuryBadge
+              label={
+                language === "es"
+                  ? "Oportunidad Histórica"
+                  : "Historic Opportunity"
+              }
+            />
             <h2
               className="text-4xl md:text-6xl font-light text-cream-light mb-6 font-arabic"
               style={{
@@ -2504,197 +2614,256 @@ export default function PlayaVivaLanding() {
           />
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto flex flex-col items-center text-center space-y-3">
-            <div className="inline-flex">
-              <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-linear-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
-                {/* Brillo dorado superior */}
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
-                {/* Efecto de brillo animado intenso */}
-                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
-                {/* Resplandor de fondo al hover */}
-                <div className="absolute inset-0 bg-linear-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
-                {/* Textura sutil */}
-                <div
-                  className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)",
-                    backgroundSize: "16px 16px",
-                  }}
-                ></div>
-                <span className="relative z-10 group-hover:drop-shadow-[0_0_8px_rgba(162,144,96,0.4)] transition-all duration-500">
-                  {language === "es"
-                    ? "Dossier de Inversión Exclusivo"
-                    : "Exclusive Investment Dossier"}
-                </span>
-              </div>
+          <div className="max-w-5xl mx-auto flex flex-col gap-6">
+            <LuxuryBadge
+              label={
+                language === "es"
+                  ? "Dossier de Inversión Exclusivo"
+                  : "Exclusive Investment Dossier"
+              }
+            />
+            <div className="text-center space-y-3 max-w-3xl mx-auto">
+              <p className="text-[#271c13] text-base md:text-lg leading-relaxed font-medium">
+                {t.leadForm.intro}
+              </p>
+              <p className="text-cream-light text-sm leading-relaxed">
+                {t.leadForm.description}
+              </p>
             </div>
-            <p className="text-[#271c13] text-base md:text-lg leading-relaxed font-medium">
-              {t.leadForm.intro}
-            </p>
-          </div>
-
-          {/* Texto descriptivo debajo del subtítulo */}
-          <div className="mt-5 max-w-3xl mx-auto">
-            <p className="text-cream-light text-sm leading-relaxed text-center">
-              {t.leadForm.description}
-            </p>
-          </div>
-
-          {/* Checks en dos columnas FUERA del card */}
-          <div className="mt-5 w-full max-w-2xl mx-auto grid md:grid-cols-[0.85fr_1.15fr] gap-3">
-            {featureColumns.map((column, columnIndex) => (
-              <div key={columnIndex} className="space-y-2.5 text-left">
-                {column.map((feature) => (
-                  <div key={feature} className="flex items-start gap-2">
-                    <div className="bg-gold-warm/25 rounded-full p-1.5 mt-0.5">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-gold-warm" />
+            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] items-start">
+              <div className="space-y-6">
+                <div className="grid md:grid-cols-[0.85fr_1.15fr] gap-3">
+                  {featureColumns.map((column, columnIndex) => (
+                    <div key={columnIndex} className="space-y-2.5 text-left">
+                      {column.map((feature) => (
+                        <div key={feature} className="flex items-start gap-2">
+                          <div className="bg-gold-warm/25 rounded-full p-1.5 mt-0.5">
+                            <CheckCircle2 className="h-3.5 w-3.5 text-gold-warm" />
+                          </div>
+                          <p className="text-[#c9b896] text-sm leading-relaxed">
+                            {feature}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                    <p className="text-[#c9b896] text-sm leading-relaxed">
-                      {feature}
-                    </p>
+                  ))}
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur-sm shadow-inner">
+                    <div className="flex items-start gap-3">
+                      <div className="h-10 w-10 rounded-full bg-gold-warm/20 text-gold-warm flex items-center justify-center">
+                        <Bot className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-cream-light mb-1">
+                          {recaptchaTitle}
+                        </p>
+                        <p className="text-xs text-cream-light/75 leading-relaxed">
+                          {recaptchaCopy}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                ))}
+                  <div className="rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur-sm shadow-inner">
+                    <div className="flex items-start gap-3">
+                      <div className="h-10 w-10 rounded-full bg-gold-warm/20 text-gold-warm flex items-center justify-center">
+                        <ShieldCheck className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-cream-light mb-1">
+                          {consentTitle}
+                        </p>
+                        <p className="text-xs text-cream-light/75 leading-relaxed">
+                          {consentCopy}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-
-          {/* Card del CTA con efectos premium */}
-          <div className="mt-8 w-full flex justify-center">
-            <div className="w-full max-w-[500px] rounded-3xl border-2 border-gold-warm/40 bg-linear-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] shadow-[0_20px_60px_rgba(162,144,96,0.35),0_0_80px_rgba(162,144,96,0.15),0_0_0_1px_rgba(255,255,255,0.8)_inset] backdrop-blur-sm px-6 md:px-8 py-6 relative overflow-hidden group transition-all duration-500 hover:shadow-[0_28px_80px_rgba(162,144,96,0.6),0_0_120px_rgba(162,144,96,0.35),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-[1.02] hover:border-[#d4b876]">
-              {/* Brillo dorado superior */}
-              <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-3xl bg-linear-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
-              {/* Efecto de brillo animado intenso que cruza el card */}
-              <div className="absolute inset-0 rounded-3xl bg-linear-to-r from-transparent via-white/50 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1200 ease-out"></div>
-              {/* Efecto de brillo dorado animado en el borde superior */}
-              <div
-                className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none group-hover:opacity-70 transition-opacity duration-500"
-                style={{
-                  background:
-                    "radial-gradient(circle at top right, rgba(162,144,96,0.25), transparent 60%)",
-                }}
-              />
-              {/* Efecto de brillo secundario inferior */}
-              <div
-                className="absolute inset-0 rounded-3xl opacity-30 pointer-events-none group-hover:opacity-50 transition-opacity duration-500"
-                style={{
-                  background:
-                    "radial-gradient(circle at bottom left, rgba(184,166,115,0.2), transparent 50%)",
-                }}
-              />
-              {/* Resplandor de fondo al hover */}
-              <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/8 group-hover:via-white/15 group-hover:to-[#d4b876]/8 transition-all duration-500"></div>
-              {/* Textura sutil de puntos */}
-              <div
-                className="absolute inset-0 rounded-3xl opacity-[0.02] group-hover:opacity-[0.04] transition-opacity duration-500"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)",
-                  backgroundSize: "20px 20px",
-                }}
-              ></div>
-              <form
-                onSubmit={handleLeadSubmit}
-                className="space-y-4 text-left relative z-10"
-              >
-                <div className="grid md:grid-cols-[0.7fr_1.3fr] gap-3">
-                  <div>
-                    <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
-                      {t.leadForm.form.firstNamePlaceholder}{" "}
-                      <span className="text-brown-dark/80">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.firstName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, firstName: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
-                      placeholder={t.leadForm.form.firstNamePlaceholder}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
-                      {t.leadForm.form.lastNamePlaceholder}{" "}
-                      <span className="text-brown-dark/80">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.lastName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, lastName: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
-                      placeholder={t.leadForm.form.lastNamePlaceholder}
-                    />
-                  </div>
-                </div>
-
-                <div className="text-left">
-                  <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
-                    {t.leadForm.form.emailPlaceholder}{" "}
-                    <span className="text-brown-dark/80">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="w-full px-3 py-2 border border-brown-dark/15 rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md"
-                    placeholder={t.leadForm.form.emailPlaceholder}
-                  />
-                </div>
-
-                <div className="flex justify-center mt-6">
-                  <Button
-                    type="submit"
-                    disabled={
-                      isSubmitting ||
-                      !formData.firstName.trim() ||
-                      !formData.lastName.trim() ||
-                      !formData.email.trim()
-                    }
-                    className="bg-linear-to-r from-[#8a7a4f] to-[#9a8a60] hover:from-[#9a8a60] hover:to-[#8a7a4f] text-[#1f1509] font-semibold py-2 px-6 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group"
-                  >
-                    <span className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                    <span className="relative flex items-center justify-center">
-                      <Download
-                        className={`mr-2 h-4 w-4 ${
-                          isSubmitting ? "animate-pulse" : ""
-                        }`}
-                      />
-                      {isSubmitting
-                        ? t.leadForm.form.sending
-                        : t.leadForm.form.ctaButton}
-                    </span>
-                  </Button>
-                </div>
-
-                {automationFeedback && (
+              <div className="w-full">
+                <div className="w-full rounded-3xl border-2 border-gold-warm/40 bg-linear-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] shadow-[0_20px_60px_rgba(162,144,96,0.35),0_0_80px_rgba(162,144,96,0.15),0_0_0_1px_rgba(255,255,255,0.8)_inset] backdrop-blur-sm px-6 md:px-10 py-7 relative overflow-hidden group transition-all duration-500 hover:shadow-[0_28px_80px_rgba(162,144,96,0.6),0_0_120px_rgba(162,144,96,0.35),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-[1.01] hover:border-[#d4b876]">
+                  <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-3xl bg-linear-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
+                  <div className="absolute inset-0 rounded-3xl bg-linear-to-r from-transparent via-white/50 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1200 ease-out"></div>
                   <div
-                    className={`text-xs rounded-xl border px-3 py-2 text-left ${
-                      automationFeedback.type === "success"
-                        ? "border-brown-dark/20 text-[#5a4f3d] bg-[#ddd4c6]"
-                        : "border-red-400 text-red-600 bg-red-50"
-                    }`}
+                    className="absolute inset-0 rounded-3xl opacity-50 pointer-events-none group-hover:opacity-70 transition-opacity duration-500"
+                    style={{
+                      background:
+                        "radial-gradient(circle at top right, rgba(162,144,96,0.25), transparent 60%)",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0 rounded-3xl opacity-30 pointer-events-none group-hover:opacity-50 transition-opacity duration-500"
+                    style={{
+                      background:
+                        "radial-gradient(circle at bottom left, rgba(184,166,115,0.2), transparent 50%)",
+                    }}
+                  />
+                  <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/8 group-hover:via-white/15 group-hover:to-[#d4b876]/8 transition-all duration-500"></div>
+                  <div
+                    className="absolute inset-0 rounded-3xl opacity-[0.02] group-hover:opacity-[0.04] transition-opacity duration-500"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)",
+                      backgroundSize: "20px 20px",
+                    }}
+                  ></div>
+                  <form
+                    onSubmit={handleLeadSubmit}
+                    className="space-y-5 text-left relative z-10"
                   >
-                    {automationFeedback.type === "success"
-                      ? t.leadForm.form.successMessage.replace(
-                          "{{name}}",
-                          automationFeedback.userName
-                        )
-                      : t.leadForm.form.errorMessage}
-                  </div>
-                )}
-
-                <p className="text-brown-dark/60 text-[11px] text-center leading-relaxed mt-2">
-                  {t.leadForm.form.privacy}
-                </p>
-              </form>
+                    {validationMessage && (
+                      <div
+                        className="rounded-2xl border border-gold-warm/30 bg-white/90 px-4 py-3 text-xs text-brown-dark flex items-center gap-2 shadow-sm"
+                        role="alert"
+                        aria-live="polite"
+                      >
+                        <ShieldCheck className="h-4 w-4 text-gold-warm" />
+                        <span>{validationMessage.message}</span>
+                      </div>
+                    )}
+                    <div className="grid md:grid-cols-[0.7fr_1.3fr] gap-3">
+                      <div>
+                        <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
+                          {t.leadForm.form.firstNamePlaceholder}
+                          <span className="text-brown-dark/80">*</span>
+                        </label>
+                        <input
+                          ref={firstNameRef}
+                          type="text"
+                          value={formData.firstName}
+                          onChange={(e) => {
+                            setFormData({ ...formData, firstName: e.target.value });
+                            if (validationMessage?.field === "firstName") {
+                              setValidationMessage(null);
+                            }
+                          }}
+                          aria-invalid={validationMessage?.field === "firstName"}
+                          className={`w-full px-3 py-2 border rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/85 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md ${
+                            validationMessage?.field === "firstName"
+                              ? "border-[#c07a50]"
+                              : "border-brown-dark/15"
+                          }`}
+                          placeholder={t.leadForm.form.firstNamePlaceholder}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
+                          {t.leadForm.form.lastNamePlaceholder}
+                          <span className="text-brown-dark/80">*</span>
+                        </label>
+                        <input
+                          ref={lastNameRef}
+                          type="text"
+                          value={formData.lastName}
+                          onChange={(e) => {
+                            setFormData({ ...formData, lastName: e.target.value });
+                            if (validationMessage?.field === "lastName") {
+                              setValidationMessage(null);
+                            }
+                          }}
+                          aria-invalid={validationMessage?.field === "lastName"}
+                          className={`w-full px-3 py-2 border rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/85 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md ${
+                            validationMessage?.field === "lastName"
+                              ? "border-[#c07a50]"
+                              : "border-brown-dark/15"
+                          }`}
+                          placeholder={t.leadForm.form.lastNamePlaceholder}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
+                        {t.leadForm.form.emailPlaceholder}
+                        <span className="text-brown-dark/80">*</span>
+                      </label>
+                      <input
+                        ref={emailRef}
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => {
+                          setFormData({ ...formData, email: e.target.value });
+                          if (validationMessage?.field === "email") {
+                            setValidationMessage(null);
+                          }
+                        }}
+                        aria-invalid={validationMessage?.field === "email"}
+                        className={`w-full px-3 py-2 border rounded-xl focus:border-gold-warm focus:ring-1 focus:ring-gold-warm/20 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm text-brown-dark text-sm shadow-sm hover:shadow-md ${
+                          validationMessage?.field === "email"
+                            ? "border-[#c07a50]"
+                            : "border-brown-dark/15"
+                        }`}
+                        placeholder={t.leadForm.form.emailPlaceholder}
+                      />
+                    </div>
+                    <div
+                      className={`rounded-2xl border px-4 py-3 bg-white/80 backdrop-blur-sm text-[13px] text-brown-dark/90 leading-relaxed transition-all duration-200 ${
+                        validationMessage?.field === "privacy"
+                          ? "border-[#c07a50]"
+                          : "border-brown-dark/20"
+                      }`}
+                    >
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          ref={privacyRef}
+                          type="checkbox"
+                          checked={privacyAccepted}
+                          onChange={(e) => {
+                            setPrivacyAccepted(e.target.checked);
+                            if (validationMessage?.field === "privacy") {
+                              setValidationMessage(null);
+                            }
+                          }}
+                          aria-invalid={validationMessage?.field === "privacy"}
+                          className="mt-1 h-4 w-4 rounded border-brown-dark/30 text-gold-warm focus:ring-gold-warm/40"
+                        />
+                        <span>{privacyCheckboxLabel}</span>
+                      </label>
+                    </div>
+                    <div className="flex justify-center mt-6">
+                      <Button
+                        type="submit"
+                        disabled={
+                          isSubmitting ||
+                          !formData.firstName.trim() ||
+                          !formData.lastName.trim() ||
+                          !formData.email.trim() ||
+                          !privacyAccepted
+                        }
+                        className="bg-linear-to-r from-[#8a7a4f] to-[#9a8a60] hover:from-[#9a8a60] hover:to-[#8a7a4f] text-[#1f1509] font-semibold py-2 px-6 rounded-xl shadow-[0_4px_16px_rgba(162,144,96,0.4)] hover:shadow-[0_6px_20px_rgba(162,144,96,0.5)] transition-all duration-300 text-sm disabled:cursor-not-allowed disabled:opacity-70 relative overflow-hidden group">
+                        <span className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                        <span className="relative flex items-center justify-center">
+                          <Download
+                            className={`mr-2 h-4 w-4 ${
+                              isSubmitting ? "animate-pulse" : ""
+                            }`}
+                          />
+                          {isSubmitting
+                            ? t.leadForm.form.sending
+                            : t.leadForm.form.ctaButton}
+                        </span>
+                      </Button>
+                    </div>
+                    {automationFeedback && (
+                      <div
+                        className={`text-xs rounded-xl border px-3 py-2 text-left ${
+                          automationFeedback.type === "success"
+                            ? "border-brown-dark/20 text-[#5a4f3d] bg-[#ddd4c6]"
+                            : "border-red-400 text-red-600 bg-red-50"
+                        }`}
+                      >
+                        {automationFeedback.type === "success"
+                          ? t.leadForm.form.successMessage.replace(
+                              "{{name}}",
+                              automationFeedback.userName
+                            )
+                          : t.leadForm.form.errorMessage}
+                      </div>
+                    )}
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
