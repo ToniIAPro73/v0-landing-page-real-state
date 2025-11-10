@@ -13,6 +13,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import {
   getLocalDossierDir,
   resolveS3Config,
+  shouldUseS3Storage,
 } from "@/lib/dossier-storage";
 
 export const runtime = "nodejs";
@@ -49,14 +50,8 @@ const PDF_BASE_PATH = path.join(
 );
 const LOCAL_PDF_OUTPUT_DIR = getLocalDossierDir();
 const s3Config = resolveS3Config();
-const useS3Storage = Boolean(
-  s3Config.endpoint &&
-    s3Config.bucket &&
-    s3Config.region &&
-    s3Config.accessKeyId &&
-    s3Config.secretAccessKey,
-);
-const s3Client = useS3Storage
+const useS3Storage = shouldUseS3Storage(s3Config);
+const s3Client = useS3Storage && s3Config.bucket
   ? new S3Client({
       region: s3Config.region as string,
       endpoint: s3Config.endpoint,
