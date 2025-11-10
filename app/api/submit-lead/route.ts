@@ -15,6 +15,7 @@ import {
   resolveS3Config,
   shouldUseS3Storage,
 } from "@/lib/dossier-storage";
+import { verifyServerSignature } from "altcha";
 
 export const runtime = "nodejs";
 
@@ -27,7 +28,7 @@ type LeadSubmitPayload = {
   hubspotutk: string;
   pageUri: string;
   utm?: Record<string, string>;
-  recaptchaToken?: string;
+  altchaPayload?: string;
 };
 
 const HUB_ID =
@@ -65,88 +66,10 @@ const s3Client = useS3Storage && s3Config.bucket
   : null;
 const PDF_FIELD_NAME = "nombre_personalizacion_lead";
 const PDF_STORAGE_PREFIX = "dossiers";
-const RECAPTCHA_PROJECT_ID =
-  process.env.RECAPTCHA_PROJECT_ID ?? "gen-lang-client-0093228508";
-const RECAPTCHA_SITE_KEY =
-  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "";
-const RECAPTCHA_API_KEY = process.env.RECAPTCHA_API_KEY;
-const RECAPTCHA_MIN_SCORE = Number(
-  process.env.RECAPTCHA_MIN_SCORE ?? "0.5",
-);
-const RECAPTCHA_ACTION = "DOSSIER_DOWNLOAD";
-const IS_DEV = process.env.NODE_ENV !== "production";
+const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
 
-type RecaptchaAssessment = {
-  success: boolean;
-  score: number;
-  reasons: string[];
-};
-
-async function verifyRecaptchaToken(
-  token?: string,
-  expectedAction = RECAPTCHA_ACTION,
-): Promise<RecaptchaAssessment> {
-  if (!token) {
-    return { success: false, score: 0, reasons: ["missing_token"] };
-  }
-
-  if (!RECAPTCHA_API_KEY || !RECAPTCHA_SITE_KEY) {
-    if (IS_DEV) {
-      console.warn(
-        "[reCAPTCHA] Missing configuration. Skipping verification in development.",
-      );
-      return { success: true, score: 1, reasons: ["dev_bypass"] };
-    }
-
-    console.error(
-      "[reCAPTCHA] Missing RECAPTCHA_API_KEY or NEXT_PUBLIC_RECAPTCHA_SITE_KEY.",
-    );
-    return { success: false, score: 0, reasons: ["missing_configuration"] };
-  }
-
-  try {
-    const response = await fetch(
-      `https://recaptchaenterprise.googleapis.com/v1/projects/${RECAPTCHA_PROJECT_ID}/assessments?key=${RECAPTCHA_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          event: {
-            token,
-            expectedAction,
-            siteKey: RECAPTCHA_SITE_KEY,
-          },
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error("[reCAPTCHA] API responded with an error:", errorData);
-      return { success: false, score: 0, reasons: ["api_error"] };
-    }
-
-    const data = await response.json();
-    const tokenProperties = data.tokenProperties ?? {};
-    const riskAnalysis = data.riskAnalysis ?? {};
-
-    const isValid = tokenProperties.valid === true;
-    const actionMatches =
-      !tokenProperties.action || tokenProperties.action === expectedAction;
-    const score = typeof riskAnalysis.score === "number" ? riskAnalysis.score : 0;
-    const reasons: string[] = riskAnalysis.reasons ?? [];
-
-    const meetsThreshold = score >= RECAPTCHA_MIN_SCORE;
-
-    return {
-      success: isValid && actionMatches && meetsThreshold,
-      score,
-      reasons,
-    };
-  } catch (error) {
-    console.error("[reCAPTCHA] Unexpected verification error:", error);
-    return { success: false, score: 0, reasons: ["verification_error"] };
-  }
+if (!ALTCHA_SECRET) {
+  console.warn("[ALTCHA] ALTCHA_SECRET is not configured. Verification will fail.");
 }
 
 async function submitToHubSpot(payload: LeadSubmitPayload) {
@@ -541,7 +464,9 @@ async function sendDossierEmail(
 
 export async function POST(request: NextRequest) {
   try {
-    const payload = (await request.json()) as LeadSubmitPayload;
+    const payload = (await request.json()) as LeadSubmitPayload & {
+      altcha_payload?: string;
+    };
 
     if (
       !payload.firstName ||
@@ -563,21 +488,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const recaptchaResult = await verifyRecaptchaToken(
-      payload.recaptchaToken,
-      RECAPTCHA_ACTION,
-    );
+    const altchaPayload =
+      payload.altchaPayload ?? payload.altcha_payload ?? null;
 
-    if (!recaptchaResult.success) {
+    if (!altchaPayload) {
       return NextResponse.json(
-        {
-          error: "Verificación de seguridad fallida",
-          details: {
-            recaptcha_score: recaptchaResult.score,
-            recaptcha_reasons: recaptchaResult.reasons,
-          },
-        },
-        { status: 403 },
+        { error: "Falta la verificación ALTCHA" },
+        { status: 400 },
+      );
+    }
+
+    if (!ALTCHA_SECRET) {
+      return NextResponse.json(
+        { error: "ALTCHA no está configurado en el backend" },
+        { status: 500 },
+      );
+    }
+
+    try {
+      const isValid = await verifyServerSignature(altchaPayload, ALTCHA_SECRET);
+      if (!isValid) {
+        return NextResponse.json(
+          { error: "Verificación ALTCHA inválida" },
+          { status: 400 },
+        );
+      }
+    } catch (error) {
+      console.error("[ALTCHA] Error verificando payload:", error);
+      return NextResponse.json(
+        { error: "No se pudo verificar ALTCHA" },
+        { status: 400 },
       );
     }
 
@@ -612,8 +552,6 @@ export async function POST(request: NextRequest) {
       pdf_url: pdfUrl,
       pdf_local_path: pdfLocalPath,
       pdf_error: pdfError,
-      recaptcha_score: recaptchaResult.score,
-      recaptcha_reasons: recaptchaResult.reasons,
       message:
         hubspotSuccess && pdfSuccess
           ? "Lead procesado correctamente. Revisa tu email."
