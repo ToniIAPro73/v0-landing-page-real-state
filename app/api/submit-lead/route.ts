@@ -131,13 +131,15 @@ async function personalizePDF(payload: LeadSubmitPayload) {
     return { success: false, pdf_delivery_url: null };
   }
 
-  console.info(
-    `[personalizePDF] Storage mode: ${
-      useS3Storage && s3Client && s3Config.bucket
-        ? `S3 bucket "${s3Config.bucket}"`
-        : `local directory "${LOCAL_PDF_OUTPUT_DIR}"`
-    }`,
-  );
+  if (useS3Storage && s3Client && s3Config.bucket) {
+    console.info(
+      `[personalizePDF] Storage mode: S3 bucket "${s3Config.bucket}" (region ${s3Config.region})`,
+    );
+  } else {
+    console.info(
+      `[personalizePDF] Storage mode: local directory ${JSON.stringify(LOCAL_PDF_OUTPUT_DIR)}`,
+    );
+  }
 
   const displayName =
     payload.fullName?.trim() ||
@@ -232,9 +234,12 @@ async function personalizePDF(payload: LeadSubmitPayload) {
 
     try {
       const outputPath = path.join(LOCAL_PDF_OUTPUT_DIR, outputFilename);
+      console.info(
+        `[personalizePDF] Writing dossier to ${JSON.stringify(outputPath)}`,
+      );
       await fs.writeFile(outputPath, pdfBuffer);
       console.info(
-        `[personalizePDF] Saved dossier locally at ${outputPath}`,
+        `[personalizePDF] Saved dossier locally at ${JSON.stringify(outputPath)}`,
       );
 
       return {
