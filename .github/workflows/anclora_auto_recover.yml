@@ -1,0 +1,66 @@
+name: ⚓ Anclora | Auto Recover Main Branch
+
+on:
+  schedule:
+    # Ejecuta todos los días a las 03:00 UTC
+    - cron: "0 3 * * *"
+  workflow_dispatch: # Permite ejecución manual desde GitHub Actions
+
+jobs:
+  recover-main:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Permite commits y push
+    steps:
+      - name: 🔹 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Clona todo el historial de Git
+
+      - name: ⚙️ Set up PowerShell
+        run: |
+          # Install PowerShell on Ubuntu
+          wget -q "https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb"
+          sudo dpkg -i packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo apt-get install -y powershell
+
+      - name: 🧭 Detect current date and create backup branch
+        id: backup
+        run: |
+          echo "📦 Creando copia de seguridad de main..."
+          TS=$(date +"%Y%m%d-%H%M%S")
+          BACKUP_BRANCH="backup/main-${TS}"
+          git fetch origin
+          git checkout main
+          git pull origin main
+          git checkout -b "$BACKUP_BRANCH"
+          git push origin "$BACKUP_BRANCH"
+          echo "✅ Backup branch created: $BACKUP_BRANCH"
+
+      - name: 📥 Ensure recovery script exists
+        run: |
+          if [ ! -f "scripts/anclora_git_recover_cli.ps1" ]; then
+            echo "Script no encontrado, descargando..."
+            mkdir -p scripts
+            curl -L -o scripts/anclora_git_recover_cli.ps1 \
+              https://raw.githubusercontent.com/ToniIAPro73/v0-landing-page-real-state/main/scripts/anclora_git_recover_cli.ps1
+          fi
+
+      - name: 🔄 Restore main branch from Claude branch
+        shell: pwsh
+        run: |
+          ./scripts/anclora_git_recover_cli.ps1 `
+            -Mode mainFromBranch `
+            -Source "claude/playa-viva-landing-page-011CUsPXiqxuxCxUpCqy83GB" `
+            -AutoConfirm $true
+
+      - name: ✅ Verification summary
+        run: |
+          echo "🧭 Verificando última sincronización..."
+          git checkout main
+          git status
+          echo "Último commit:"
+          git log -1 --oneline
+          echo "───────────────────────────────"
+          echo "✅ Main restaurado y backup remoto creado correctamente."
