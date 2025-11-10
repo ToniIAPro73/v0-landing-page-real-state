@@ -15,7 +15,7 @@ import {
   resolveS3Config,
   shouldUseS3Storage,
 } from "@/lib/dossier-storage";
-import { verifyServerSignature } from "altcha";
+import { verifyAltchaPayload } from "@/lib/altcha";
 
 export const runtime = "nodejs";
 
@@ -43,13 +43,14 @@ const resendClient = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
-const PDF_BASE_PATH = path.join(
+const PDF_BASE_DIR = path.join(
   process.cwd(),
   "public",
   "assets",
   "dossier",
-  "Dossier-Personalizado.pdf",
 );
+const PDF_BASE_FILE_NAME = "Dossier-Personalizado.pdf";
+const PDF_BASE_PATH = path.join(PDF_BASE_DIR, PDF_BASE_FILE_NAME);
 const LOCAL_PDF_OUTPUT_DIR = getLocalDossierDir();
 const s3Config = resolveS3Config();
 const useS3Storage = shouldUseS3Storage(s3Config);
@@ -67,6 +68,7 @@ const s3Client = useS3Storage && s3Config.bucket
 const PDF_FIELD_NAME = "nombre_personalizacion_lead";
 const PDF_STORAGE_PREFIX = "dossiers";
 const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
+const FALLBACK_PDF_FILES = ["Dossier-Playa-Viva-ES.pdf"];
 
 if (!ALTCHA_SECRET) {
   console.warn("[ALTCHA] ALTCHA_SECRET is not configured. Verification will fail.");
@@ -138,9 +140,8 @@ type PdfResult = {
 };
 
 async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
-  try {
-    await fs.access(PDF_BASE_PATH);
-  } catch {
+  const basePdfPath = await resolveBasePdfPath();
+  if (!basePdfPath) {
     console.error(`[personalizePDF] Base PDF not found at ${PDF_BASE_PATH}`);
     return {
       success: false,
@@ -169,7 +170,7 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
   const outputPath = path.join(PDF_OUTPUT_DIR, outputFilename);
 
   try {
-    const basePdfBytes = await fs.readFile(PDF_BASE_PATH);
+    const basePdfBytes = await fs.readFile(basePdfPath);
     const pdfDoc = await PDFDocument.load(basePdfBytes);
     const form = pdfDoc.getForm();
     let fieldFilled = false;
@@ -506,7 +507,7 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      const isValid = await verifyServerSignature(altchaPayload, ALTCHA_SECRET);
+      const isValid = verifyAltchaPayload(altchaPayload, ALTCHA_SECRET);
       if (!isValid) {
         return NextResponse.json(
           { error: "Verificación ALTCHA inválida" },

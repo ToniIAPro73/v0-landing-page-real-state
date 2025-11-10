@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { randomInt } from "crypto";
-import { createChallenge } from "altcha/server";
+import { createAltchaChallenge } from "@/lib/altcha";
 
 const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
 const ALTCHA_CHALLENGE_TTL = Number(
@@ -22,10 +21,8 @@ export async function GET() {
   }
 
   try {
-    const challenge = createChallenge({
-      hmacKey: ALTCHA_SECRET,
-      number: randomInt(0, 100000),
-      expires: Date.now() + ALTCHA_CHALLENGE_TTL * 1000,
+    const challenge = createAltchaChallenge(ALTCHA_SECRET, {
+      ttlSeconds: ALTCHA_CHALLENGE_TTL,
     });
 
     return NextResponse.json(challenge);
