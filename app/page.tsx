@@ -22,8 +22,6 @@ import {
   ShieldCheck,
   Bot,
 } from "lucide-react";
-import "altcha/i18n/all";
-
 const ALTCHA_TRANSLATIONS: Record<
   "es" | "en",
   {
@@ -252,19 +250,37 @@ export default function PlayaVivaLanding() {
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !(globalThis as any).altchaI18n) {
-      return;
-    }
+    if (typeof window === "undefined") return;
+    let cancelled = false;
 
-    const registry = (globalThis as any).altchaI18n;
-    (["es", "en"] as const).forEach((locale) => {
-      const current = registry.get(locale) ?? {};
-      registry.set(locale, {
-        ...current,
-        ...ALTCHA_TRANSLATIONS[locale],
+    (async () => {
+      const globalAny = window as any;
+      if (!globalAny.__altchaI18nLoaded) {
+        try {
+          await import("altcha/i18n/all");
+          globalAny.__altchaI18nLoaded = true;
+        } catch (error) {
+          console.error("[ALTCHA] Unable to load i18n bundle:", error);
+          return;
+        }
+      }
+
+      if (cancelled) return;
+      const registry = globalAny.altchaI18n;
+      if (!registry) return;
+
+      (["es", "en"] as const).forEach((locale) => {
+        registry.set(locale, {
+          ...(registry.get(locale) ?? {}),
+          ...ALTCHA_TRANSLATIONS[locale],
+        });
       });
-    });
-  }, []);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [language]);
 
   const wynnEffectRef = useRef<HTMLDivElement>(null);
   const investmentRef = useRef<HTMLDivElement>(null);
@@ -1471,6 +1487,7 @@ const orchestrateLeadAutomation = async (
         src="https://cdn.jsdelivr.net/npm/altcha/dist/altcha.min.js"
         type="module"
         strategy="afterInteractive"
+        crossOrigin="anonymous"
       />
       {/* Language Toggle - Fixed Bottom Right */}
       <div className="fixed bottom-6 right-6 z-100 flex flex-col items-end gap-3">
