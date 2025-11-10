@@ -1,17 +1,16 @@
 import json
-import os
 import sys
 import subprocess
-import time
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 # Type imports for static analysis (used for type checking tools)
 if TYPE_CHECKING: # pragma: no cover
     import requests
     from pypdf import PdfReader, PdfWriter
 
-QUIET_MODE = False
+# Global variable declaration
+QUIET_MODE: bool = False
 
 def log(message: str) -> None:
     """Print to stdout or stderr depending on execution mode."""
@@ -23,12 +22,12 @@ def install_package(package_name):
     """Helper function to install packages"""
     try:
         # Use sys.executable to ensure the package is installed to the correct environment
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package_name], 
-                              stdout=subprocess.DEVNULL, 
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package_name],
+                              stdout=subprocess.DEVNULL,
                               stderr=subprocess.DEVNULL)
         return True
-    except subprocess.CalledProcessError:
-        log(f"Failed to install {package_name}")
+    except subprocess.CalledProcessError as e:
+        log(f"Failed to install {package_name}: {e}")
         return False
 
 # Import dependencies with automatic installation
@@ -70,10 +69,12 @@ def verificar_dependencias():
     """Verificar que todas las dependencias están disponibles"""
     # Esta función ahora solo comprueba que los módulos importados están cargados
     try:
-        requests
-        PdfReader
+        # Verificar que los módulos están disponibles usando hasattr
+        # o intentando acceder a atributos para evitar expresiones no utilizadas
+        hasattr(requests, 'get')
+        hasattr(PdfReader, '__init__')
         return True
-    except NameError as e:
+    except (NameError, AttributeError) as e:
         log(f"Missing dependencies: {str(e)}")
         log("Execute: pip install requests pypdf")
         return False
@@ -223,7 +224,6 @@ if __name__ == "__main__":
     if not sys.stdin.isatty():
         stdin_payload = sys.stdin.read().strip()
 
-    global QUIET_MODE
     QUIET_MODE = bool(stdin_payload)
 
     if stdin_payload:
