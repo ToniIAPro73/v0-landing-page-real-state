@@ -1,14 +1,7 @@
 import os from "os";
 import path from "path";
 
-const DEFAULT_WINDOWS_USER =
-  process.env.USERPROFILE ??
-  path.join("C:", "Users", "Usuario");
-
-const documentsDir =
-  process.platform === "win32"
-    ? path.join(DEFAULT_WINDOWS_USER, "Documents")
-    : path.join(os.homedir(), "Documents");
+const documentsDir = path.join(os.homedir(), "Documents");
 
 const DEFAULT_LOCAL_DIR = path.join(
   documentsDir,
