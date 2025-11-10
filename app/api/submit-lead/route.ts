@@ -69,6 +69,18 @@ const PDF_FIELD_NAME = "nombre_personalizacion_lead";
 const PDF_STORAGE_PREFIX = "dossiers";
 const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
 const FALLBACK_PDF_FILES = ["Dossier-Playa-Viva-ES.pdf"];
+const DOSSIER_ALERT_RECIPIENTS = {
+  es: {
+    email: process.env.DOSSIER_ALERT_EMAIL_ES ?? "tony@uniestate.co.uk",
+    name: "Toni",
+    subject: "Playa Viva • Dossier base no disponible",
+  },
+  en: {
+    email: process.env.DOSSIER_ALERT_EMAIL_EN ?? "michael@uniestate.co.uk",
+    name: "Michael",
+    subject: "Playa Viva • Missing dossier base",
+  },
+};
 
 if (!ALTCHA_SECRET) {
   console.warn("[ALTCHA] ALTCHA_SECRET is not configured. Verification will fail.");
@@ -132,11 +144,38 @@ const sanitizeFileName = (value: string) =>
     .trim()
     .slice(0, 60) || "lead";
 
+async function resolveBasePdfPath(): Promise<string | null> {
+  try {
+    await fs.access(PDF_BASE_PATH);
+    return PDF_BASE_PATH;
+  } catch {
+    // continue to fallbacks
+  }
+
+  try {
+    for (const fallback of FALLBACK_PDF_FILES) {
+      const fallbackPath = path.join(PDF_BASE_DIR, fallback);
+      try {
+        await fs.access(fallbackPath);
+        return fallbackPath;
+      } catch {
+        continue;
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.error("[personalizePDF] Error scanning dossier directory:", error);
+    return null;
+  }
+}
+
 type PdfResult = {
   success: boolean;
   pdf_delivery_url: string | null;
   local_path?: string | null;
   error?: string;
+  missingBase?: boolean;
 };
 
 async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
@@ -147,6 +186,7 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
       success: false,
       pdf_delivery_url: null,
       error: `Base PDF not found at ${PDF_BASE_PATH}`,
+      missingBase: true,
     };
   }
 
@@ -463,6 +503,54 @@ async function sendDossierEmail(
   }
 }
 
+async function sendMissingBaseAlert(payload: LeadSubmitPayload) {
+  if (!resendClient) {
+    console.info(
+      "[sendMissingBaseAlert] RESEND_API_KEY not configured; skipping dossier alert",
+    );
+    return;
+  }
+
+  const language = payload.language === "en" ? "en" : "es";
+  const recipient = DOSSIER_ALERT_RECIPIENTS[language];
+  const leadName =
+    payload.fullName?.trim() ||
+    `${payload.firstName} ${payload.lastName}`.trim() ||
+    "Lead no identificado";
+
+  const greeting = language === "en" ? "Hi" : "Hola";
+  const explanation =
+    language === "en"
+      ? "A dossier request reached the server but the base PDF was missing."
+      : "Se ha recibido una solicitud del dossier personalizado pero el PDF base no estaba disponible.";
+  const footer =
+    language === "en"
+      ? "Please restore `Dossier-Personalizado.pdf` (or `Dossier-Playa-Viva-ES.pdf`) inside `public/assets/dossier/` immediately."
+      : "Por favor, coloca el PDF base `Dossier-Personalizado.pdf` (o `Dossier-Playa-Viva-ES.pdf`) dentro de `public/assets/dossier/` cuanto antes.";
+
+  try {
+    await resendClient.emails.send({
+      from: `Uniestate Playa Viva <${recipient.email}>`,
+      to: recipient.email,
+      subject: recipient.subject,
+      html: `
+        <p>${greeting} ${recipient.name},</p>
+        <p>${explanation}</p>
+        <ul>
+          <li><strong>Nombre:</strong> ${leadName}</li>
+          <li><strong>Email:</strong> ${payload.email}</li>
+          <li><strong>Idioma:</strong> ${language === "en" ? "English" : "Español"}</li>
+          <li><strong>Página:</strong> ${payload.pageUri || "https://landing-page-playa-viva.vercel.app"}</li>
+        </ul>
+        <p>${footer}</p>
+        <p>Cualquiera de los dos PDFs debe estar disponible para que el lead reciba su dossier.</p>
+      `,
+    });
+  } catch (error) {
+    console.error("[sendMissingBaseAlert] Failed to send alert:", error);
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const payload = (await request.json()) as LeadSubmitPayload & {
@@ -541,10 +629,21 @@ export async function POST(request: NextRequest) {
             ? pdfResult.reason.message
             : String(pdfResult.reason)
           : pdfValue?.error ?? null;
+    const basePdfMissing = pdfValue?.missingBase ?? false;
+
+    if (basePdfMissing) {
+      void sendMissingBaseAlert(payload);
+    }
 
     if (pdfSuccess && pdfUrl) {
       await sendDossierEmail(payload, pdfUrl);
     }
+
+    const message = basePdfMissing
+      ? "Nuestro dossier personalizado se encuentra en mejora, vuelve a intentarlo en unos minutos."
+      : hubspotSuccess && pdfSuccess
+        ? "Lead procesado correctamente. Revisa tu email."
+        : "Lead parcialmente procesado. Revisa los registros para más detalle.";
 
     return NextResponse.json({
       success: hubspotSuccess && pdfSuccess,
@@ -553,10 +652,7 @@ export async function POST(request: NextRequest) {
       pdf_url: pdfUrl,
       pdf_local_path: pdfLocalPath,
       pdf_error: pdfError,
-      message:
-        hubspotSuccess && pdfSuccess
-          ? "Lead procesado correctamente. Revisa tu email."
-          : "Lead parcialmente procesado. Revisa los registros para más detalle.",
+      message,
     });
   } catch (error) {
     console.error("[submit-lead] Error:", error);

@@ -1,21 +1,3 @@
-clave de sitio web:
-6LdVoAcsAAAAABmGUpMvdZoVrjje45Xbq62lT5sm
-
-clave secreta:
-6LdVoAcsAAAAADwQDx9nZWWT3dQ883gO6hSbvAnK
-
-clave API render:
-playa-viva-prod:
-re_boM9WsG9_NUGqCcqv3vRncqSaJ9nWuKq6
-
-Endpoint: s3.eu-west-4.idrivee2.com
-Region Code: eu-west-4
-Access Key ID: tIXYZHGuuqtMG9IcCSvy
-Secret Access Key: UqrPCeF8UzchMQagrT319y7txyuxCocGz4FT0wwN
-
-
-
-
 Asunto: Tu Dossier Personalizado de Playa Viva | Siguiente Paso
 
 Cuerpo:
@@ -45,4 +27,7 @@ Quedo a tu disposición.
 
 Saludos,
 
-Tony Agente Oficial, Uniestate UK tony@uniestate.co.uk
+-- Para email en español:
+Toni, Agente Oficial de Uniestate UK (email: tony@uniestate.co.uk)
+-- Para emial en inglés:
+Michael, Official Agent of Unistate UK (email: michael@uniestate.co.uk) 
