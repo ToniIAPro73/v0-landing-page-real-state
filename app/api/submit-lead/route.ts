@@ -4,6 +4,16 @@ import path from "path";
 import { randomUUID } from "crypto";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { Resend } from "resend";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import {
+  getLocalDossierDir,
+  resolveS3Config,
+} from "@/lib/dossier-storage";
 
 export const runtime = "nodejs";
 
@@ -37,14 +47,28 @@ const PDF_BASE_PATH = path.join(
   "dossier",
   "Dossier-Personalizado.pdf",
 );
-const PDF_OUTPUT_DIR = path.join(
-  process.cwd(),
-  "public",
-  "assets",
-  "dossier",
-  "dossiers_generados",
+const LOCAL_PDF_OUTPUT_DIR = getLocalDossierDir();
+const s3Config = resolveS3Config();
+const useS3Storage = Boolean(
+  s3Config.endpoint &&
+    s3Config.bucket &&
+    s3Config.region &&
+    s3Config.accessKeyId &&
+    s3Config.secretAccessKey,
 );
+const s3Client = useS3Storage
+  ? new S3Client({
+      region: s3Config.region as string,
+      endpoint: s3Config.endpoint,
+      credentials: {
+        accessKeyId: s3Config.accessKeyId as string,
+        secretAccessKey: s3Config.secretAccessKey as string,
+      },
+      forcePathStyle: true,
+    })
+  : null;
 const PDF_FIELD_NAME = "nombre_personalizacion_lead";
+const PDF_STORAGE_PREFIX = "dossiers";
 
 async function submitToHubSpot(payload: LeadSubmitPayload) {
   const fields = [
@@ -112,13 +136,6 @@ async function personalizePDF(payload: LeadSubmitPayload) {
     return { success: false, pdf_delivery_url: null };
   }
 
-  try {
-    await fs.mkdir(PDF_OUTPUT_DIR, { recursive: true });
-  } catch (error) {
-    console.error("[personalizePDF] Cannot create output dir:", error);
-    return { success: false, pdf_delivery_url: null };
-  }
-
   const displayName =
     payload.fullName?.trim() ||
     `${payload.firstName} ${payload.lastName}`.trim() ||
@@ -161,12 +178,72 @@ async function personalizePDF(payload: LeadSubmitPayload) {
     }
 
     const pdfBytes = await pdfDoc.save();
-    await fs.writeFile(outputPath, Buffer.from(pdfBytes));
+    const pdfBuffer = Buffer.from(pdfBytes);
 
-    return {
-      success: true,
-      pdf_delivery_url: `/assets/dossier/dossiers_generados/${outputFilename}`,
-    };
+    if (useS3Storage && s3Client && s3Config.bucket) {
+      const key = `${PDF_STORAGE_PREFIX}/${outputFilename}`;
+      try {
+        await s3Client.send(
+          new PutObjectCommand({
+            Bucket: s3Config.bucket,
+            Key: key,
+            Body: pdfBuffer,
+            ContentType: "application/pdf",
+          }),
+        );
+
+        const signedUrl = await getSignedUrl(
+          s3Client,
+          new GetObjectCommand({
+            Bucket: s3Config.bucket,
+            Key: key,
+          }),
+          { expiresIn: 60 * 60 * 24 },
+        );
+
+        return {
+          success: true,
+          pdf_delivery_url: signedUrl,
+        };
+      } catch (error) {
+        console.error(
+          "[personalizePDF] Error uploading dossier to S3:",
+          error,
+        );
+        return { success: false, pdf_delivery_url: null };
+      }
+    }
+
+    try {
+      await fs.mkdir(LOCAL_PDF_OUTPUT_DIR, { recursive: true });
+    } catch (error) {
+      console.error(
+        "[personalizePDF] Cannot create local dossier directory:",
+        error,
+      );
+      return { success: false, pdf_delivery_url: null };
+    }
+
+    try {
+      const outputPath = path.join(LOCAL_PDF_OUTPUT_DIR, outputFilename);
+      await fs.writeFile(outputPath, pdfBuffer);
+      console.info(
+        `[personalizePDF] Saved dossier locally at ${outputPath}`,
+      );
+
+      return {
+        success: true,
+        pdf_delivery_url: `/api/local-dossiers/${encodeURIComponent(
+          outputFilename,
+        )}`,
+      };
+    } catch (error) {
+      console.error(
+        "[personalizePDF] Error writing dossier locally:",
+        error,
+      );
+      return { success: false, pdf_delivery_url: null };
+    }
   } catch (error) {
     console.error("[personalizePDF] Error customizing PDF:", error);
     return { success: false, pdf_delivery_url: null };
@@ -179,9 +256,20 @@ async function sendDossierEmail(
 ) {
   if (!pdfUrl) return;
 
+  const siteOrigin = (() => {
+    if (payload.pageUri) {
+      try {
+        return new URL(payload.pageUri).origin;
+      } catch {
+        return SITE_URL;
+      }
+    }
+    return SITE_URL;
+  })();
+
   const absoluteUrl = pdfUrl.startsWith("http")
     ? pdfUrl
-    : `${SITE_URL}${pdfUrl}`;
+    : `${siteOrigin}${pdfUrl}`;
 
   if (!resendClient) {
     console.warn("[sendDossierEmail] RESEND_API_KEY not configured.");
