@@ -4,7 +4,7 @@
 
 ### Opción A: Script Automático
 
-```bash
+\`\`\`bash
 # 1. Descargar todos los archivos en una carpeta
 # 2. Navegar a la raíz de tu proyecto Next.js
 cd tu-proyecto-playa-viva
@@ -15,11 +15,11 @@ bash install.sh
 
 # 5. Iniciar servidor
 npm run dev
-```
+\`\`\`
 
 ### Opción B: Manual (3 pasos)
 
-```bash
+\`\`\`bash
 # Paso 1: Crear directorios
 mkdir -p src/app/api/submit-lead public/dossiers scripts
 
@@ -34,7 +34,7 @@ NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 HUBSPOT_FORM_GUID=34afefab-a031-4516-838e-f0edf0b98bc7
 NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
 EOF
-```
+\`\`\`
 
 ---
 
@@ -52,7 +52,7 @@ EOF
 
 ## ✅ Checklist de Verificación
 
-```
+\`\`\`
 □ Archivos copiados a ubicaciones correctas
 □ .env.local configurado con variables correctas
 □ npm run dev ejecutándose sin errores
@@ -60,27 +60,27 @@ EOF
 □ Formulario envía datos (verificar en Network tab)
 □ Lead aparece en HubSpot Contacts
 □ Original Source muestra atribución correcta
-```
+\`\`\`
 
 ---
 
 ## 🧪 Test Rápido
 
 ### 1. Iniciar servidor
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 ### 2. Abrir navegador
-```
+\`\`\`
 http://localhost:3000
-```
+\`\`\`
 
 ### 3. Verificar cookie HubSpot
 Abrir DevTools > Console y ejecutar:
-```javascript
+\`\`\`javascript
 document.cookie.split(';').find(c => c.includes('hubspotutk'))
-```
+\`\`\`
 
 Debería mostrar: `" hubspotutk=XXXXXXXXXX"`
 
@@ -109,16 +109,16 @@ Debería mostrar: `" hubspotutk=XXXXXXXXXX"`
 ## 🎯 Cambios Principales
 
 ### Antes
-```typescript
+\`\`\`typescript
 // Simulación
 const orchestrateLeadAutomation = async (payload) => {
     console.log('[Automation] HubSpot API Dispatch', payload);
     // ... solo console.log
 };
-```
+\`\`\`
 
 ### Después
-```typescript
+\`\`\`typescript
 // Envío real a HubSpot
 const orchestrateLeadAutomation = async (payload) => {
     const hubspotutk = getHubSpotCookie(); // ← Captura cookie
@@ -133,36 +133,36 @@ const orchestrateLeadAutomation = async (payload) => {
     
     return await response.json();
 };
-```
+\`\`\`
 
 ---
 
 ## 🔍 Troubleshooting Rápido
 
 ### Error: "hubspotutk not found"
-```bash
+\`\`\`bash
 # Verificar que HubSpot script está cargando
 # Abrir DevTools > Network
 # Buscar: hs-scripts.com
 # Si no aparece, verificar layout.tsx
-```
+\`\`\`
 
 ### Error: "Cannot POST /api/submit-lead"
-```bash
+\`\`\`bash
 # Verificar que route.ts está en ubicación correcta
 ls src/app/api/submit-lead/route.ts
 
 # Si no existe, copiar manualmente
 cp route.ts src/app/api/submit-lead/route.ts
-```
+\`\`\`
 
 ### Lead no aparece en HubSpot
-```bash
+\`\`\`bash
 # 1. Verificar en HubSpot > Contacts > All contacts
 # 2. Buscar por email exacto
 # 3. Si existe pero no visible, puede estar en spam
 # 4. Revisar logs en DevTools > Console
-```
+\`\`\`
 
 ---
 
@@ -176,7 +176,7 @@ cp route.ts src/app/api/submit-lead/route.ts
 
 ## 🚀 Deploy a Producción
 
-```bash
+\`\`\`bash
 # Configurar variables en Vercel
 vercel env add NEXT_PUBLIC_HUBSPOT_PORTAL_ID
 vercel env add HUBSPOT_FORM_GUID
@@ -184,7 +184,7 @@ vercel env add NEXT_PUBLIC_SITE_URL
 
 # Deploy
 vercel --prod
-```
+\`\`\`
 
 ---
 
@@ -215,9 +215,9 @@ vercel --prod
 
 4. **Atribución:**
    - Usa UTM parameters para pruebas:
-   ```
+   \`\`\`
    ?utm_source=google&utm_medium=cpc&utm_campaign=test
-   ```
+   \`\`\`
    - Verifica "Original Source" en contacto HubSpot
 
 ---

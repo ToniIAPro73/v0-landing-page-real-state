@@ -8,7 +8,7 @@
 
 ## ⚡ Inicio Rápido (5 minutos)
 
-```bash
+\`\`\`bash
 # 1. Ejecutar instalación automática
 bash install.sh
 
@@ -17,7 +17,7 @@ npm run dev
 
 # 3. Probar formulario
 [Test URL](http://localhost:3000)
-```
+\`\`\`
 
 **✅ Listo.** El formulario ahora envía leads reales a HubSpot con atribución correcta.
 
@@ -102,15 +102,15 @@ npm run dev
 
 ### ANTES (Simulación):
 
-```text
+\`\`\`text
 Usuario → Formulario → console.log() → Nada
-```
+\`\`\`
 
 ### DESPUÉS (Funcional):
 
-```text
+\`\`\`text
 Usuario → Formulario → API Route → HubSpot (con atribución) + PDF + Email
-```
+\`\`\`
 
 ---
 
@@ -132,11 +132,11 @@ Usuario → Formulario → API Route → HubSpot (con atribución) + PDF + Email
 
 ### Variables de Entorno (.env.local):
 
-```bash
+\`\`\`bash
 NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 HUBSPOT_FORM_GUID=34afefab-a031-4516-838e-f0edf0b98bc7
 NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
-```
+\`\`\`
 
 ### Archivos Mínimos:
 
@@ -160,10 +160,10 @@ NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
 
 Abrir DevTools > Console:
 
-```javascript
+\`\`\`javascript
 document.cookie.split(";").find((c) => c.includes("hubspotutk"));
 // Debería retornar: " hubspotutk=1697224219759"
-```
+\`\`\`
 
 ### 2. Probar Formulario
 
@@ -191,7 +191,7 @@ document.cookie.split(";").find((c) => c.includes("hubspotutk"));
 
 ## 🚀 Deploy a Producción
 
-```bash
+\`\`\`bash
 # Configurar variables en Vercel
 vercel env add NEXT_PUBLIC_HUBSPOT_PORTAL_ID
 vercel env add HUBSPOT_FORM_GUID
@@ -199,7 +199,7 @@ vercel env add NEXT_PUBLIC_SITE_URL
 
 # Deploy
 vercel --prod
-```
+\`\`\`
 
 ---
 
@@ -207,30 +207,30 @@ vercel --prod
 
 ### Cookie no se genera
 
-```javascript
+\`\`\`javascript
 // Verificar que HubSpot script está en layout.tsx
 // Esperar 10-15 segundos después de cargar página
-```
+\`\`\`
 
 ### Lead con "Offline sources"
 
-```text
+\`\`\`text
 Problema: hubspotutk no se envió
 Solución: Verificar orchestrateLeadAutomation() captura cookie
-```
+\`\`\`
 
 ### API route no responde
 
-```bash
+\`\`\`bash
 # Verificar ubicación correcta
 ls src/app/api/submit-lead/route.ts
-```
+\`\`\`
 
 ---
 
 ## 📊 Estructura del Proyecto
 
-```tree
+\`\`\`tree
 tu-proyecto/
 ├── src/
 │   ├── app/
@@ -245,13 +245,13 @@ tu-proyecto/
 ├── public/
 │   └── dossiers/                       ← Crear carpeta
 └── .env.local                          ← Configurar ✅
-```
+\`\`\`
 
 ---
 
 ## ✅ Checklist de Implementación
 
-```text
+\`\`\`text
 Instalación:
 □ Archivos copiados a ubicaciones correctas
 □ .env.local configurado
@@ -275,7 +275,7 @@ Deploy:
 □ Deploy exitoso
 □ Test en producción
 □ Verificación final en HubSpot
-```
+\`\`\`
 
 ---
 

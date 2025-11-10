@@ -29,25 +29,25 @@
 
 **Si usas Node.js:**
 
-```bash
+\`\`\`bash
 npm install altcha
-```
+\`\`\`
 
 **Si usas Python:**
 
-```bash
+\`\`\`bash
 pip install altcha
-```
+\`\`\`
 
 **Verificación:**
 
-```bash
+\`\`\`bash
 # Node.js
 node -e "console.log(require('altcha'))"
 
 # Python
 python -c "import altcha; print('OK')"
-```
+\`\`\`
 
 ---
 
@@ -59,7 +59,7 @@ python -c "import altcha; print('OK')"
 
 **Código Node.js/Express:**
 
-```javascript
+\`\`\`javascript
 const express = require("express");
 const { createChallenge } = require("altcha");
 const app = express();
@@ -83,11 +83,11 @@ app.get("/api/altcha/challenge", (req, res) => {
     res.status(500).json({ error: "Failed to create challenge" });
   }
 });
-```
+\`\`\`
 
 **Código Python/Flask:**
 
-```python
+\`\`\`python
 from flask import Flask, jsonify
 from altcha import create_challenge
 import os
@@ -111,11 +111,11 @@ def get_challenge():
     except Exception as e:
         print(f'Error creating ALTCHA challenge: {e}')
         return jsonify({'error': 'Failed to create challenge'}), 500
-```
+\`\`\`
 
 **Verificación:**
 
-```bash
+\`\`\`bash
 curl http://localhost:3000/api/altcha/challenge
 
 # Debe devolver:
@@ -125,7 +125,7 @@ curl http://localhost:3000/api/altcha/challenge
   "salt": "...",
   "signature": "..."
 }
-```
+\`\`\`
 
 ---
 
@@ -135,7 +135,7 @@ curl http://localhost:3000/api/altcha/challenge
 
 **Código Node.js/Express:**
 
-```javascript
+\`\`\`javascript
 const { verifyServerSignature } = require("altcha");
 
 app.post("/api/submit-lead", async (req, res) => {
@@ -172,11 +172,11 @@ app.post("/api/submit-lead", async (req, res) => {
   // 3. Continuar con submit a HubSpot (código existente)
   // ... tu código actual de HubSpot aquí ...
 });
-```
+\`\`\`
 
 **Código Python/Flask:**
 
-```python
+\`\`\`python
 from altcha import verify_server_signature
 
 @app.route('/api/submit-lead', methods=['POST'])
@@ -214,18 +214,18 @@ def submit_lead():
 
     # 3. Continuar con submit a HubSpot (código existente)
     # ... tu código actual aquí ...
-```
+\`\`\`
 
 **Verificación:**
 
-```bash
+\`\`\`bash
 # Test con payload inválido (debe fallar)
 curl -X POST http://localhost:3000/api/submit-lead \
   -d "altcha_payload=invalid" \
   -d "email=test@test.com"
 
 # Debe devolver error 400
-```
+\`\`\`
 
 ---
 
@@ -237,7 +237,7 @@ curl -X POST http://localhost:3000/api/submit-lead \
 
 **Buscar y eliminar:**
 
-```html
+\`\`\`html
 <!-- ELIMINAR ESTO -->
 <script src="https://www.google.com/recaptcha/api.js"></script>
 <script>
@@ -245,15 +245,15 @@ curl -X POST http://localhost:3000/api/submit-lead \
     grecaptcha.execute('YOUR_SITE_KEY', {action: 'submit'})...
   });
 </script>
-```
+\`\`\`
 
 **Buscar en archivos:**
 
-```bash
+\`\`\`bash
 # Encontrar referencias a reCAPTCHA
 grep -r "recaptcha" . --include="*.html" --include="*.js"
 grep -r "grecaptcha" . --include="*.html" --include="*.js"
-```
+\`\`\`
 
 ---
 
@@ -263,7 +263,7 @@ grep -r "grecaptcha" . --include="*.html" --include="*.js"
 
 **Eliminar código JavaScript:**
 
-```javascript
+\`\`\`javascript
 // ELIMINAR TODO ESTO:
 
 // Obtener token de reCAPTCHA
@@ -275,7 +275,7 @@ grecaptcha.ready(function () {
       // ...
     });
 });
-```
+\`\`\`
 
 ---
 
@@ -287,17 +287,17 @@ grecaptcha.ready(function () {
 
 **Añadir script CDN:**
 
-```html
+\`\`\`html
 <!-- Añadir en <head> o antes de </body> -->
 <script
   type="module"
   src="https://cdn.jsdelivr.net/npm/altcha/dist/altcha.min.js"
 ></script>
-```
+\`\`\`
 
 **Añadir widget en formulario:**
 
-```html
+\`\`\`html
 <form id="leadForm" method="POST" action="/api/submit-lead">
   <!-- Campos existentes -->
   <input type="text" name="firstname" required />
@@ -313,15 +313,15 @@ grecaptcha.ready(function () {
 
   <button type="submit">Enviar</button>
 </form>
-```
+\`\`\`
 
 **Verificación:**
 
-```text
+\`\`\`text
 1. Abrir página en navegador
 2. Debe aparecer widget ALTCHA (pequeño box con "Verifying...")
 3. Después de 1-2 segundos: ✓ Verified
-```
+\`\`\`
 
 ---
 
@@ -331,7 +331,7 @@ grecaptcha.ready(function () {
 
 **Código actualizado:**
 
-```javascript
+\`\`\`javascript
 document
   .getElementById("leadForm")
   .addEventListener("submit", async function (e) {
@@ -370,7 +370,7 @@ document
       alert("Error al enviar formulario");
     }
   });
-```
+\`\`\`
 
 ---
 
@@ -380,7 +380,7 @@ document
 
 **Estilos CSS:**
 
-```css
+\`\`\`css
 altcha-widget {
   margin: 20px 0;
   display: block;
@@ -397,11 +397,11 @@ altcha-widget::part(label) {
   font-size: 14px;
   color: #333;
 }
-```
+\`\`\`
 
 **Atributos del widget:**
 
-```html
+\`\`\`html
 <altcha-widget
   challengeurl="/api/altcha/challenge"
   name="altcha_payload"
@@ -409,7 +409,7 @@ altcha-widget::part(label) {
   hidelogo="false"
   strings='{"label":"Verificando...","verified":"✓ Verificado"}'
 ></altcha-widget>
-```
+\`\`\`
 
 ---
 
@@ -421,23 +421,23 @@ altcha-widget::part(label) {
 
 **Crear `.env` file:**
 
-```bash
+\`\`\`bash
 # Generar secret aleatorio
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 # O en Python
 python -c "import secrets; print(secrets.token_hex(32))"
-```
+\`\`\`
 
 **Añadir a `.env`:**
 
-```bash
+\`\`\`bash
 ALTCHA_SECRET=tu_secret_key_aqui_64_caracteres
-```
+\`\`\`
 
 **Verificar en código:**
 
-```javascript
+\`\`\`javascript
 // Node.js
 require("dotenv").config();
 const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
@@ -445,7 +445,7 @@ const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
 if (!ALTCHA_SECRET) {
   throw new Error("ALTCHA_SECRET not configured");
 }
-```
+\`\`\`
 
 ---
 
@@ -465,14 +465,14 @@ if (!ALTCHA_SECRET) {
 
 **Checklist:**
 
-```text
+\`\`\`text
 ✓ Widget aparece correctamente
 ✓ Verifica en 1-3 segundos
 ✓ Submit funciona
 ✓ Backend valida correctamente
 ✓ Lead llega a HubSpot con todos los datos
 ✓ No hay errores en consola
-```
+\`\`\`
 
 ---
 
@@ -482,23 +482,23 @@ if (!ALTCHA_SECRET) {
 
 ### Test 1: Submit sin ALTCHA
 
-```bash
+\`\`\`bash
 curl -X POST http://localhost:3000/api/submit-lead \
   -d "email=test@test.com" \
   -d "firstname=Test"
 
 # Debe devolver: 400 Bad Request
-```
+\`\`\`
 
 ### Test 2: Submit con payload inválido
 
-```bash
+\`\`\`bash
 curl -X POST http://localhost:3000/api/submit-lead \
   -d "altcha_payload=fake_payload" \
   -d "email=test@test.com"
 
 # Debe devolver: 400 Bad Request
-```
+\`\`\`
 
 ### Test 3: Reusar payload antiguo
 
@@ -533,29 +533,29 @@ curl -X POST http://localhost:3000/api/submit-lead \
 
 **Vercel/Netlify:**
 
-```bash
+\`\`\`bash
 # Via CLI
 vercel env add ALTCHA_SECRET
 
 # Via Web UI
 Settings → Environment Variables
 → Add: ALTCHA_SECRET = tu_secret_aqui
-```
+\`\`\`
 
 **Heroku:**
 
-```bash
+\`\`\`bash
 heroku config:set ALTCHA_SECRET=tu_secret_aqui
-```
+\`\`\`
 
 **Verificación:**
 
-```bash
+\`\`\`bash
 # Verificar que existe
 vercel env ls
 # o
 heroku config
-```
+\`\`\`
 
 ---
 
@@ -563,7 +563,7 @@ heroku config
 
 **Acción:**
 
-```bash
+\`\`\`bash
 # Git commit
 git add .
 git commit -m "feat: migrate from reCAPTCHA v3 to ALTCHA"
@@ -573,16 +573,16 @@ git push origin staging
 
 # O deploy directo
 vercel --prod
-```
+\`\`\`
 
 **Verificación:**
 
-```bash
+\`\`\`bash
 # Test en staging URL
 curl https://staging.playaviva-invest.es/api/altcha/challenge
 
 # Debe devolver challenge válido
-```
+\`\`\`
 
 ---
 
@@ -602,7 +602,7 @@ curl https://staging.playaviva-invest.es/api/altcha/challenge
 
 **Acción:**
 
-```bash
+\`\`\`bash
 # Merge a main
 git checkout main
 git merge staging
@@ -610,17 +610,17 @@ git push origin main
 
 # Auto-deploy o manual
 vercel --prod
-```
+\`\`\`
 
 **Anuncio:**
 
-```text
+\`\`\`text
 🎉 ALTCHA implementado en producción
 - reCAPTCHA v3 eliminado
 - GDPR compliant
 - Zero tracking
 - Experiencia de usuario mejorada
-```
+\`\`\`
 
 ---
 
@@ -630,14 +630,14 @@ vercel --prod
 
 **Acción:**
 
-```bash
+\`\`\`bash
 # Cada día durante la primera semana
 vercel logs --follow
 
 # Buscar:
 # - ✅ ALTCHA verified (confirmaciones exitosas)
 # - ❌ ALTCHA verification failed (intentos de spam)
-```
+\`\`\`
 
 **Métricas a seguir:**
 
@@ -653,14 +653,14 @@ vercel logs --follow
 
 **Crear tabla comparativa:**
 
-```tab
+\`\`\`tab
 | Métrica              | reCAPTCHA v3 | ALTCHA |
 |----------------------|--------------|--------|
 | Conversion rate      | X%           | Y%     |
 | Spam submissions     | N            | M      |
 | User complaints      | A            | B      |
 | Page load time       | Xms          | Yms    |
-```
+\`\`\`
 
 ---
 
@@ -668,18 +668,18 @@ vercel logs --follow
 
 ### Opción 1: Rollback inmediato
 
-```bash
+\`\`\`bash
 # Revertir último commit
 git revert HEAD
 git push origin main
 
 # O rollback en Vercel
 vercel rollback
-```
+\`\`\`
 
 ### Opción 2: Mantener ambos temporalmente
 
-```javascript
+\`\`\`javascript
 // Verificar reCAPTCHA O ALTCHA
 const recaptchaToken = req.body["g-recaptcha-response"];
 const altchaPayload = req.body["altcha_payload"];
@@ -693,7 +693,7 @@ if (altchaPayload) {
 } else {
   return error("No CAPTCHA provided");
 }
-```
+\`\`\`
 
 ---
 

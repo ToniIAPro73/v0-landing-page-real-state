@@ -12,7 +12,7 @@
 
 ## 🎯 Arquitectura del Sistema
 
-```text
+\`\`\`text
 ┌─────────────────┐
 │   Formulario    │
 │   (page.tsx)    │
@@ -29,7 +29,7 @@
          ├─── 3a. HubSpot Forms API (atribución)
          │
          └─── 3b. Personalización PDF (Python o TypeScript)
-```
+\`\`\`
 
 ---
 
@@ -37,7 +37,7 @@
 
 ### 1.1 Estructura del proyecto Next.js
 
-```tree
+\`\`\`tree
 tu-proyecto/
 ├── src/
 │   ├── app/
@@ -53,20 +53,20 @@ tu-proyecto/
 ├── scripts/
 │   └── personalizar_dossier.py         ← NUEVO: Script Python
 └── .env.local                          ← Variables de entorno
-```
+\`\`\`
 
 ### 1.2 Crear directorios necesarios
 
-```bash
+\`\`\`bash
 # Desde la raíz del proyecto
 mkdir -p src/app/api/submit-lead
 mkdir -p public/dossiers
 mkdir -p scripts
-```
+\`\`\`
 
 ### 1.3 Copiar archivos
 
-```bash
+\`\`\`bash
 # Copiar API route
 cp route.ts src/app/api/submit-lead/route.ts
 
@@ -75,7 +75,7 @@ cp page.tsx src/app/page.tsx
 
 # Copiar script Python
 cp personalizar_dossier.py scripts/personalizar_dossier.py
-```
+\`\`\`
 
 ---
 
@@ -83,7 +83,7 @@ cp personalizar_dossier.py scripts/personalizar_dossier.py
 
 Crea o actualiza `.env.local`:
 
-```bash
+\`\`\`bash
 # HubSpot
 NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 HUBSPOT_FORM_GUID=34afefab-a031-4516-838e-f0edf0b98bc7
@@ -95,7 +95,7 @@ NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
 RESEND_API_KEY=re_xxxxx
 # O SendGrid:
 # SENDGRID_API_KEY=SG.xxxxx
-```
+\`\`\`
 
 **Nota:** El `HUBSPOT_FORM_GUID` ya está configurado en el código Python y en route.ts.
 
@@ -128,13 +128,13 @@ El script Python busca un campo llamado `nombre_personalizacion_lead` en el PDF.
 **C. Sin personalización (temporal):**
 Si no quieres personalizar aún, comenta las líneas 142-146 en `personalizar_dossier.py`:
 
-```python
+\`\`\`python
 # Comentar estas líneas temporalmente:
 # pdf_writer.update_page_form_field_values(
 #     pdf_writer.pages,
 #     {CAMPO_PDF_A_RELLENAR: personalization_value}
 # )
-```
+\`\`\`
 
 ---
 
@@ -142,7 +142,7 @@ Si no quieres personalizar aún, comenta las líneas 142-146 en `personalizar_do
 
 ### 4.1 Si quieres usar el script Python para personalización
 
-```bash
+\`\`\`bash
 # Instalar Python 3.8+
 python3 --version
 
@@ -152,13 +152,13 @@ pip install requests pypdf
 
 # Probar script
 python3 personalizar_dossier.py
-```
+\`\`\`
 
 ### 4.2 Integrar Python con Next.js
 
 Actualiza `route.ts` línea 58:
 
-```typescript
+\`\`\`typescript
 async function personalizePDF(payload: LeadSubmitPayload): Promise<any> {
   const { spawn } = require("child_process");
 
@@ -206,7 +206,7 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<any> {
     python.stdin.end();
   });
 }
-```
+\`\`\`
 
 ---
 
@@ -214,29 +214,29 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<any> {
 
 ### 5.1 Iniciar servidor desarrollo
 
-```bash
+\`\`\`bash
 npm run dev
 # o
 yarn dev
-```
+\`\`\`
 
 ### 5.2 Abrir navegador
 
-```url
+\`\`\`url
 http://localhost:3000
-```
+\`\`\`
 
 ### 5.3 Verificar HubSpot tracking
 
 **Consola del navegador:**
 
-```javascript
+\`\`\`javascript
 // Ver si la cookie existe
 document.cookie.split(";").find((c) => c.includes("hubspotutk"));
 
 // Debería mostrar algo como:
 // " hubspotutk=1697224219759"
-```
+\`\`\`
 
 ### 5.4 Probar formulario
 
@@ -265,7 +265,7 @@ document.cookie.split(";").find((c) => c.includes("hubspotutk"));
 
 ### 6.1 Configurar variables de entorno en Vercel
 
-```bash
+\`\`\`bash
 # Via CLI
 vercel env add NEXT_PUBLIC_HUBSPOT_PORTAL_ID
 vercel env add HUBSPOT_FORM_GUID
@@ -273,11 +273,11 @@ vercel env add NEXT_PUBLIC_SITE_URL
 
 # O via Dashboard:
 # Vercel Project > Settings > Environment Variables
-```
+\`\`\`
 
 ### 6.2 Deploy
 
-```bash
+\`\`\`bash
 # Deploy a producción
 vercel --prod
 
@@ -285,7 +285,7 @@ vercel --prod
 git add .
 git commit -m "Integración HubSpot Forms API + PDF personalizado"
 git push origin main
-```
+\`\`\`
 
 ### 6.3 Verificar en producción
 
@@ -343,9 +343,9 @@ git push origin main
 
 ### 8.1 Crear UTM tags de prueba
 
-```url
+\`\`\`url
 https://landing-page-playa-viva.vercel.app/?utm_source=google&utm_medium=cpc&utm_campaign=playa_viva_spain&utm_content=test
-```
+\`\`\`
 
 ### 8.2 Verificar en HubSpot
 
@@ -387,13 +387,13 @@ El formulario mantiene el estilo visual de Playa Viva:
 
 ### Opción A: Resend (Recomendado)
 
-```bash
+\`\`\`bash
 npm install resend
-```
+\`\`\`
 
 Actualiza `route.ts`:
 
-```typescript
+\`\`\`typescript
 import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -405,13 +405,13 @@ async function sendDossierEmail(payload: LeadSubmitPayload, pdfUrl: string) {
     html: `<!-- tu HTML aquí -->`,
   });
 }
-```
+\`\`\`
 
 ### Opción B: SendGrid
 
-```bash
+\`\`\`bash
 npm install @sendgrid/mail
-```
+\`\`\`
 
 ---
 

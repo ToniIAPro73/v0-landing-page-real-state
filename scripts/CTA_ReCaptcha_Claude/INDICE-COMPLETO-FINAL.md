@@ -136,31 +136,31 @@
 
 ### Para Implementación Completa (HubSpot + reCAPTCHA):
 
-```
+\`\`\`
 1. README.md ← Vista general
 2. QUICK-START.md ← Setup HubSpot básico
 3. RECAPTCHA-RESUMEN-EJECUTIVO.md ← Overview reCAPTCHA
 4. RECAPTCHA-ENTERPRISE-GUIA.md ← Implementar reCAPTCHA
 5. Testing + Deploy
-```
+\`\`\`
 
 ### Solo HubSpot (Sin reCAPTCHA):
 
-```
+\`\`\`
 1. README.md
 2. QUICK-START.md
 3. README-INTEGRACION-COMPLETA.md
 4. Usar route.ts (sin reCAPTCHA)
-```
+\`\`\`
 
 ### Solo reCAPTCHA (Ya tienes HubSpot):
 
-```
+\`\`\`
 1. RECAPTCHA-RESUMEN-EJECUTIVO.md
 2. RECAPTCHA-ENTERPRISE-GUIA.md
 3. Usar route-recaptcha-enterprise.ts
 4. Actualizar page.tsx con fragmentos
-```
+\`\`\`
 
 ---
 
@@ -181,7 +181,7 @@
 ## ✅ CHECKLIST DE IMPLEMENTACIÓN
 
 ### HubSpot Forms API:
-```
+\`\`\`
 □ page.tsx actualizado
 □ route.ts implementado
 □ .env.local configurado
@@ -189,10 +189,10 @@
 □ Cookie hubspotutk capturada
 □ Lead aparece en HubSpot
 □ Original Source correcta
-```
+\`\`\`
 
 ### reCAPTCHA Enterprise (Opcional):
-```
+\`\`\`
 □ API Key obtenida de Google Cloud
 □ RECAPTCHA_API_KEY en .env.local
 □ page.tsx actualizado (5 cambios)
@@ -202,7 +202,7 @@
 □ Token se genera al enviar
 □ Score > 0.5 validado en backend
 □ Deploy con nueva variable en Vercel
-```
+\`\`\`
 
 ---
 
@@ -211,14 +211,14 @@
 ### Variables de Entorno (.env.local):
 
 **Solo HubSpot:**
-```bash
+\`\`\`bash
 NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 HUBSPOT_FORM_GUID=34afefab-a031-4516-838e-f0edf0b98bc7
 NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
-```
+\`\`\`
 
 **HubSpot + reCAPTCHA:**
-```bash
+\`\`\`bash
 # HubSpot
 NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 HUBSPOT_FORM_GUID=34afefab-a031-4516-838e-f0edf0b98bc7
@@ -226,7 +226,7 @@ NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
 
 # reCAPTCHA Enterprise (NUEVO)
 RECAPTCHA_API_KEY=AIzaSyBxxxxxxxxxxxxxxxxxxxxxx
-```
+\`\`\`
 
 ---
 
@@ -234,7 +234,7 @@ RECAPTCHA_API_KEY=AIzaSyBxxxxxxxxxxxxxxxxxxxxxx
 
 ### Opción A: HubSpot Solo (Sin reCAPTCHA)
 
-```bash
+\`\`\`bash
 # 1. Instalación automática
 bash install.sh
 
@@ -243,11 +243,11 @@ npm run dev
 
 # 3. Test formulario
 # http://localhost:3000
-```
+\`\`\`
 
 ### Opción B: HubSpot + reCAPTCHA Enterprise
 
-```bash
+\`\`\`bash
 # 1. Setup HubSpot primero
 bash install.sh
 npm run dev
@@ -269,7 +269,7 @@ npm run dev
 # 6. Deploy
 vercel env add RECAPTCHA_API_KEY
 vercel --prod
-```
+\`\`\`
 
 ---
 

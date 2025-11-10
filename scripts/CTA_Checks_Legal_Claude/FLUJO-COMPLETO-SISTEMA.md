@@ -2,7 +2,7 @@
 
 ## 📊 Diagrama de Arquitectura
 
-```text
+\`\`\`text
 ┌─────────────────────────────────────────────────────────────────┐
 │                    NAVEGADOR DEL USUARIO                         │
 │                                                                  │
@@ -225,7 +225,7 @@
 │  inversiones@uniestate.co.uk                                    │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
-```
+\`\`\`
 
 ---
 
@@ -233,12 +233,12 @@
 
 ### 1. Cookie hubspotutk
 
-```text
+\`\`\`text
 Creación:    HubSpot Script (línea de script en layout.tsx)
 Lectura:     orchestrateLeadAutomation() en page.tsx
 Envío:       context.hutk en route.ts
 Uso:         Atribución de Original Source en HubSpot
-```
+\`\`\`
 
 ### Por qué es crítico
 
@@ -252,23 +252,23 @@ Uso:         Atribución de Original Source en HubSpot
 
 ### ✅ Forms API (Lo que usamos)
 
-```javascript
+\`\`\`javascript
 POST https://api.hsforms.com/submissions/v3/integration/submit/
      {HUB_ID}/{FORM_GUID}
 
 context: {
   hutk: "1697224219759"  // ← Garantiza atribución
 }
-```
+\`\`\`
 
 ### ❌ Contacts API (No recomendado para atribución)
 
-```javascript
+\`\`\`javascript
 POST https://api.hubapi.com/crm/v3/objects/contacts
 
 // No acepta hubspotutk en context
 // Atribución siempre será "Offline sources"
-```
+\`\`\`
 
 ---
 
@@ -284,7 +284,7 @@ El sistema ejecuta HubSpot y PDF en paralelo usando `Promise.allSettled`:
 
 ### Resultado
 
-```javascript
+\`\`\`javascript
 const [hubspotResult, pdfResult] = await Promise.allSettled([
   submitToHubSpot(payload),
   personalizePDF(payload),
@@ -294,7 +294,7 @@ const [hubspotResult, pdfResult] = await Promise.allSettled([
 // hubspot_success: false
 // pdf_success: true
 // El usuario recibe su PDF, pero se registra error en logs
-```
+\`\`\`
 
 ---
 
@@ -318,7 +318,7 @@ El sistema continúa con los procesos exitosos y registra errores en logs.
 
 ### En HubSpot
 
-```text
+\`\`\`text
 1. Ve a: Contacts > All contacts
 2. Busca: juan@email.com
 3. Verifica:
@@ -329,11 +329,11 @@ El sistema continúa con los procesos exitosos y registra errores en logs.
    ✓ lead_partner_source: Partner_Landing_ES_Playa_Viva
    ✓ Original Source: [NO debe ser "Offline sources"]
    ✓ Activity log: Form submission registrada
-```
+\`\`\`
 
 ### En Servidor:
 
-```bash
+\`\`\`bash
 # Ver logs en tiempo real
 npm run dev
 
@@ -342,17 +342,17 @@ grep -i "error" logs/server.log
 
 # Verificar PDF generado
 ls -lh public/dossiers/
-```
+\`\`\`
 
 ### En Email:
 
-```text
+\`\`\`text
 1. Revisa inbox de juan@email.com
 2. Busca email de: inversiones@uniestate.co.uk
 3. Asunto: "Tu Dossier Exclusivo de Playa Viva, Juan"
 4. Click en botón "Descargar Dossier"
 5. Verifica que descarga PDF con nombre correcto
-```
+\`\`\`
 
 ---
 
@@ -360,20 +360,20 @@ ls -lh public/dossiers/
 
 ### URL de prueba:
 
-```text
+\`\`\`text
 https://landing-page-playa-viva.vercel.app/?utm_source=google&utm_medium=cpc&utm_campaign=playa_viva_spain&utm_content=hero_cta&utm_term=luxury+beach+apartments
-```
+\`\`\`
 
 ### Resultado esperado en HubSpot:
 
-```text
+\`\`\`text
 Original Source: Paid Search
 Original Source Drill-Down 1: google
 Original Source Drill-Down 2: cpc
 
 Latest Source: Direct Traffic
 Latest Source Drill-Down 1: landing-page-playa-viva
-```
+\`\`\`
 
 ---
 
@@ -381,7 +381,7 @@ Latest Source Drill-Down 1: landing-page-playa-viva
 
 ### Problema: Cookie no se genera
 
-```javascript
+\`\`\`javascript
 // En consola del navegador:
 document.cookie.split(";").find((c) => c.includes("hubspotutk"));
 
@@ -389,11 +389,11 @@ document.cookie.split(";").find((c) => c.includes("hubspotutk"));
 // 1. Verificar que HubSpotScript.tsx está en layout.tsx
 // 2. Esperar 10-15 segundos después de cargar
 // 3. Verificar en DevTools > Application > Cookies
-```
+\`\`\`
 
 ### Problema: Lead con "Offline sources"
 
-```text
+\`\`\`text
 Causa: hubspotutk no se envió correctamente
 
 Verificar:
@@ -401,24 +401,24 @@ Verificar:
 2. orchestrateLeadAutomation() captura la cookie
 3. API route recibe hubspotutk en payload
 4. HubSpot Forms API recibe hutk en context
-```
+\`\`\`
 
 ### Problema: PDF no se personaliza
 
-```text
+\`\`\`text
 Causa: Campo 'nombre_personalizacion_lead' no existe en PDF
 
 Solución:
 1. Verificar PDF tiene campo correcto
 2. O comentar personalización temporalmente
 3. O usar otro nombre de campo en script Python
-```
+\`\`\`
 
 ---
 
 ## ✅ Checklist de Verificación Completa
 
-```text
+\`\`\`text
 Navegador:
 □ Cookie hubspotutk se crea
 □ Formulario valida campos
@@ -450,7 +450,7 @@ Logs:
 □ Sin errores en consola del navegador
 □ Sin errores en logs del servidor
 □ Respuestas HTTP 200 en Network tab
-```
+\`\`\`
 
 ---
 

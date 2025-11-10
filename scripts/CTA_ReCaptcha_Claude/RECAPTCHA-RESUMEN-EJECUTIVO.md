@@ -3,14 +3,14 @@
 ## ⚡ Cambio en 1 Minuto
 
 ### ANTES:
-```html
+\`\`\`html
 □ No soy un robot [checkbox que el usuario debe marcar]
-```
+\`\`\`
 
 ### DESPUÉS:
-```
+\`\`\`
 [Sin checkbox - Protección invisible automática]
-```
+\`\`\`
 
 ---
 
@@ -27,28 +27,28 @@
    - Validar score >= 0.5
 
 ### 3. **.env.local** - 1 línea nueva
-   ```bash
+   \`\`\`bash
    RECAPTCHA_API_KEY=AIzaSyBxxxxxx
-   ```
+   \`\`\`
 
 ---
 
 ## 🔑 Obtener API Key (5 minutos)
 
-```
+\`\`\`
 1. https://console.cloud.google.com/
 2. Proyecto: gen-lang-client-0093228508
 3. APIs & Services > Credentials
 4. + CREATE CREDENTIALS > API key
 5. Copiar clave generada
 6. (Opcional) Restrict key > reCAPTCHA Enterprise API
-```
+\`\`\`
 
 ---
 
 ## ✅ Implementación Rápida
 
-```bash
+\`\`\`bash
 # 1. Obtener API Key de Google Cloud (ver arriba)
 
 # 2. Agregar a .env.local
@@ -66,42 +66,42 @@ npm run dev
 # 6. Deploy
 vercel env add RECAPTCHA_API_KEY
 vercel --prod
-```
+\`\`\`
 
 ---
 
 ## 🧪 Verificación Rápida
 
 ### En Consola del Navegador:
-```javascript
+\`\`\`javascript
 typeof grecaptcha !== 'undefined' && grecaptcha.enterprise
 // Debe retornar: true
-```
+\`\`\`
 
 ### En Network Tab (DevTools):
-```
+\`\`\`
 POST /api/submit-lead
 Request: { ..., "recaptchaToken": "03AGdBq..." }
 Response: { ..., "recaptcha_score": 0.9 }
-```
+\`\`\`
 
 ### En Google Cloud Console:
-```
+\`\`\`
 Security > reCAPTCHA Enterprise > Dashboard
 - Ver assessments en tiempo real
 - Ver distribución de scores
-```
+\`\`\`
 
 ---
 
 ## 📊 Scores Esperados
 
-```
+\`\`\`
 0.9-1.0  = Usuario real legítimo ✅
 0.5-0.8  = Probablemente humano ✅
 0.3-0.4  = Sospechoso ⚠️
 0.0-0.2  = Probablemente bot ❌
-```
+\`\`\`
 
 **Threshold actual:** 0.5 (ajustable en route.ts línea 85)
 
@@ -110,27 +110,27 @@ Security > reCAPTCHA Enterprise > Dashboard
 ## 🔍 Troubleshooting Rápido
 
 ### Script no carga:
-```javascript
+\`\`\`javascript
 // Verificar en consola
 typeof grecaptcha
 // Si undefined → Verificar useEffect en page.tsx
-```
+\`\`\`
 
 ### API Key error:
-```bash
+\`\`\`bash
 # Verificar variable existe
 cat .env.local | grep RECAPTCHA
 
 # Verificar en Google Cloud
 # API habilitada: reCAPTCHA Enterprise API
-```
+\`\`\`
 
 ### Score muy bajo en local:
-```typescript
+\`\`\`typescript
 // Ajustar threshold solo en dev (route.ts)
 const isDevelopment = process.env.NODE_ENV === 'development';
 const minScore = isDevelopment ? 0.0 : 0.5;
-```
+\`\`\`
 
 ---
 
@@ -171,7 +171,7 @@ Para Playa Viva (1,000-2,000 leads/mes):
 
 ## ⏱️ Tiempo de Implementación
 
-```
+\`\`\`
 □ Obtener API Key: 5 min
 □ Actualizar .env.local: 1 min
 □ Actualizar page.tsx: 10 min
@@ -180,7 +180,7 @@ Para Playa Viva (1,000-2,000 leads/mes):
 □ Deploy: 5 min
 ────────────────────────────
 TOTAL: ~30 minutos
-```
+\`\`\`
 
 ---
 
@@ -198,7 +198,7 @@ TOTAL: ~30 minutos
 
 ## ✅ Checklist Ultra-Rápida
 
-```
+\`\`\`
 □ API Key obtenida
 □ RECAPTCHA_API_KEY en .env.local
 □ page.tsx actualizado (5 cambios)
@@ -209,7 +209,7 @@ TOTAL: ~30 minutos
 □ Score > 0.5 en logs
 □ Deploy a Vercel
 □ Test en producción OK
-```
+\`\`\`
 
 ---
 

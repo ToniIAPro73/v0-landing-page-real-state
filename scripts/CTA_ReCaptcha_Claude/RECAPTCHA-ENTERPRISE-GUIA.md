@@ -3,16 +3,16 @@
 ## ✨ Cambios Principales
 
 ### ANTES (Checkbox visible):
-```
+\`\`\`
 □ No soy un robot  [checkbox manual]
-```
+\`\`\`
 
 ### DESPUÉS (Invisible - Enterprise):
-```
+\`\`\`
 [Sin interacción del usuario]
 ✓ Protección automática con score 0-1
 ✓ Bloquea bots sin friccionar UX
-```
+\`\`\`
 
 ---
 
@@ -27,25 +27,25 @@
 ## 🔧 PASO 1: Obtener API Key de Google Cloud
 
 ### 1.1 Ir a Google Cloud Console
-```
+\`\`\`
 https://console.cloud.google.com/
-```
+\`\`\`
 
 ### 1.2 Seleccionar proyecto
 - Proyecto: `gen-lang-client-0093228508`
 - Si no lo ves, búscalo en el selector de proyectos
 
 ### 1.3 Habilitar reCAPTCHA Enterprise API
-```
+\`\`\`
 1. Ve a: APIs & Services > Library
 2. Busca: "reCAPTCHA Enterprise API"
 3. Click: Enable (si no está habilitado)
-```
+\`\`\`
 
 ### 1.4 Crear API Key
 
 **Opción A: Crear nueva API Key**
-```
+\`\`\`
 1. Ve a: APIs & Services > Credentials
 2. Click: + CREATE CREDENTIALS
 3. Selecciona: API key
@@ -54,10 +54,10 @@ https://console.cloud.google.com/
    - API restrictions > Restrict key
    - Selecciona: reCAPTCHA Enterprise API
 6. Click: Save
-```
+\`\`\`
 
 **Opción B: Usar Service Account (más seguro)**
-```
+\`\`\`
 1. Ve a: IAM & Admin > Service Accounts
 2. Click: + CREATE SERVICE ACCOUNT
 3. Nombre: recaptcha-verifier
@@ -68,7 +68,7 @@ https://console.cloud.google.com/
 8. Tipo: JSON
 9. Download JSON file
 10. Usar el campo "private_key" del JSON
-```
+\`\`\`
 
 ---
 
@@ -76,7 +76,7 @@ https://console.cloud.google.com/
 
 Edita `.env.local`:
 
-```bash
+\`\`\`bash
 # Existentes (no cambiar)
 NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 HUBSPOT_FORM_GUID=34afefab-a031-4516-838e-f0edf0b98bc7
@@ -84,7 +84,7 @@ NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
 
 # NUEVO: API Key de Google Cloud para reCAPTCHA Enterprise
 RECAPTCHA_API_KEY=AIzaSyBxxxxxxxxxxxxxxxxxxxxxx
-```
+\`\`\`
 
 **⚠️ IMPORTANTE:**
 - Esta API key es PRIVADA (solo backend)
@@ -100,7 +100,7 @@ RECAPTCHA_API_KEY=AIzaSyBxxxxxxxxxxxxxxxxxxxxxx
 **Ubicación:** Línea ~27
 
 **REEMPLAZAR:**
-```typescript
+\`\`\`typescript
 type LeadAutomationPayload = {
   firstName: string;
   lastName: string;
@@ -113,10 +113,10 @@ type LeadAutomationPayload = {
   utm: Record<string, string>;
   workflow: string;
 };
-```
+\`\`\`
 
 **CON:**
-```typescript
+\`\`\`typescript
 type LeadAutomationPayload = {
   firstName: string;
   lastName: string;
@@ -130,7 +130,7 @@ type LeadAutomationPayload = {
   workflow: string;
   recaptchaToken: string; // NUEVO
 };
-```
+\`\`\`
 
 ---
 
@@ -139,7 +139,7 @@ type LeadAutomationPayload = {
 **Ubicación:** Antes del `return` statement (línea ~1350)
 
 **AGREGAR:**
-```typescript
+\`\`\`typescript
 // Cargar script de reCAPTCHA Enterprise
 useEffect(() => {
   const script = document.createElement('script');
@@ -155,7 +155,7 @@ useEffect(() => {
     }
   };
 }, []);
-```
+\`\`\`
 
 ---
 
@@ -164,7 +164,7 @@ useEffect(() => {
 **Ubicación:** Función `orchestrateLeadAutomation` (después de donde la agregamos)
 
 **CAMBIAR línea:**
-```typescript
+\`\`\`typescript
 const apiPayload = {
   firstName: payload.firstName,
   lastName: payload.lastName,
@@ -177,7 +177,7 @@ const apiPayload = {
   // AGREGAR ESTA LÍNEA:
   recaptchaToken: payload.recaptchaToken,
 };
-```
+\`\`\`
 
 ---
 
@@ -189,17 +189,17 @@ const apiPayload = {
 
 #### A) Eliminar validación de checkbox reCAPTCHA
 **ELIMINAR estas líneas (~1289-1293):**
-```typescript
+\`\`\`typescript
 if (!isRecaptchaVerified) {
   focusField(recaptchaRef, "recaptcha", fieldErrorCopy.recaptcha);
   return;
 }
-```
+\`\`\`
 
 #### B) Agregar ejecución de reCAPTCHA Enterprise
 **AGREGAR después de `setIsSubmitting(true);` (~línea 1318):**
 
-```typescript
+\`\`\`typescript
 try {
   // Ejecutar reCAPTCHA Enterprise de forma invisible
   const recaptchaToken = await new Promise<string>((resolve, reject) => {
@@ -226,7 +226,7 @@ try {
     // ... campos existentes
     recaptchaToken, // AGREGAR
   };
-```
+\`\`\`
 
 ---
 
@@ -235,7 +235,7 @@ try {
 **Ubicación:** Líneas ~2817-2857
 
 **COMENTAR O ELIMINAR este bloque completo:**
-```html
+\`\`\`html
 {/* ELIMINAR O COMENTAR COMPLETO */}
 <div className="rounded-2xl border px-4 py-3 bg-white/80 backdrop-blur-sm ...">
   <div className="flex items-center justify-between mb-2">
@@ -255,7 +255,7 @@ try {
     </div>
   </div>
 </div>
-```
+\`\`\`
 
 ---
 
@@ -264,9 +264,9 @@ try {
 **Ubicación:** `src/app/api/submit-lead/route.ts`
 
 **ACCIÓN:** Reemplazar completamente con:
-```
+\`\`\`
 route-recaptcha-enterprise.ts
-```
+\`\`\`
 
 **Cambios principales:**
 - ✅ Función `verifyRecaptchaToken()` agregada
@@ -279,7 +279,7 @@ route-recaptcha-enterprise.ts
 ## 🔧 PASO 5: Actualizar Vercel (Producción)
 
 ### Via Dashboard:
-```
+\`\`\`
 1. Ve a: Vercel Dashboard > Tu Proyecto
 2. Settings > Environment Variables
 3. Agregar nueva variable:
@@ -288,16 +288,16 @@ route-recaptcha-enterprise.ts
    - Environment: Production + Preview + Development
 4. Save
 5. Redeploy el proyecto
-```
+\`\`\`
 
 ### Via CLI:
-```bash
+\`\`\`bash
 vercel env add RECAPTCHA_API_KEY
 # Pega tu API key cuando te lo pida
 # Selecciona: Production, Preview, Development
 
 vercel --prod
-```
+\`\`\`
 
 ---
 
@@ -305,9 +305,9 @@ vercel --prod
 
 ### 6.1 Test Local
 
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 **Verificar:**
 1. ✅ Script reCAPTCHA carga (Network tab)
@@ -317,7 +317,7 @@ npm run dev
 
 ### 6.2 Test en Consola del Navegador
 
-```javascript
+\`\`\`javascript
 // Verificar que grecaptcha está disponible
 typeof grecaptcha !== 'undefined' && grecaptcha.enterprise
 // Debe retornar: true
@@ -331,13 +331,13 @@ grecaptcha.enterprise.ready(async () => {
   console.log('Token:', token);
 });
 // Debe generar un token largo
-```
+\`\`\`
 
 ### 6.3 Verificar en Network Tab
 
 Al enviar el formulario:
 
-```
+\`\`\`
 1. DevTools > Network
 2. Buscar: submit-lead
 3. Request Payload debe incluir:
@@ -350,11 +350,11 @@ Al enviar el formulario:
      "success": true,
      "recaptcha_score": 0.9  <-- Score alto = humano real
    }
-```
+\`\`\`
 
 ### 6.4 Verificar en Google Cloud Console
 
-```
+\`\`\`
 1. Ve a: Google Cloud Console
 2. Security > reCAPTCHA Enterprise
 3. Dashboard > Metrics
@@ -362,31 +362,31 @@ Al enviar el formulario:
    - Total assessments
    - Risk score distribution
    - Actions detected
-```
+\`\`\`
 
 ---
 
 ## 📊 Entender Scores de reCAPTCHA
 
 ### Score Range:
-```
+\`\`\`
 1.0  = Muy probablemente humano legítimo
 0.9  = Probablemente humano
 0.5  = Neutral (threshold por defecto)
 0.3  = Sospechoso
 0.1  = Muy probablemente bot
 0.0  = Definitivamente bot
-```
+\`\`\`
 
 ### Configuración en route.ts:
-```typescript
+\`\`\`typescript
 // Línea ~85
 return {
   success: isValid && actionMatches && score >= 0.5, // ← Ajustar threshold aquí
   score: score,
   reasons: reasons,
 };
-```
+\`\`\`
 
 **Recomendaciones:**
 - **0.5** = Bueno para la mayoría de casos
@@ -402,7 +402,7 @@ return {
 **Causa:** Script no se cargó correctamente
 
 **Solución:**
-```javascript
+\`\`\`javascript
 // Verificar en consola
 typeof grecaptcha
 // Si retorna 'undefined', el script no se cargó
@@ -410,7 +410,7 @@ typeof grecaptcha
 // Verificar en Network tab
 // Buscar: recaptcha/enterprise.js
 // Si no aparece, verificar useEffect en page.tsx
-```
+\`\`\`
 
 ---
 
@@ -449,7 +449,7 @@ typeof grecaptcha
 - Agregar `localhost` a dominios permitidos en Google Cloud
 - O ajustar threshold a 0.0 SOLO en desarrollo:
 
-```typescript
+\`\`\`typescript
 // En route.ts
 const isDevelopment = process.env.NODE_ENV === 'development';
 const minScore = isDevelopment ? 0.0 : 0.5;
@@ -458,13 +458,13 @@ return {
   success: isValid && actionMatches && score >= minScore,
   // ...
 };
-```
+\`\`\`
 
 ---
 
 ## ✅ Checklist Final
 
-```
+\`\`\`
 Configuración:
 □ API Key obtenida de Google Cloud
 □ RECAPTCHA_API_KEY agregada a .env.local
@@ -496,14 +496,14 @@ Production:
 □ Deploy exitoso
 □ Test en producción OK
 □ Verificación en Google Cloud Console
-```
+\`\`\`
 
 ---
 
 ## 📈 Monitoreo Post-Implementación
 
 ### Google Cloud Console (Recomendado):
-```
+\`\`\`
 1. Ve a: Security > reCAPTCHA Enterprise
 2. Dashboard
 3. Métricas a revisar:
@@ -511,27 +511,27 @@ Production:
    - Average risk score
    - Actions by score
    - Reasons distribution
-```
+\`\`\`
 
 ### Logs del Servidor:
-```bash
+\`\`\`bash
 # Ver logs en Vercel
 vercel logs --follow
 
 # Buscar:
 # - "reCAPTCHA verified successfully. Score: X.X"
 # - "reCAPTCHA verification failed"
-```
+\`\`\`
 
 ### HubSpot:
-```
+\`\`\`
 Comparar:
 - Leads ANTES de reCAPTCHA Enterprise
 - Leads DESPUÉS de reCAPTCHA Enterprise
 
 Si ves reducción drástica (>30%):
 → Considera bajar threshold a 0.3-0.4
-```
+\`\`\`
 
 ---
 

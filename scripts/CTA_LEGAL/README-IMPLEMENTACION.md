@@ -13,7 +13,7 @@
 1. Copia `env.example` a `.env.local` en la raíz del proyecto
 2. Completa todas las variables:
 
-```bash
+\`\`\`bash
 # reCAPTCHA
 NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key
 RECAPTCHA_SECRET_KEY=tu_secret_key
@@ -21,7 +21,7 @@ RECAPTCHA_SECRET_KEY=tu_secret_key
 # HubSpot
 HUBSPOT_PRIVATE_APP_TOKEN=pat-eu1-xxxxx
 NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
-```
+\`\`\`
 
 ### Obtener claves reCAPTCHA v3:
 1. Ve a: https://www.google.com/recaptcha/admin
@@ -41,9 +41,9 @@ NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 
 Copia `DossierCTA.tsx` a tu carpeta de componentes:
 
-```bash
+\`\`\`bash
 cp DossierCTA.tsx src/components/DossierCTA.tsx
-```
+\`\`\`
 
 ---
 
@@ -52,16 +52,16 @@ cp DossierCTA.tsx src/components/DossierCTA.tsx
 Copia la API route al directorio correcto según tu versión de Next.js:
 
 **App Router (Next.js 13+):**
-```bash
+\`\`\`bash
 mkdir -p src/app/api/dossier-submit
 cp api-dossier-submit.ts src/app/api/dossier-submit/route.ts
-```
+\`\`\`
 
 **Pages Router (Next.js 12):**
-```bash
+\`\`\`bash
 mkdir -p pages/api
 cp api-dossier-submit.ts pages/api/dossier-submit.ts
-```
+\`\`\`
 
 ---
 
@@ -69,7 +69,7 @@ cp api-dossier-submit.ts pages/api/dossier-submit.ts
 
 Importa y usa el componente en tu página:
 
-```tsx
+\`\`\`tsx
 import DossierCTA from '@/components/DossierCTA';
 
 export default function PlayaVivaPage() {
@@ -83,16 +83,16 @@ export default function PlayaVivaPage() {
     </div>
   );
 }
-```
+\`\`\`
 
 ---
 
 ## PASO 5: Verificar Funcionamiento
 
 ### 5.1 Desarrollo local:
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 ### 5.2 Prueba el formulario:
 1. Completa campos
@@ -114,11 +114,11 @@ npm run dev
 Para enviar emails automáticos, configura uno de estos servicios:
 
 ### Opción A: Resend (Recomendado)
-```bash
+\`\`\`bash
 npm install resend
-```
+\`\`\`
 
-```typescript
+\`\`\`typescript
 // En api-dossier-submit.ts
 import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -131,18 +131,18 @@ async function sendDossierEmail(payload: DossierSubmitPayload) {
     html: `<!-- tu HTML aquí -->`,
   });
 }
-```
+\`\`\`
 
 ### Opción B: SendGrid
-```bash
+\`\`\`bash
 npm install @sendgrid/mail
-```
+\`\`\`
 
 ---
 
 ## PASO 7: Deploy a Vercel
 
-```bash
+\`\`\`bash
 # Añadir variables de entorno en Vercel Dashboard
 vercel env add RECAPTCHA_SECRET_KEY
 vercel env add HUBSPOT_PRIVATE_APP_TOKEN
@@ -150,13 +150,13 @@ vercel env add HUBSPOT_PRIVATE_APP_TOKEN
 
 # Deploy
 vercel --prod
-```
+\`\`\`
 
 ---
 
 ## Estructura de Datos Enviados a HubSpot
 
-```json
+\`\`\`json
 {
   "properties": {
     "firstname": "Juan",
@@ -173,7 +173,7 @@ vercel --prod
     "acquisition_date": "2025-11-10T00:55:00.000Z"
   }
 }
-```
+\`\`\`
 
 ---
 

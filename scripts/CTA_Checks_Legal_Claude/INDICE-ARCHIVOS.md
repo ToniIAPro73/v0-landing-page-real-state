@@ -25,9 +25,9 @@
 
 **Acción requerida:**
 
-```bash
+\`\`\`bash
 cp page.tsx src/app/page.tsx
-```
+\`\`\`
 
 ---
 
@@ -51,10 +51,10 @@ cp page.tsx src/app/page.tsx
 
 **Acción requerida:**
 
-```bash
+\`\`\`bash
 mkdir -p src/app/api/submit-lead
 cp route.ts src/app/api/submit-lead/route.ts
-```
+\`\`\`
 
 ---
 
@@ -77,11 +77,11 @@ cp route.ts src/app/api/submit-lead/route.ts
 
 **Acción requerida:**
 
-```bash
+\`\`\`bash
 mkdir -p scripts
 cp personalizar_dossier.py scripts/
 cd scripts && pip install requests pypdf
-```
+\`\`\`
 
 ---
 
@@ -164,10 +164,10 @@ cd scripts && pip install requests pypdf
 
 **Uso:**
 
-```bash
+\`\`\`bash
 chmod +x install.sh
 bash install.sh
-```
+\`\`\`
 
 **Para quién:**
 
@@ -186,10 +186,10 @@ bash install.sh
 
 **Uso:**
 
-```bash
+\`\`\`bash
 cp env.example .env.local
 # Editar .env.local con tus valores
-```
+\`\`\`
 
 ---
 
@@ -251,13 +251,13 @@ cp env.example .env.local
 
 ### Instalación Automática
 
-```bash
+\`\`\`bash
 bash install.sh
-```
+\`\`\`
 
 ### Instalación Manual
 
-```bash
+\`\`\`bash
 # Crear directorios
 mkdir -p src/app/api/submit-lead public/dossiers scripts
 
@@ -271,23 +271,23 @@ cp env.example .env.local
 
 # Iniciar servidor
 npm run dev
-```
+\`\`\`
 
 ### Verificación
 
-```bash
+\`\`\`bash
 # Ver cookie HubSpot (en consola del navegador)
 document.cookie.split(';').find(c => c.includes('hubspotutk'))
 
 # Ver logs del servidor
 npm run dev
-```
+\`\`\`
 
 ---
 
 ## ✅ Checklist Final
 
-```text
+\`\`\`text
 □ page.tsx → src/app/page.tsx
 □ route.ts → src/app/api/submit-lead/route.ts
 □ personalizar_dossier.py → scripts/
@@ -300,7 +300,7 @@ npm run dev
 □ Formulario envía datos
 □ Lead aparece en HubSpot
 □ Atribución correcta verificada
-```
+\`\`\`
 
 ---
 

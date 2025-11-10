@@ -16,7 +16,7 @@
 
 ### ❌ ANTES (Líneas 1175-1189)
 
-```typescript
+\`\`\`typescript
 const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
   const simulateCall = (label: string, delay = 650) =>
     new Promise<void>((resolve) => {
@@ -32,7 +32,7 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
 
   await simulateCall("Email confirmation & gratitude message", 600);
 };
-```
+\`\`\`
 
 **Problema:** Solo simula llamadas con `console.log`. No envía datos reales.
 
@@ -40,7 +40,7 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
 
 ### ✅ DESPUÉS (Actualizado)
 
-```typescript
+\`\`\`typescript
 /**
  * Orquesta el proceso completo de lead:
  * 1.  Captura hubspotutk (cookie de HubSpot)
@@ -93,7 +93,7 @@ const orchestrateLeadAutomation = async (payload: LeadAutomationPayload) => {
 
   return await response.json();
 };
-```
+\`\`\`
 
 **Mejoras:**
 
@@ -119,7 +119,7 @@ Este archivo NO existía antes. Es completamente nuevo.
 
 **Código clave:**
 
-```typescript
+\`\`\`typescript
 // Configuración HubSpot
 const HUB_ID = "147219365";
 const FORM_GUID = "34afefab-a031-4516-838e-f0edf0b98bc7";
@@ -157,7 +157,7 @@ async function submitToHubSpot(payload: LeadSubmitPayload): Promise<any> {
 
   return await response.json();
 }
-```
+\`\`\`
 
 **Mejoras vs. versión anterior:**
 
@@ -174,13 +174,13 @@ async function submitToHubSpot(payload: LeadSubmitPayload): Promise<any> {
 
 Tenía un pequeño error en línea 79:
 
-```python
+\`\`\`python
 hutk = data_from_landing_page.get('hubspotutk', '').strip()
 
 # Validar campos esenciales
 
 if not all([nombre_completo, email, hutk]): # ← Requería hutk obligatoriamente
-```
+\`\`\`
 
 **Problema:** Si no existía la cookie, el script fallaba completamente.
 
@@ -188,7 +188,7 @@ if not all([nombre_completo, email, hutk]): # ← Requería hutk obligatoriament
 
 ### ✅ DESPUÉS
 
-```python
+\`\`\`python
 hutk = data_from_landing_page.get('hubspotutk', '').strip()
 
 # Validar campos esenciales
@@ -201,7 +201,7 @@ if not all([nombre_completo, email]): # ← Ya no requiere hutk obligatoriamente
 if not hutk:
     hutk = f"generated_{int(time.time() * 1000)}"
     print(f"WARNING: No hubspotutk provided. Using fallback: {hutk}")
-```
+\`\`\`
 
 **Mejoras:**
 
