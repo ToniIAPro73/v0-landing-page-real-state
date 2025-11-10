@@ -4,6 +4,7 @@ import {
   getLocalDossierDir,
   resolveS3Config,
   isS3Enabled,
+  shouldUseS3Storage,
 } from "../lib/dossier-storage";
 
 const ORIGINAL_ENV = { ...process.env };
@@ -40,9 +41,9 @@ describe("resolveS3Config", () => {
 
   it("prefers explicit bucket env vars when provided", () => {
     vi.stubEnv("S3_Endpoint", "https://s3.example.com");
-    vi.stubEnv("S3_BUCKET_NAME", "bespoke-bucket");
+    vi.stubEnv("S3_BUCKET_NAME", "Bespoke Bucket 01");
     const config = resolveS3Config();
-    expect(config.bucket).toBe("bespoke-bucket");
+    expect(config.bucket).toBe("bespoke-bucket-01");
   });
 });
 
@@ -58,5 +59,38 @@ describe("isS3Enabled", () => {
     vi.stubEnv("S3_Access_Key_ID", "key");
     vi.stubEnv("S3_Secret_Access_Key", "secret");
     expect(isS3Enabled()).toBe(true);
+  });
+});
+
+describe("shouldUseS3Storage", () => {
+  const seedValidConfig = () => {
+    vi.stubEnv("S3_Endpoint", "https://storage.example.com/bucket");
+    vi.stubEnv("S3_Region_Code", "eu-west-3");
+    vi.stubEnv("S3_Access_Key_ID", "key");
+    vi.stubEnv("S3_Secret_Access_Key", "secret");
+  };
+
+  it("returns false locally even with config", () => {
+    seedValidConfig();
+    expect(shouldUseS3Storage()).toBe(false);
+  });
+
+  it("returns true on Vercel when config exists", () => {
+    seedValidConfig();
+    vi.stubEnv("VERCEL", "1");
+    expect(shouldUseS3Storage()).toBe(true);
+  });
+
+  it("respects FORCE_S3_STORAGE override", () => {
+    seedValidConfig();
+    vi.stubEnv("FORCE_S3_STORAGE", "true");
+    expect(shouldUseS3Storage()).toBe(true);
+  });
+
+  it("respects DISABLE_S3_STORAGE override", () => {
+    seedValidConfig();
+    vi.stubEnv("VERCEL", "1");
+    vi.stubEnv("DISABLE_S3_STORAGE", "true");
+    expect(shouldUseS3Storage()).toBe(false);
   });
 });

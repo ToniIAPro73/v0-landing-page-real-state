@@ -18,7 +18,7 @@ const DEFAULT_LOCAL_DIR = path.join(
 export const getLocalDossierDir = () =>
   process.env.DOSSIER_LOCAL_DIR ?? DEFAULT_LOCAL_DIR;
 
-type ResolvedS3Config = {
+export type ResolvedS3Config = {
   endpoint?: string;
   bucket?: string;
   region?: string;
@@ -26,10 +26,15 @@ type ResolvedS3Config = {
   secretAccessKey?: string;
 };
 
-const sanitizeBucketName = (value?: string | null) => {
+const normalizeBucketName = (value?: string | null) => {
   if (!value) return undefined;
   const trimmed = value.trim().replace(/(^\/+|\/+$)/g, "");
-  return trimmed || undefined;
+  if (!trimmed) return undefined;
+  return trimmed
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9.-]/gi, "-")
+    .replace(/-+/g, "-")
+    .toLowerCase();
 };
 
 const splitEndpoint = (rawEndpoint?: string, bucket?: string) => {
@@ -88,7 +93,7 @@ export const resolveS3Config = (): ResolvedS3Config => {
 
   const { endpoint, bucket } = splitEndpoint(
     rawEndpoint,
-    sanitizeBucketName(bucketEnv),
+    normalizeBucketName(bucketEnv),
   );
 
   return {
@@ -103,13 +108,28 @@ export const resolveS3Config = (): ResolvedS3Config => {
   };
 };
 
-export const isS3Enabled = () => {
-  const config = resolveS3Config();
+export const isS3Enabled = (config?: ResolvedS3Config) => {
+  const resolved = config ?? resolveS3Config();
   return Boolean(
-    config.endpoint &&
-      config.bucket &&
-      config.region &&
-      config.accessKeyId &&
-      config.secretAccessKey,
+    resolved.endpoint &&
+      resolved.bucket &&
+      resolved.region &&
+      resolved.accessKeyId &&
+      resolved.secretAccessKey,
   );
+};
+
+export const shouldUseS3Storage = (config?: ResolvedS3Config) => {
+  const resolved = config ?? resolveS3Config();
+  const disabled =
+    (process.env.DISABLE_S3_STORAGE ?? "").toLowerCase() === "true";
+  if (disabled) return false;
+
+  const enabled =
+    (process.env.FORCE_S3_STORAGE ?? "").toLowerCase() === "true";
+  const hasConfig = isS3Enabled(resolved);
+  if (enabled) return hasConfig;
+
+  const runningOnVercel = Boolean(process.env.VERCEL);
+  return runningOnVercel && hasConfig;
 };
