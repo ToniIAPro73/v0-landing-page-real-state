@@ -1,11 +1,28 @@
 import next from "eslint-config-next";
 
+const noopTailwindcssPlugin = {
+  rules: {
+    suggestCanonicalClasses: {
+      meta: {
+        docs: {
+          description:
+            "No-op placeholder while Tailwind 4 canonical class suggestions are disabled.",
+        },
+      },
+      create: () => ({}),
+    },
+  },
+};
+
 const config = [
   {
     ignores: ["node_modules", ".next", "dist"],
   },
   ...next,
   {
+    plugins: {
+      tailwindcss: noopTailwindcssPlugin,
+    },
     rules: {
       "tailwindcss/suggestCanonicalClasses": "off",
     },
