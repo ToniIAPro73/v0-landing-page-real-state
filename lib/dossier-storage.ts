@@ -8,8 +8,24 @@ const DEFAULT_LOCAL_DIR = path.join(
   "Dossiers_Personalizados_PlayaViva",
 );
 
-export const getLocalDossierDir = () =>
-  process.env.DOSSIER_LOCAL_DIR ?? DEFAULT_LOCAL_DIR;
+function normalizeEnvPath(value: string) {
+  const replaced = value.replace(/\\+/g, path.sep).replace(/\/+/g, path.sep);
+  return path.normalize(replaced);
+}
+
+export const getLocalDossierDir = () => {
+  const envPath = process.env.DOSSIER_LOCAL_DIR;
+  if (!envPath) return DEFAULT_LOCAL_DIR;
+  try {
+    const normalized = normalizeEnvPath(envPath);
+    if (path.isAbsolute(normalized)) {
+      return normalized;
+    }
+    return path.join(process.cwd(), normalized);
+  } catch {
+    return DEFAULT_LOCAL_DIR;
+  }
+};
 
 export type ResolvedS3Config = {
   endpoint?: string;
