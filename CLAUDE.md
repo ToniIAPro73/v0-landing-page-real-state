@@ -11,16 +11,21 @@ The landing page features bilingual content (Spanish/English), animated hero sec
 ## Development Commands
 
 \`\`\`powershell
-# Install dependencies (run after each pull)
+
+\# Install dependencies (run after each pull)
+
 npm install
 
-# Start development server at http://localhost:3000 with hot reload
+\# Start development server at <http://localhost:3000> with hot reload
+
 npm run dev
 
-# Run linting (ESLint + TypeScript checks)
+\# Run linting (ESLint + TypeScript checks)
+
 npm run lint
 
-# Production build and start (identical to Vercel deployment)
+\# Production build and start (identical to Vercel deployment)
+
 npm run build
 npm run start
 \`\`\`
