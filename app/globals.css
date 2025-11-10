@@ -318,3 +318,8 @@ body {
     transform: scale(0.85);
   }
 }
+
+/* Garantiza que la insignia reCAPTCHA quede por encima del formulario */
+.grecaptcha-badge {
+  z-index: 40;
+}

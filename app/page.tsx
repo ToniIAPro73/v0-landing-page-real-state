@@ -202,6 +202,67 @@ export default function PlayaVivaLanding() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const sectionElement = leadFormRef.current;
+    if (!sectionElement) return;
+
+    const badgeSelector = ".grecaptcha-badge";
+
+    const placeBadgeInsideSection = () => {
+      const badge = document.querySelector<HTMLElement>(badgeSelector);
+      if (!badge) return;
+
+      if (badge.parentElement !== sectionElement) {
+        sectionElement.appendChild(badge);
+      }
+
+      Object.assign(badge.style, {
+        position: "absolute",
+        left: "auto",
+        right: "32px",
+        bottom: "-60px",
+        width: "auto",
+        transform: "scale(0.95)",
+        transformOrigin: "bottom right",
+        opacity: badge.style.opacity || "0",
+        transition: "opacity 250ms ease",
+        pointerEvents: badge.style.pointerEvents || "none",
+      });
+    };
+
+    const mutationObserver = new MutationObserver(() => {
+      placeBadgeInsideSection();
+    });
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    placeBadgeInsideSection();
+
+    let intersectionObserver: IntersectionObserver | null = null;
+
+    if ("IntersectionObserver" in window) {
+      intersectionObserver = new IntersectionObserver(
+        ([entry]) => {
+          const badge = document.querySelector<HTMLElement>(badgeSelector);
+          if (!badge) return;
+          badge.style.opacity = entry.isIntersecting ? "1" : "0";
+          badge.style.pointerEvents = entry.isIntersecting ? "auto" : "none";
+        },
+        { threshold: 0.35 },
+      );
+
+      intersectionObserver.observe(sectionElement);
+    }
+
+    return () => {
+      mutationObserver.disconnect();
+      intersectionObserver?.disconnect();
+    };
+  }, []);
   useEffect(() => {
     const onResize = () => fitHeroToViewport();
     window.addEventListener("resize", onResize);
@@ -2727,7 +2788,7 @@ const orchestrateLeadAutomation = async (
       <section
         id="dossier"
         ref={leadFormRef}
-        className="relative py-20 bg-linear-to-b from-brown-dark via-[#22170f] to-brown-dark overflow-hidden"
+        className="relative py-20 pb-32 bg-linear-to-b from-brown-dark via-[#22170f] to-brown-dark overflow-hidden"
         style={{
           opacity: visibleSections.leadForm ? 1 : 0,
           transform: visibleSections.leadForm
