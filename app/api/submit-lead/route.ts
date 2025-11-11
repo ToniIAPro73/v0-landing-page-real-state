@@ -641,14 +641,14 @@ async function sendDossierEmail(
           <!-- 3 Photos at the bottom -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
             <tr>
-              <td align="center" style="padding: 12px; width: 35%;">
-                <img src="${fotoComplejoUrl}" alt="Playa Viva Complejo" width="220" style="width: 220px; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block;" />
+              <td align="center" style="padding: 12px; width: 40%;">
+                <img src="${fotoComplejoUrl}" alt="Playa Viva Complejo" width="240" height="160" style="width: 240px; height: 160px; max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block;" />
               </td>
-              <td align="center" valign="middle" style="padding: 12px; width: 30%;">
-                <img src="${fotoLogoUrl}" alt="Playa Viva Logo" width="160" style="width: 160px; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block; margin: 0 auto;" />
+              <td align="center" valign="middle" style="padding: 12px; width: 20%;">
+                <img src="${fotoLogoUrl}" alt="Playa Viva Logo" width="149" height="64" style="width: 149px; height: 64px; max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block; margin: 0 auto;" />
               </td>
-              <td align="center" style="padding: 12px; width: 35%;">
-                <img src="${fotoCasinoUrl}" alt="Casino Wynn" width="220" style="width: 220px; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block;" />
+              <td align="center" style="padding: 12px; width: 40%;">
+                <img src="${fotoCasinoUrl}" alt="Casino Wynn" width="240" height="160" style="width: 240px; height: 160px; max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block;" />
               </td>
             </tr>
           </table>
