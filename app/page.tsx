@@ -21,6 +21,8 @@ import {
   ArrowUpRight,
   ShieldCheck,
   Bot,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 const ALTCHA_TRANSLATIONS: Record<
   "es" | "en",
@@ -118,6 +120,7 @@ export default function PlayaVivaLanding() {
   const [showMenu, setShowMenu] = useState(false);
   const [showNavbar, setShowNavbar] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState<"top" | "middle" | "bottom">("top");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -220,6 +223,21 @@ export default function PlayaVivaLanding() {
 
       // Show navbar after scrolling past hero section
       setShowNavbar(currentScroll > window.innerHeight * 0.8);
+
+      // Determine scroll position for navigation buttons
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      const scrollTop = currentScroll;
+      const scrollableHeight = scrollHeight - clientHeight;
+      const scrollPercentage = scrollableHeight > 0 ? (scrollTop / scrollableHeight) * 100 : 0;
+
+      if (scrollPercentage < 15) {
+        setScrollPosition("top");
+      } else if (scrollPercentage > 85) {
+        setScrollPosition("bottom");
+      } else {
+        setScrollPosition("middle");
+      }
 
       const checkSectionVisibility = (
         ref: React.RefObject<HTMLDivElement | null>,
@@ -1246,6 +1264,15 @@ export default function PlayaVivaLanding() {
       setShowMenu(false);
     }
   };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const scrollToBottom = () => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+  };
+
   const showBackToHero = scrollProgress >= 1;
 
 const orchestrateLeadAutomation = async (
@@ -1489,21 +1516,34 @@ const orchestrateLeadAutomation = async (
         strategy="afterInteractive"
         crossOrigin="anonymous"
       />
-      {/* Language Toggle - Fixed Bottom Right */}
+      {/* Navigation and Language Toggle - Fixed Bottom Right */}
       <div className="fixed bottom-6 right-6 z-100 flex flex-col items-end gap-3">
-        {showBackToHero && (
-          <Button
-            size="sm"
-            onClick={() => scrollToSection("hero")}
-            aria-label={language === "es" ? "Volver arriba" : "Back to top"}
-            className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 py-2 text-xs rounded-md shadow-[0_8px_18px_rgba(0,0,0,0.25)] transition-all duration-200 flex items-center gap-2 border border-brown-dark/20"
-          >
-            <ArrowUpRight className="w-4 h-4" />
-            <span className="tracking-wide">
-              {language === "es" ? "Atrás" : "Back"}
-            </span>
-          </Button>
-        )}
+        {/* Scroll Navigation Buttons */}
+        <div className="flex flex-col gap-2">
+          {/* Scroll Up Button - Show in middle and bottom sections */}
+          {(scrollPosition === "middle" || scrollPosition === "bottom") && (
+            <button
+              onClick={scrollToTop}
+              aria-label={language === "es" ? "Ir al inicio" : "Go to top"}
+              className="group w-12 h-12 rounded-full bg-gradient-to-br from-brown-dark via-taupe-medium to-brown-dark border-2 border-gold-warm/30 hover:border-gold-warm/60 shadow-[0_8px_24px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_32px_rgba(162,144,96,0.4)] transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95"
+            >
+              <ChevronUp className="w-6 h-6 text-gold-warm group-hover:text-white transition-colors duration-300" strokeWidth={3} />
+            </button>
+          )}
+
+          {/* Scroll Down Button - Show in top and middle sections */}
+          {(scrollPosition === "top" || scrollPosition === "middle") && (
+            <button
+              onClick={scrollToBottom}
+              aria-label={language === "es" ? "Ir al final" : "Go to bottom"}
+              className="group w-12 h-12 rounded-full bg-gradient-to-br from-brown-dark via-taupe-medium to-brown-dark border-2 border-gold-warm/30 hover:border-gold-warm/60 shadow-[0_8px_24px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_32px_rgba(162,144,96,0.4)] transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95"
+            >
+              <ChevronDown className="w-6 h-6 text-gold-warm group-hover:text-white transition-colors duration-300" strokeWidth={3} />
+            </button>
+          )}
+        </div>
+
+        {/* Language Toggle */}
         <Button
           variant="outline"
           size="sm"
