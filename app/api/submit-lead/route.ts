@@ -537,98 +537,132 @@ async function sendDossierEmail(
   console.info("[sendDossierEmail] SMTP Host:", smtpHost);
   console.info("[sendDossierEmail] SMTP Port:", smtpPort);
 
+  // HubSpot Meetings URLs (configurar en .env.local)
+  const hubspotMeetingsUrl = payload.language === "es"
+    ? (process.env.HUBSPOT_MEETINGS_URL_ES || "https://meetings.hubspot.com/PLACEHOLDER_TONY")
+    : (process.env.HUBSPOT_MEETINGS_URL_EN || "https://meetings.hubspot.com/PLACEHOLDER_MICHAEL");
+
   const emailCopy = {
     es: {
-      subject: "Tu Dossier Personalizado de Playa Viva | Siguiente Paso",
+      subject: "Tu dossier de Playa Viva está listo | El Efecto Wynn",
       greeting: `Hola ${payload.firstName},`,
       intro:
-        "Es un placer. Puedes descargar tu dossier personalizado de Playa Viva con el botón inferior, tal como solicitaste en nuestra web.",
+        "Gracias por tu interés en Playa Viva. Aquí tienes el dossier personalizado que solicitaste sobre esta oportunidad única en Al Marjan Island.",
       effect:
-        "Confío en que este análisis te mostrará la oportunidad única que representa el “Efecto Wynn” y el potencial de Al Marjan Island.",
-      nextStepTitle: "Tu siguiente paso",
+        "En este análisis descubrirás en detalle el impacto del "Efecto Wynn" y el potencial real que ofrece la zona.",
+      nextStepTitle: "Tu Siguiente Paso: Hablemos 15 Minutos",
       nextStepBody:
-        "Cuando hayas revisado el dossier, el siguiente paso lógico es una consulta privada de 15 minutos para analizar cómo esta inversión encaja con tus objetivos.",
+        "Una vez hayas revisado los datos, el siguiente paso lógico es una consulta privada y sin compromiso de 15 minutos. En ella, analizaremos cómo esta inversión se alinea con tus objetivos personales y resolveremos tus dudas directas.",
       instructions:
-        "Para agendar tu consulta sin compromiso, simplemente responde a este email (tony@uniestate.co.uk) con los siguientes detalles y mi equipo se pondrá en contacto contigo:",
-      fields: [
-        "Tu número de teléfono (incluyendo prefijo de país).",
-        "Tipo de apartamento de interés (ej. Estudio, 1 Habitación, 2 Habitaciones, 3 Habitaciones).",
-        "Método de contacto preferido (Email, Teléfono, WhatsApp, Zoom).",
-        "Franja horaria preferida (ej. Mañana 9-12h, Mediodía 12-15h, Tarde 15-18h, a cualquier hora).",
-      ],
+        "Para tu comodidad, puedes agendar directamente la hora que mejor te convenga en mi calendario. No es necesario responder a este email, aunque estaré encantado de resolver cualquier duda que tengas también a través de este medio.",
       closing: "Quedo a tu disposición.",
-      signature: "Tony · Agente Oficial, Uniestate UK · tony@uniestate.co.uk",
-      buttonLabel: "Descargar dossier",
+      signature: "Un saludo,<br/>Antonio Ballesteros Alonso, Agente Oficial de Uniestate UK<br/>tony@uniestate.co.uk",
+      buttonLabel: "Descargar mi Dossier",
+      meetingButtonLabel: "Agendar mi Consulta de 15 Minutos",
+      ps1: "P.D. Si el botón de descarga no funciona, copia y pega este enlace en tu navegador:",
+      ps2: "P.D. 2 Si el botón de agendar cita no funciona, este es el enlace:",
     },
     en: {
-      subject: "Your Playa Viva Personalised Dossier | Next Step",
+      subject: "Your Playa Viva dossier is ready | The Wynn Effect",
       greeting: `Hello ${payload.firstName},`,
       intro:
-        "It’s my pleasure. You can download your personalised Playa Viva dossier with the button below, exactly as requested on our site.",
+        "Thank you for your interest in Playa Viva. Here is the personalised dossier you requested about this unique opportunity at Al Marjan Island.",
       effect:
-        "I trust this briefing will showcase the unique opportunity behind the “Wynn Effect” and the potential of Al Marjan Island.",
-      nextStepTitle: "Your next step",
+        "In this analysis, you will discover in detail the impact of the "Wynn Effect" and the real potential the area offers.",
+      nextStepTitle: "Your Next Step: Let's Talk for 15 Minutes",
       nextStepBody:
-        "Once you’ve reviewed the dossier, the logical next step is a private 15-minute consultation to explore how this investment aligns with your goals.",
+        "Once you have reviewed the data, the logical next step is a private, no-obligation 15-minute consultation. In this call, we will analyse how this investment aligns with your personal goals and answer your direct questions.",
       instructions:
-        "To book your consultation with no obligation, simply reply to this email (tony@uniestate.co.uk) with the details below and my team will reach out:",
-      fields: [
-        "Your phone number (including country code).",
-        "Apartment type of interest (e.g., Studio, 1 Bedroom, 2 Bedrooms, 3 Bedrooms).",
-        "Preferred contact method (Email, Phone, WhatsApp, Zoom).",
-        "Preferred time window (e.g., Morning 9-12h, Midday 12-15h, Afternoon 15-18h, anytime).",
-      ],
-      closing: "I remain at your disposal.",
-      signature: "Tony · Official Agent, Uniestate UK · tony@uniestate.co.uk",
-      buttonLabel: "Download dossier",
+        "For your convenience, you can book a time that works best for you directly on my calendar. There's no need to reply to this email, although I am also happy to answer any questions you may have here.",
+      closing: "I look forward to hearing from you.",
+      signature: "Best regards,<br/>Michael McMullen, Official Agent at Uniestate UK<br/>michael@uniestate.co.uk",
+      buttonLabel: "Download my Dossier",
+      meetingButtonLabel: "Schedule my 15-Minute Consultation",
+      ps1: "P.S. If the download button doesn't work, please copy and paste this link into your browser:",
+      ps2: "P.S. 2 If the scheduling button doesn't work, this is the link:",
     },
   }[payload.language];
 
+  // URLs de las 3 fotos al pie
+  const fotoComplejoUrl = `${siteOrigin}/assets/imagenes/Foto_Complejo.png`;
+  const fotoLogoUrl = `${siteOrigin}/assets/imagenes/logo.png`;
+  const fotoCasinoUrl = `${siteOrigin}/assets/imagenes/Casino.png`;
+
   const html = `
-    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="font-family: sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="font-family: sans-serif; color: #333; line-height: 1.6;">
       <tr>
-        <td>
-          <p style="margin-bottom:24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;">
-            <img
-              src="${logoUrl}"
-              alt="Playa Viva"
-              width="168"
-              style="display:block;width:168px;max-width:60%;height:auto;"
-            />
-            <img
-              src="${compositionUrl}"
-              alt="Playa Viva vista aérea"
-              width="132"
-              style="display:block;width:132px;max-width:40%;height:auto;opacity:0.9;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.08);"
-            />
-          </p>
-          <p>${emailCopy.greeting}</p>
-          <p>${emailCopy.intro}</p>
-          <p>${emailCopy.effect}</p>
-          <p style="text-transform:uppercase;font-size:13px;letter-spacing:0.1em;color:#c2a46d;margin-top:28px;margin-bottom:8px;">
-            ${emailCopy.nextStepTitle}
-          </p>
-          <p>${emailCopy.nextStepBody}</p>
-          <p>${emailCopy.instructions}</p>
-          <ul style="padding-left:18px;color:#4e4332;">
-            ${emailCopy.fields
-              .map((item) => `<li style="margin-bottom:4px;">${item}</li>`)
-              .join("")}
-          </ul>
-          <p>${emailCopy.closing}</p>
-          <p style="margin-bottom:28px;">${emailCopy.signature}</p>
-          <p>
-            <a href="${absoluteUrl}" style="background:linear-gradient(135deg,#d4af37,#c4a037);color:#1f1509;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">
+        <td style="padding: 20px;">
+          <!-- Greeting -->
+          <p style="margin-bottom: 16px;">${emailCopy.greeting}</p>
+
+          <!-- Intro -->
+          <p style="margin-bottom: 16px;">${emailCopy.intro}</p>
+
+          <!-- Effect -->
+          <p style="margin-bottom: 24px;">${emailCopy.effect}</p>
+
+          <!-- Download Button -->
+          <p style="margin-bottom: 32px; text-align: center;">
+            <a href="${absoluteUrl}" style="background:linear-gradient(135deg,#d4af37,#c4a037);color:#1f1509;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block;font-size:15px;">
               ${emailCopy.buttonLabel}
             </a>
           </p>
-          <p style="font-size:13px;color:#6e5f46">
-            ${
-              payload.language === "es"
-                ? "Si el botón no funciona, copia y pega este enlace en tu navegador:"
-                : "If the button does not work, copy and paste this link into your browser:"
-            }<br/>
-            <a href="${absoluteUrl}">${absoluteUrl}</a>
+
+          <!-- Separator Line -->
+          <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 32px 0;" />
+
+          <!-- Next Step Title -->
+          <h2 style="font-size: 16px; color: #c2a46d; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;">
+            ${emailCopy.nextStepTitle}
+          </h2>
+
+          <!-- Next Step Body -->
+          <p style="margin-bottom: 16px;">${emailCopy.nextStepBody}</p>
+
+          <!-- Instructions -->
+          <p style="margin-bottom: 24px;">${emailCopy.instructions}</p>
+
+          <!-- Meeting Button -->
+          <p style="margin-bottom: 32px; text-align: center;">
+            <a href="${hubspotMeetingsUrl}" style="background:linear-gradient(135deg,#8B7355,#6B5D4F);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block;font-size:15px;">
+              ${emailCopy.meetingButtonLabel}
+            </a>
+          </p>
+
+          <!-- Closing -->
+          <p style="margin-bottom: 8px;">${emailCopy.closing}</p>
+
+          <!-- Signature -->
+          <p style="margin-bottom: 32px; line-height: 1.8;">${emailCopy.signature}</p>
+
+          <!-- Separator Line -->
+          <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 32px 0;" />
+
+          <!-- 3 Photos at the bottom -->
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
+            <tr>
+              <td align="center" style="padding: 8px;">
+                <img src="${fotoComplejoUrl}" alt="Playa Viva Complejo" style="max-width: 30%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+              </td>
+              <td align="center" style="padding: 8px;">
+                <img src="${fotoLogoUrl}" alt="Playa Viva Logo" style="max-width: 30%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+              </td>
+              <td align="center" style="padding: 8px;">
+                <img src="${fotoCasinoUrl}" alt="Casino Wynn" style="max-width: 30%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+              </td>
+            </tr>
+          </table>
+
+          <!-- P.D. 1 -->
+          <p style="font-size: 13px; color: #6e5f46; margin-bottom: 12px;">
+            <strong>${emailCopy.ps1}</strong><br/>
+            <a href="${absoluteUrl}" style="color: #8B7355; word-break: break-all;">${absoluteUrl}</a>
+          </p>
+
+          <!-- P.D. 2 -->
+          <p style="font-size: 13px; color: #6e5f46; margin-bottom: 12px;">
+            <strong>${emailCopy.ps2}</strong><br/>
+            <a href="${hubspotMeetingsUrl}" style="color: #8B7355; word-break: break-all;">${hubspotMeetingsUrl}</a>
           </p>
         </td>
       </tr>
