@@ -624,7 +624,7 @@ async function sendDossierEmail(
 
           <!-- Meeting Button -->
           <p style="margin-bottom: 32px; text-align: center;">
-            <a href="${hubspotMeetingsUrl}" style="background:linear-gradient(135deg,#8B7355,#6B5D4F);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block;font-size:15px;">
+            <a href="${hubspotMeetingsUrl}" style="background:linear-gradient(135deg,#d4af37,#c4a037);color:#1f1509;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block;font-size:15px;">
               ${emailCopy.meetingButtonLabel}
             </a>
           </p>
