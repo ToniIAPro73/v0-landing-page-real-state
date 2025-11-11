@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import fontkit from "@pdf-lib/fontkit";
 import { Resend } from "resend";
 import {
   S3Client,
@@ -48,8 +49,10 @@ const PDF_BASE_DIR = path.join(
   "assets",
   "dossier",
 );
-const PDF_BASE_FILE_NAME = "Dossier-Personalizado.pdf";
-const PDF_BASE_PATH = path.join(PDF_BASE_DIR, PDF_BASE_FILE_NAME);
+const PDF_BASE_FILES = {
+  es: "Dossier-Playa-Viva-ES.pdf",
+  en: "Dossier-Playa-Viva-EN.pdf",
+};
 const LOCAL_PDF_OUTPUT_DIR = getLocalDossierDir();
 const s3Config = resolveS3Config();
 const useS3Storage = shouldUseS3Storage(s3Config);
@@ -67,7 +70,6 @@ const s3Client = useS3Storage && s3Config.bucket
 const PDF_FIELD_NAME = "Nombre_Personalizacion_Lead";
 const PDF_STORAGE_PREFIX = "dossiers";
 const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
-const FALLBACK_PDF_FILES = ["Dossier-Playa-Viva-ES.pdf"];
 const DOSSIER_ALERT_RECIPIENTS = {
   es: {
     email: process.env.DOSSIER_ALERT_EMAIL_ES ?? "tony@uniestate.co.uk",
@@ -143,28 +145,21 @@ const sanitizeFileName = (value: string) =>
     .trim()
     .slice(0, 60) || "lead";
 
-async function resolveBasePdfPath(): Promise<string | null> {
-  try {
-    await fs.access(PDF_BASE_PATH);
-    return PDF_BASE_PATH;
-  } catch {
-    // continue to fallbacks
+async function resolveBasePdfPath(language: "es" | "en"): Promise<string | null> {
+  const fileName = PDF_BASE_FILES[language];
+  if (!fileName) {
+    console.error(`[resolveBasePdfPath] No PDF configured for language: ${language}`);
+    return null;
   }
 
-  try {
-    for (const fallback of FALLBACK_PDF_FILES) {
-      const fallbackPath = path.join(PDF_BASE_DIR, fallback);
-      try {
-        await fs.access(fallbackPath);
-        return fallbackPath;
-      } catch {
-        continue;
-      }
-    }
+  const pdfPath = path.join(PDF_BASE_DIR, fileName);
 
-    return null;
+  try {
+    await fs.access(pdfPath);
+    console.info(`[resolveBasePdfPath] Using PDF for language '${language}': ${fileName}`);
+    return pdfPath;
   } catch (error) {
-    console.error("[personalizePDF] Error scanning dossier directory:", error);
+    console.error(`[resolveBasePdfPath] PDF not found for language '${language}': ${pdfPath}`, error);
     return null;
   }
 }
@@ -180,13 +175,14 @@ type PdfResult = {
 };
 
 async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
-  const basePdfPath = await resolveBasePdfPath();
+  const language = payload.language || "es";
+  const basePdfPath = await resolveBasePdfPath(language);
   if (!basePdfPath) {
-    console.error(`[personalizePDF] Base PDF not found at ${PDF_BASE_PATH}`);
+    console.error(`[personalizePDF] Base PDF not found for language: ${language}`);
     return {
       success: false,
       pdf_delivery_url: null,
-      error: `Base PDF not found at ${PDF_BASE_PATH}`,
+      error: `Base PDF not found for language: ${language}`,
       missingBase: true,
     };
   }
@@ -211,34 +207,161 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
   try {
     const basePdfBytes = await fs.readFile(basePdfPath);
     const pdfDoc = await PDFDocument.load(basePdfBytes);
-    const form = pdfDoc.getForm();
-    let fieldFilled = false;
 
-    try {
-      const personalizationField = form.getTextField(PDF_FIELD_NAME);
-      personalizationField.setText(`${displayName},`);
-      fieldFilled = true;
-    } catch (error) {
-      console.warn(
-        `[personalizePDF] Could not find field "${PDF_FIELD_NAME}". Drawing text instead.`,
-        error,
-      );
+    // Registrar fontkit para usar fuentes personalizadas
+    pdfDoc.registerFontkit(fontkit);
+
+    // Verificar que el PDF tenga al menos 2 páginas
+    if (pdfDoc.getPageCount() < 2) {
+      console.error(`[personalizePDF] PDF only has ${pdfDoc.getPageCount()} page(s), need at least 2`);
+      return {
+        success: false,
+        pdf_delivery_url: null,
+        error: `PDF must have at least 2 pages`,
+      };
     }
 
-    if (!fieldFilled) {
-      const firstPage = pdfDoc.getPage(0);
-      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-      const text = `Personalizado para ${displayName}`;
-      const textSize = 16;
-      const textWidth = font.widthOfTextAtSize(text, textSize);
-      firstPage.drawText(text, {
-        x: (firstPage.getWidth() - textWidth) / 2,
-        y: 64,
+    // Obtener la segunda página (índice 1)
+    const secondPage = pdfDoc.getPage(1);
+
+    // Cargar la fuente Allura personalizada
+    const fontPath = path.join(process.cwd(), 'public', 'fonts', 'Allura-Regular.ttf');
+    const fontBytes = await fs.readFile(fontPath);
+    const font = await pdfDoc.embedFont(fontBytes);
+
+    // Formatear el nombre con iniciales en mayúsculas y coma al final
+    const nameParts = displayName.split(' ');
+    const formattedName = nameParts
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ') + ',';
+
+    const textSize = 92; // Altura de texto especificada
+    const pageHeight = secondPage.getHeight();
+    const pageWidth = secondPage.getWidth();
+
+    // Ajustar posición: el texto debe estar más arriba (reducir fieldTopY)
+    const fieldTopY = 150; // Ajustado para mejor posicionamiento visual
+    const fieldHeight = 143.3;
+
+    // Convertir Y de "desde arriba" a "desde abajo" (sistema de coordenadas PDF)
+    const fieldBottomY = pageHeight - fieldTopY - fieldHeight;
+
+    console.info(`[personalizePDF] Page: ${pageWidth}x${pageHeight}, Field Y from top: ${fieldTopY}, Field Y from bottom: ${fieldBottomY}`);
+
+    // Calcular el ancho del texto
+    const fullTextWidth = font.widthOfTextAtSize(formattedName, textSize);
+
+    // Determinar si necesita dividirse en 2 líneas
+    let line1 = formattedName;
+    let line2 = '';
+
+    if (fullTextWidth > pageWidth * 0.8) { // Si ocupa más del 80% del ancho de la página
+      // Dividir: nombre en línea 1, apellidos + coma en línea 2
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(' ');
+
+      line1 = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+      line2 = lastName.split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ') + ',';
+
+      console.info(`[personalizePDF] Text split into 2 lines: "${line1}" / "${line2}"`);
+    } else {
+      console.info(`[personalizePDF] Text fits in 1 line: "${line1}"`);
+    }
+
+    // Calcular posición centrada horizontalmente para cada línea (centrado en la página completa)
+    const line1Width = font.widthOfTextAtSize(line1, textSize);
+    const line1X = (pageWidth - line1Width) / 2;
+
+    // Offset vertical para ajustar la posición (positivo = sube el texto)
+    const verticalOffset = 30;
+
+    // Color cian apagado #5d8584 convertido a RGB (0-1)
+    const textColor = rgb(0.365, 0.522, 0.518); // #5d8584
+    // Transparencia 100% = opacidad 1.0 (totalmente opaco)
+    const opacity = 1.0;
+
+    if (line2) {
+      // Dos líneas: centrar verticalmente ambas
+      const lineSpacing = textSize * 1.2; // Espacio entre líneas
+      const totalHeight = textSize * 2 + (lineSpacing - textSize);
+      const startY = fieldBottomY + (fieldHeight - totalHeight) / 2 + verticalOffset;
+
+      // Calcular posición centrada para línea 2 (también en la página completa)
+      const line2Width = font.widthOfTextAtSize(line2, textSize);
+      const line2X = (pageWidth - line2Width) / 2;
+
+      // Calcular dimensiones del rectángulo de fondo
+      const maxLineWidth = Math.max(line1Width, line2Width);
+      const padding = 40; // Padding alrededor del texto
+      const bgWidth = maxLineWidth + (padding * 2);
+      const bgHeight = totalHeight + (padding * 2);
+      const bgX = (pageWidth - bgWidth) / 2;
+      const bgY = startY - padding;
+
+      // Dibujar rectángulo de fondo semi-transparente para mejorar legibilidad
+      secondPage.drawRectangle({
+        x: bgX,
+        y: bgY,
+        width: bgWidth,
+        height: bgHeight,
+        color: rgb(1, 1, 1), // Blanco
+        opacity: 0.75, // 75% opaco = 25% transparente
+      });
+
+      // Línea 1 (nombre)
+      secondPage.drawText(line1, {
+        x: line1X,
+        y: startY + textSize + (lineSpacing - textSize),
         size: textSize,
         font,
-        color: rgb(0.63, 0.55, 0.4),
+        color: textColor,
+        opacity: opacity,
+      });
+
+      // Línea 2 (apellidos + coma)
+      secondPage.drawText(line2, {
+        x: line2X,
+        y: startY,
+        size: textSize,
+        font,
+        color: textColor,
+        opacity: opacity,
+      });
+    } else {
+      // Una línea: centrar vertical y horizontalmente
+      const textY = fieldBottomY + (fieldHeight - textSize) / 2 + verticalOffset;
+
+      // Calcular dimensiones del rectángulo de fondo
+      const padding = 40;
+      const bgWidth = line1Width + (padding * 2);
+      const bgHeight = textSize + (padding * 2);
+      const bgX = (pageWidth - bgWidth) / 2;
+      const bgY = textY - padding;
+
+      // Dibujar rectángulo de fondo semi-transparente
+      secondPage.drawRectangle({
+        x: bgX,
+        y: bgY,
+        width: bgWidth,
+        height: bgHeight,
+        color: rgb(1, 1, 1), // Blanco
+        opacity: 0.75, // 75% opaco = 25% transparente
+      });
+
+      // Dibujar texto encima del fondo
+      secondPage.drawText(line1, {
+        x: line1X,
+        y: textY,
+        size: textSize,
+        font,
+        color: textColor,
+        opacity: opacity,
       });
     }
+
+    console.info(`[personalizePDF] Text drawn on page 2 at Y position: ${fieldBottomY}`);
 
     const pdfBytes = await pdfDoc.save();
     const pdfBuffer = Buffer.from(pdfBytes);
@@ -354,11 +477,9 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
 async function sendDossierEmail(
   payload: LeadSubmitPayload,
   pdfUrl: string | null,
-  pdfBuffer: Buffer | null,
-  pdfFilename: string | null,
 ) {
-  if (!pdfBuffer && !pdfUrl) {
-    console.warn("[sendDossierEmail] No PDF buffer or URL provided, skipping email");
+  if (!pdfUrl) {
+    console.warn("[sendDossierEmail] No PDF URL provided, skipping email");
     return;
   }
 
@@ -507,16 +628,9 @@ async function sendDossierEmail(
       html,
     };
 
-    // Adjuntar PDF directamente al email (método principal)
-    if (pdfBuffer && pdfFilename) {
-      emailPayload.attachments = [
-        {
-          filename: pdfFilename,
-          content: pdfBuffer.toString('base64'),
-        }
-      ];
-      console.info(`[sendDossierEmail] Attaching PDF to email: ${pdfFilename}`);
-    }
+    // No adjuntar PDF (demasiado grande para email)
+    // El usuario descargará desde el link en el email
+    console.info(`[sendDossierEmail] Sending email with download link (no attachment): ${absoluteUrl}`);
 
     await resendClient.emails.send(emailPayload);
     console.info(`[sendDossierEmail] Email sent successfully to ${payload.email}`);
@@ -659,8 +773,8 @@ export async function POST(request: NextRequest) {
       void sendMissingBaseAlert(payload);
     }
 
-    if (pdfSuccess && (pdfBuffer || pdfUrl)) {
-      await sendDossierEmail(payload, pdfUrl, pdfBuffer, pdfFilename);
+    if (pdfSuccess && pdfUrl) {
+      await sendDossierEmail(payload, pdfUrl);
     }
 
     const message = basePdfMissing

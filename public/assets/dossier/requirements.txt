@@ -1,2 +1,0 @@
-requests>=2.25.1
-pypdf>=2.0.0
