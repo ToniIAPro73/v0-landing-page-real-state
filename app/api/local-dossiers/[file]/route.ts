@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import {
   getLocalDossierDir,
-  isS3Enabled,
+  shouldUseS3Storage,
 } from "@/lib/dossier-storage";
 
 export const runtime = "nodejs";
@@ -15,7 +15,7 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: { file: string } },
 ) {
-  if (isS3Enabled()) {
+  if (shouldUseS3Storage()) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
