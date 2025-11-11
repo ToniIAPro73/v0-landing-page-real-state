@@ -1543,32 +1543,42 @@ const orchestrateLeadAutomation = async (
           )}
         </div>
 
-        {/* Language Toggle */}
-        <Button
-          variant="outline"
-          size="sm"
+        {/* Language Toggle - iOS Style Switch */}
+        <button
           onClick={() => setLanguage(language === "es" ? "en" : "es")}
-          className="bg-white/95 backdrop-blur-sm border-brown-dark/20 hover:bg-cream-light text-brown-dark shadow-lg rounded-full px-3 py-2 flex items-center gap-2"
           aria-label={language === "es" ? "Switch to English" : "Cambiar a Español"}
+          className="relative flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-full shadow-lg px-3 py-2 hover:shadow-xl transition-all duration-300"
         >
+          {/* ES Label */}
           <span
-            className={`text-lg transition-all duration-200 ${
-              language === "es" ? "opacity-100 scale-110" : "opacity-40 scale-90"
+            className={`text-sm font-bold tracking-wide transition-all duration-300 ${
+              language === "es" ? "text-brown-dark" : "text-brown-dark/30"
             }`}
-            aria-hidden="true"
           >
-            🇪🇸
+            ES
           </span>
-          <span className="text-brown-dark/40 font-light">|</span>
+
+          {/* Switch Track */}
+          <div className="relative w-16 h-8 rounded-full bg-gradient-to-r from-taupe-medium/20 to-brown-dark/20 border-2 border-brown-dark/20">
+            {/* Sliding Circle with Flag */}
+            <div
+              className={`absolute top-0.5 w-7 h-7 rounded-full bg-gradient-to-br from-brown-dark via-taupe-medium to-gold-warm shadow-md flex items-center justify-center text-lg transition-all duration-300 ease-out ${
+                language === "es" ? "left-0.5" : "left-[calc(100%-1.875rem)]"
+              }`}
+            >
+              {language === "es" ? "🇪🇸" : "🇬🇧"}
+            </div>
+          </div>
+
+          {/* EN Label */}
           <span
-            className={`text-lg transition-all duration-200 ${
-              language === "en" ? "opacity-100 scale-110" : "opacity-40 scale-90"
+            className={`text-sm font-bold tracking-wide transition-all duration-300 ${
+              language === "en" ? "text-brown-dark" : "text-brown-dark/30"
             }`}
-            aria-hidden="true"
           >
-            🇬🇧
+            EN
           </span>
-        </Button>
+        </button>
       </div>
 
       {/* Sticky Navigation Menu - Uniestate UK Style */}
