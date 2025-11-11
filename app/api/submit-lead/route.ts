@@ -277,10 +277,16 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
     // Offset vertical para ajustar la posición (positivo = sube el texto)
     const verticalOffset = 30;
 
-    // Color cian apagado #5d8584 convertido a RGB (0-1)
-    const textColor = rgb(0.365, 0.522, 0.518); // #5d8584
-    // Transparencia 100% = opacidad 1.0 (totalmente opaco)
+    // Color dorado-bronce oscuro #8B7355 (tono intermedio entre dorado y bronce, muy premium)
+    // RGB calculado: 139/255 = 0.545, 115/255 = 0.451, 85/255 = 0.333
+    const textColor = rgb(0.545, 0.451, 0.333);
     const opacity = 1.0;
+
+    // Color de sombra: negro con baja opacidad para efecto sutil
+    const shadowColor = rgb(0, 0, 0);
+    const shadowOpacity = 0.35; // Sombra muy sutil pero visible
+    const shadowOffsetX = 2; // Desplazamiento horizontal de la sombra
+    const shadowOffsetY = -2; // Desplazamiento vertical de la sombra (negativo = hacia abajo)
 
     if (line2) {
       // Dos líneas: centrar verticalmente ambas
@@ -292,38 +298,44 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
       const line2Width = font.widthOfTextAtSize(line2, textSize);
       const line2X = (pageWidth - line2Width) / 2;
 
-      // Calcular dimensiones del rectángulo de fondo
-      const maxLineWidth = Math.max(line1Width, line2Width);
-      const padding = 40; // Padding alrededor del texto
-      const bgWidth = maxLineWidth + (padding * 2);
-      const bgHeight = totalHeight + (padding * 2);
-      const bgX = (pageWidth - bgWidth) / 2;
-      const bgY = startY - padding;
+      // Calcular posiciones para el texto
+      const line1Y = startY + textSize + (lineSpacing - textSize);
+      const line2Y = startY;
 
-      // Dibujar rectángulo de fondo semi-transparente para mejorar legibilidad
-      secondPage.drawRectangle({
-        x: bgX,
-        y: bgY,
-        width: bgWidth,
-        height: bgHeight,
-        color: rgb(1, 1, 1), // Blanco
-        opacity: 0.75, // 75% opaco = 25% transparente
+      // SOMBRA para Línea 1
+      secondPage.drawText(line1, {
+        x: line1X + shadowOffsetX,
+        y: line1Y + shadowOffsetY,
+        size: textSize,
+        font,
+        color: shadowColor,
+        opacity: shadowOpacity,
       });
 
-      // Línea 1 (nombre)
+      // TEXTO PRINCIPAL Línea 1 (nombre)
       secondPage.drawText(line1, {
         x: line1X,
-        y: startY + textSize + (lineSpacing - textSize),
+        y: line1Y,
         size: textSize,
         font,
         color: textColor,
         opacity: opacity,
       });
 
-      // Línea 2 (apellidos + coma)
+      // SOMBRA para Línea 2
+      secondPage.drawText(line2, {
+        x: line2X + shadowOffsetX,
+        y: line2Y + shadowOffsetY,
+        size: textSize,
+        font,
+        color: shadowColor,
+        opacity: shadowOpacity,
+      });
+
+      // TEXTO PRINCIPAL Línea 2 (apellidos + coma)
       secondPage.drawText(line2, {
         x: line2X,
-        y: startY,
+        y: line2Y,
         size: textSize,
         font,
         color: textColor,
@@ -333,24 +345,17 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
       // Una línea: centrar vertical y horizontalmente
       const textY = fieldBottomY + (fieldHeight - textSize) / 2 + verticalOffset;
 
-      // Calcular dimensiones del rectángulo de fondo
-      const padding = 40;
-      const bgWidth = line1Width + (padding * 2);
-      const bgHeight = textSize + (padding * 2);
-      const bgX = (pageWidth - bgWidth) / 2;
-      const bgY = textY - padding;
-
-      // Dibujar rectángulo de fondo semi-transparente
-      secondPage.drawRectangle({
-        x: bgX,
-        y: bgY,
-        width: bgWidth,
-        height: bgHeight,
-        color: rgb(1, 1, 1), // Blanco
-        opacity: 0.75, // 75% opaco = 25% transparente
+      // SOMBRA para texto de una línea
+      secondPage.drawText(line1, {
+        x: line1X + shadowOffsetX,
+        y: textY + shadowOffsetY,
+        size: textSize,
+        font,
+        color: shadowColor,
+        opacity: shadowOpacity,
       });
 
-      // Dibujar texto encima del fondo
+      // TEXTO PRINCIPAL de una línea
       secondPage.drawText(line1, {
         x: line1X,
         y: textY,
@@ -522,6 +527,11 @@ async function sendDossierEmail(
     return;
   }
 
+  console.info("[sendDossierEmail] ===== EMAIL DEBUG START =====");
+  console.info("[sendDossierEmail] Recipient:", payload.email);
+  console.info("[sendDossierEmail] Language:", payload.language);
+  console.info("[sendDossierEmail] PDF URL:", absoluteUrl);
+
   const emailCopy = {
     es: {
       subject: "Tu Dossier Personalizado de Playa Viva | Siguiente Paso",
@@ -620,22 +630,40 @@ async function sendDossierEmail(
     </table>
   `;
 
+  // Determinar remitente según idioma
+  const senderEmail = payload.language === "es"
+    ? "tony@uniestate.co.uk"
+    : "michael@uniestate.co.uk";
+  const senderName = payload.language === "es"
+    ? "Tony - Uniestate Playa Viva"
+    : "Michael - Uniestate Playa Viva";
+
   try {
     const emailPayload: any = {
-      from: "Uniestate Playa Viva <inversiones@uniestate.co.uk>",
+      from: `${senderName} <${senderEmail}>`,
       to: payload.email,
       subject: emailCopy.subject,
       html,
     };
 
-    // No adjuntar PDF (demasiado grande para email)
-    // El usuario descargará desde el link en el email
-    console.info(`[sendDossierEmail] Sending email with download link (no attachment): ${absoluteUrl}`);
+    console.info(`[sendDossierEmail] Attempting to send email...`);
+    console.info(`[sendDossierEmail] From: ${senderName} <${senderEmail}>`);
+    console.info(`[sendDossierEmail] To: ${payload.email}`);
+    console.info(`[sendDossierEmail] Subject: ${emailCopy.subject}`);
 
-    await resendClient.emails.send(emailPayload);
-    console.info(`[sendDossierEmail] Email sent successfully to ${payload.email}`);
+    const result = await resendClient.emails.send(emailPayload);
+
+    console.info(`[sendDossierEmail] ✓ Email sent successfully!`);
+    console.info(`[sendDossierEmail] Resend Email ID:`, result.id);
+    console.info("[sendDossierEmail] ===== EMAIL DEBUG END =====");
   } catch (error) {
-    console.error("[sendDossierEmail] Failed to send email via Resend:", error);
+    console.error("[sendDossierEmail] ✗ Failed to send email via Resend");
+    console.error("[sendDossierEmail] Error details:", error);
+    if (error instanceof Error) {
+      console.error("[sendDossierEmail] Error message:", error.message);
+      console.error("[sendDossierEmail] Error stack:", error.stack);
+    }
+    console.error("[sendDossierEmail] ===== EMAIL DEBUG END (WITH ERROR) =====");
   }
 }
 

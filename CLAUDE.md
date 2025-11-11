@@ -49,13 +49,23 @@ npm run start
 - **`lib/`** - Utility functions
 
   - `utils.ts` - `cn()` helper for merging Tailwind classes (clsx + tailwind-merge)
+  - `dossier-storage.ts` - Storage configuration for personalized PDFs (local/S3 with path normalization)
+  - `altcha.ts` - ALTCHA challenge creation and verification (CAPTCHA alternative)
+
+- **`app/api/`** - API Routes
+
+  - `submit-lead/route.ts` - Lead submission endpoint with HubSpot integration, PDF personalization, and multi-storage support
+  - `local-dossiers/[file]/route.ts` - Secure endpoint to serve locally stored personalized PDFs
+  - `altcha/challenge/route.ts` - ALTCHA challenge generation endpoint
 
 - **`public/`** - Static assets served directly
   - `assets/imagenes/` - Image galleries (compressed to <300 KB)
-  - `assets/dossier/` - Investment PDF documents
+  - `assets/dossier/` - Investment PDF documents (ES/EN versions)
   - `assets/planos/` - Floor plan images
   - `assets/Videos/` - Video content
   - `hero-background.png`, `logo-playa-viva.png`, `favicon_playa_viva.png`
+- **`public/fonts/`** - Custom fonts for PDF personalization
+  - `Allura-Regular.ttf` - Script font for personalized lead names in dossiers
 
 ### Key Technical Details
 
@@ -79,10 +89,28 @@ npm run start
 - Gallery tabs (servicios, interior, sitios, video)
 - Apartment showcase tabs (studio, oneBed, twoBed, threeBed)
 - FAQ accordion with hover interactions
-- Lead form with automation payload structure for HubSpot integration
+- Lead form with ALTCHA verification (privacy-focused CAPTCHA alternative)
+- Lead submission with automation payload for HubSpot integration
 - Viewport-responsive hero scaling for mobile landscape
 
 **Analytics**: Vercel Analytics integrated via `@vercel/analytics/next`
+
+**Security & Bot Protection**:
+
+- ALTCHA integration for form verification (privacy-preserving proof-of-work)
+- Custom translations for ES/EN verification messages
+- Server-side payload verification with configurable TTL
+
+**PDF Personalization System** (`app/api/submit-lead/route.ts`):
+
+- Dynamic PDF generation using pdf-lib with custom fonts (Allura-Regular.ttf)
+- Multi-language support: generates personalized dossiers in Spanish or English based on form language
+- Dual storage strategy:
+  - **Local storage**: Normalized path handling for Windows environments (supports `DOSSIER_LOCAL_DIR` env var)
+  - **S3 storage**: AWS S3/compatible services with presigned URLs (configurable with `S3_*` env vars)
+  - Automatic fallback system when base PDFs are missing
+- Email notifications via Resend when PDF generation fails (language-aware recipients)
+- Secure file serving via `/api/local-dossiers/[file]/route.ts` endpoint
 
 ## Development Guidelines
 
@@ -117,22 +145,39 @@ The main landing page manages multiple state concerns:
 - Run `npm run lint` before commits
 - Document tested tabs/sections and language in PRs
 
-## Current Context (from CONTEXTO.md)
+## Current Context
 
-**Active Work**: The `app/page.tsx` file maintains its Client Component structure and compiles correctly.
+**Active Work**: Full PDF personalization system with multi-storage support and ALTCHA security integration.
 
-**Recent Changes**:
+**Recent Changes** (Last 2 weeks):
 
-- Dossier hero section displays premium badge "Dossier de Inversión Exclusivo" with corrected tilde
-- FAQ section uses compact panel with hover show/hide
-- Dossier form divides fields with different proportions (firstName narrower than lastName)
-- Simulated automation for HubSpot + Python script + internal storage
+- **PDF Personalization**: Complete system for generating personalized dossiers with lead names using pdf-lib
+  - Base PDFs available in both languages: `Dossier-Playa-Viva-ES.pdf` and `Dossier-Playa-Viva-EN.pdf`
+  - Custom font integration (Allura-Regular.ttf) for elegant name rendering
+  - Fallback to `Dossier-Personalizado.pdf` when language-specific PDFs are unavailable
+- **Storage Infrastructure** (`lib/dossier-storage.ts`):
+  - Local storage with Windows path normalization (fixes backslash/forward-slash issues)
+  - S3-compatible storage with automatic endpoint/bucket parsing
+  - Environment-based storage selection (Vercel → S3, local dev → filesystem)
+- **ALTCHA Integration**: Privacy-preserving bot protection replacing traditional CAPTCHAs
+  - Challenge generation endpoint (`/api/altcha/challenge`)
+  - Server-side verification with configurable TTL
+  - Bilingual widget translations (ES/EN)
+- **Lead Submission Flow** (`app/api/submit-lead/route.ts`):
+  - HubSpot form submission with UTM tracking
+  - PDF personalization with name overlay
+  - Multi-storage support (local + S3)
+  - Language-aware error notifications via Resend
+  - Secure PDF serving via dedicated endpoint
+- **Removed Python Script**: PDF generation now handled entirely in TypeScript/Node.js (removed `personalizar_dossier.py`)
 
-**Pending Tasks**:
+**Known Issues & Maintenance Notes**:
 
-1. Re-insert two descriptive paragraphs before highlights in dossier section
-2. Adjust CTA card dimensions (~620px width needs height/padding reduction for better proportions)
-3. Visual verification at 100% zoom desktop and mobile after changes
+- Base PDF files (`Dossier-Playa-Viva-ES.pdf`, `Dossier-Playa-Viva-EN.pdf`) must exist in `public/assets/dossier/`
+- When PDFs are missing and Resend is configured, automated alerts are sent:
+  - Spanish form submissions → tony@uniestate.co.uk
+  - English form submissions → michael@uniestate.co.uk
+- Local storage directory must be configured via `DOSSIER_LOCAL_DIR` env var for Windows dev environments
 
 ## Deployment
 
@@ -142,10 +187,25 @@ The main landing page manages multiple state concerns:
 
 ## Important Notes
 
-- **Environment Variables**: Prefix with `NEXT_PUBLIC_` for client-side access
-- **PDF Assets**: Verify `public/assets/dossier/*.pdf` files after marketing updates to avoid broken links
+- **Environment Variables**:
+  - Prefix with `NEXT_PUBLIC_` for client-side access
+  - Required for production: `RESEND_API_KEY`, `ALTCHA_SECRET`, S3 credentials (`S3_Endpoint`, `S3_Bucket`, `S3_Region_Code`, `S3_Access_Key_ID`, `S3_Secret_Access_Key`)
+  - Optional for local dev: `DOSSIER_LOCAL_DIR` (defaults to `~/Documents/Dossiers_Personalizados_PlayaViva`)
+  - Storage behavior flags: `DISABLE_S3_STORAGE`, `FORCE_S3_STORAGE`
+- **PDF Assets**:
+  - Verify `public/assets/dossier/*.pdf` files after marketing updates to avoid broken links
+  - Base PDFs required: `Dossier-Playa-Viva-ES.pdf` and `Dossier-Playa-Viva-EN.pdf`
+  - Fallback PDF: `Dossier-Personalizado.pdf` (used when language-specific versions are missing)
+- **Path Handling**: Use forward slashes in code; `lib/dossier-storage.ts` normalizes paths for Windows compatibility
 - **No Turbopack Lock**: Ensure the Client Component compiles without Turbopack locks
 - **Commit Style**: Short, imperative, bilingual if affecting copy (e.g., "Refina tabs Apartamentos ES/EN")
+
+## Key Dependencies
+
+- **pdf-lib** + **@pdf-lib/fontkit**: PDF manipulation and custom font embedding
+- **altcha**: Privacy-preserving proof-of-work CAPTCHA alternative
+- **resend**: Transactional email service for error notifications
+- **@aws-sdk/client-s3** + **@aws-sdk/s3-request-presigner**: S3-compatible storage with presigned URLs
 
 ## PR Requirements
 
