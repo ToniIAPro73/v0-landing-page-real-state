@@ -2689,11 +2689,11 @@ const orchestrateLeadAutomation = async (
             <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30">
               {locationView === "map" ? (
                 <Image
-                  src="/assets/imagenes/areamap.webp"
+                  src="/assets/imagenes/Collage_ubicacion.png"
                   alt="Al Marjan Island Area Map"
                   className="w-full h-auto"
                   width={1200}
-                  height={704}
+                  height={800}
                   loading="lazy"
                   sizes="(max-width: 1024px) 100vw, 70vw"
                 />
