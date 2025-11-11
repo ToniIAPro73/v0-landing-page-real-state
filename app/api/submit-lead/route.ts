@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
-import { randomUUID } from "crypto";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { Resend } from "resend";
 import {
@@ -205,8 +204,7 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
     `${payload.firstName} ${payload.lastName}`.trim() ||
     "Inversor Playa Viva";
   const safeName = sanitizeFileName(displayName);
-  const uniqueId = randomUUID();
-  const outputFilename = `Dossier_Playa_Viva_${safeName}_${uniqueId}.pdf`;
+  const outputFilename = `Dossier_Playa_Viva_${safeName}.pdf`;
 
   try {
     const basePdfBytes = await fs.readFile(basePdfPath);
