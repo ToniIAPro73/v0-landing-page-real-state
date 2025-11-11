@@ -207,7 +207,6 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
   const safeName = sanitizeFileName(displayName);
   const uniqueId = randomUUID();
   const outputFilename = `Dossier_Playa_Viva_${safeName}_${uniqueId}.pdf`;
-  const outputPath = path.join(PDF_OUTPUT_DIR, outputFilename);
 
   try {
     const basePdfBytes = await fs.readFile(basePdfPath);
