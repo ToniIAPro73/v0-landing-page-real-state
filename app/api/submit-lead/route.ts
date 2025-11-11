@@ -4,6 +4,7 @@ import path from "path";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import {
   S3Client,
   PutObjectCommand,
@@ -282,11 +283,11 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
     const textColor = rgb(0.545, 0.451, 0.333);
     const opacity = 1.0;
 
-    // Color de sombra: negro con baja opacidad para efecto sutil
+    // Color de sombra: negro con opacidad media para máxima legibilidad
     const shadowColor = rgb(0, 0, 0);
-    const shadowOpacity = 0.35; // Sombra muy sutil pero visible
-    const shadowOffsetX = 2; // Desplazamiento horizontal de la sombra
-    const shadowOffsetY = -2; // Desplazamiento vertical de la sombra (negativo = hacia abajo)
+    const shadowOpacity = 0.65; // Sombra más intensa para mejor contraste
+    const shadowOffsetX = 3; // Desplazamiento horizontal de la sombra (aumentado)
+    const shadowOffsetY = -3; // Desplazamiento vertical de la sombra (aumentado)
 
     if (line2) {
       // Dos líneas: centrar verticalmente ambas
@@ -518,12 +519,14 @@ async function sendDossierEmail(
     }
   })();
 
-  if (!resendClient) {
-    console.warn("[sendDossierEmail] RESEND_API_KEY not configured.");
-    console.warn(
-      "[sendDossierEmail] Dossier download link:",
-      absoluteUrl,
-    );
+  // Check SMTP configuration
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = parseInt(process.env.SMTP_PORT || "465");
+  const smtpSecure = process.env.SMTP_SECURE === "true";
+
+  if (!smtpHost) {
+    console.warn("[sendDossierEmail] SMTP not configured.");
+    console.warn("[sendDossierEmail] Dossier download link:", absoluteUrl);
     return;
   }
 
@@ -531,6 +534,8 @@ async function sendDossierEmail(
   console.info("[sendDossierEmail] Recipient:", payload.email);
   console.info("[sendDossierEmail] Language:", payload.language);
   console.info("[sendDossierEmail] PDF URL:", absoluteUrl);
+  console.info("[sendDossierEmail] SMTP Host:", smtpHost);
+  console.info("[sendDossierEmail] SMTP Port:", smtpPort);
 
   const emailCopy = {
     es: {
@@ -630,34 +635,55 @@ async function sendDossierEmail(
     </table>
   `;
 
-  // Determinar remitente según idioma
+  // Determinar remitente y credenciales según idioma
   const senderEmail = payload.language === "es"
     ? "tony@uniestate.co.uk"
     : "michael@uniestate.co.uk";
   const senderName = payload.language === "es"
     ? "Tony - Uniestate Playa Viva"
     : "Michael - Uniestate Playa Viva";
+  const smtpUser = payload.language === "es"
+    ? process.env.SMTP_USER_ES
+    : process.env.SMTP_USER_EN;
+  const smtpPass = payload.language === "es"
+    ? process.env.SMTP_PASS_ES
+    : process.env.SMTP_PASS_EN;
+
+  if (!smtpUser || !smtpPass) {
+    console.error(`[sendDossierEmail] SMTP credentials missing for language: ${payload.language}`);
+    return;
+  }
 
   try {
-    const emailPayload: any = {
-      from: `${senderName} <${senderEmail}>`,
-      to: payload.email,
-      subject: emailCopy.subject,
-      html,
-    };
+    // Crear transporte SMTP con Nodemailer
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpSecure,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
+    });
 
-    console.info(`[sendDossierEmail] Attempting to send email...`);
+    console.info(`[sendDossierEmail] Attempting to send email via SMTP...`);
     console.info(`[sendDossierEmail] From: ${senderName} <${senderEmail}>`);
     console.info(`[sendDossierEmail] To: ${payload.email}`);
     console.info(`[sendDossierEmail] Subject: ${emailCopy.subject}`);
 
-    const result = await resendClient.emails.send(emailPayload);
+    const result = await transporter.sendMail({
+      from: `${senderName} <${senderEmail}>`,
+      to: payload.email,
+      subject: emailCopy.subject,
+      html,
+    });
 
-    console.info(`[sendDossierEmail] ✓ Email sent successfully!`);
-    console.info(`[sendDossierEmail] Resend Email ID:`, result.id);
+    console.info(`[sendDossierEmail] ✓ Email sent successfully via SMTP!`);
+    console.info(`[sendDossierEmail] Message ID:`, result.messageId);
+    console.info(`[sendDossierEmail] Response:`, result.response);
     console.info("[sendDossierEmail] ===== EMAIL DEBUG END =====");
   } catch (error) {
-    console.error("[sendDossierEmail] ✗ Failed to send email via Resend");
+    console.error("[sendDossierEmail] ✗ Failed to send email via SMTP");
     console.error("[sendDossierEmail] Error details:", error);
     if (error instanceof Error) {
       console.error("[sendDossierEmail] Error message:", error.message);
