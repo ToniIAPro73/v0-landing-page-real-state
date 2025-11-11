@@ -1558,16 +1558,20 @@ const orchestrateLeadAutomation = async (
             ES
           </span>
 
-          {/* Switch Track */}
-          <div className="relative w-16 h-8 rounded-full bg-gradient-to-r from-taupe-medium/20 to-brown-dark/20 border-2 border-brown-dark/20">
-            {/* Sliding Circle with Flag */}
+          {/* Switch Track with Flags */}
+          <div className="relative w-20 h-9 rounded-full bg-gradient-to-r from-taupe-medium/20 to-brown-dark/20 border-2 border-brown-dark/20 flex items-center justify-between px-1.5">
+            {/* Spanish Flag - Fixed on left */}
+            <span className="text-xl z-10 pointer-events-none">🇪🇸</span>
+
+            {/* Sliding Circle (no flag inside) */}
             <div
-              className={`absolute top-0.5 w-7 h-7 rounded-full bg-gradient-to-br from-brown-dark via-taupe-medium to-gold-warm shadow-md flex items-center justify-center text-lg transition-all duration-300 ease-out ${
-                language === "es" ? "left-0.5" : "left-[calc(100%-1.875rem)]"
+              className={`absolute top-0.5 w-8 h-8 rounded-full bg-gradient-to-br from-brown-dark via-taupe-medium to-gold-warm shadow-lg transition-all duration-300 ease-out ${
+                language === "es" ? "left-0.5" : "left-[calc(100%-2.125rem)]"
               }`}
-            >
-              {language === "es" ? "🇪🇸" : "🇬🇧"}
-            </div>
+            />
+
+            {/* UK Flag - Fixed on right */}
+            <span className="text-xl z-10 pointer-events-none">🇬🇧</span>
           </div>
 
           {/* EN Label */}
