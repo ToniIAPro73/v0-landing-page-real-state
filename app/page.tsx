@@ -1543,35 +1543,18 @@ const orchestrateLeadAutomation = async (
           )}
         </div>
 
-        {/* Language Toggle - iOS Style Switch (Captura.png design) */}
-        <button
+        {/* Language Toggle - Simple */}
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => setLanguage(language === "es" ? "en" : "es")}
+          className="bg-white/95 backdrop-blur-sm border-brown-dark/20 hover:bg-cream-light text-brown-dark shadow-lg rounded-full px-4 py-2"
           aria-label={language === "es" ? "Switch to English" : "Cambiar a Español"}
-          className="relative bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 p-1.5"
         >
-          <div className="relative flex items-center bg-cream-light/40 rounded-full px-2 py-1.5 min-w-[140px]">
-            {/* ES Label - Left side */}
-            <span className="text-sm font-bold text-brown-dark/70 w-10 text-center z-10">
-              ES
-            </span>
-
-            {/* Sliding White Circle with Flag */}
-            <div
-              className={`absolute w-14 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ease-in-out border-2 border-brown-dark/10 ${
-                language === "es" ? "left-1" : "left-[calc(100%-3.625rem)]"
-              }`}
-            >
-              <span className="text-2xl">
-                {language === "es" ? "🇪🇸" : "🇬🇧"}
-              </span>
-            </div>
-
-            {/* EN Label - Right side */}
-            <span className="text-sm font-bold text-brown-dark/70 w-10 text-center z-10">
-              EN
-            </span>
-          </div>
-        </button>
+          <span className={language === "es" ? "font-bold" : "opacity-60"}>ES</span>
+          <span className="mx-2 text-brown-dark/40">|</span>
+          <span className={language === "en" ? "font-bold" : "opacity-60"}>EN</span>
+        </Button>
       </div>
 
       {/* Sticky Navigation Menu - Uniestate UK Style */}
