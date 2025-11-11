@@ -1508,10 +1508,26 @@ const orchestrateLeadAutomation = async (
           variant="outline"
           size="sm"
           onClick={() => setLanguage(language === "es" ? "en" : "es")}
-          className="bg-white/95 backdrop-blur-sm border-brown-dark/20 hover:bg-cream-light text-brown-dark shadow-lg rounded-full px-4"
+          className="bg-white/95 backdrop-blur-sm border-brown-dark/20 hover:bg-cream-light text-brown-dark shadow-lg rounded-full px-3 py-2 flex items-center gap-2"
+          aria-label={language === "es" ? "Switch to English" : "Cambiar a Español"}
         >
-          <Globe className="mr-2 h-4 w-4" />
-          {language === "es" ? "EN" : "ES"}
+          <span
+            className={`text-lg transition-all duration-200 ${
+              language === "es" ? "opacity-100 scale-110" : "opacity-40 scale-90"
+            }`}
+            aria-hidden="true"
+          >
+            🇪🇸
+          </span>
+          <span className="text-brown-dark/40 font-light">|</span>
+          <span
+            className={`text-lg transition-all duration-200 ${
+              language === "en" ? "opacity-100 scale-110" : "opacity-40 scale-90"
+            }`}
+            aria-hidden="true"
+          >
+            🇬🇧
+          </span>
         </Button>
       </div>
 
