@@ -549,7 +549,7 @@ async function sendDossierEmail(
       intro:
         "Gracias por tu interés en Playa Viva. Aquí tienes el dossier personalizado que solicitaste sobre esta oportunidad única en Al Marjan Island.",
       effect:
-        "En este análisis descubrirás en detalle el impacto del "Efecto Wynn" y el potencial real que ofrece la zona.",
+        "En este análisis descubrirás en detalle el impacto del \"Efecto Wynn\" y el potencial real que ofrece la zona.",
       nextStepTitle: "Tu Siguiente Paso: Hablemos 15 Minutos",
       nextStepBody:
         "Una vez hayas revisado los datos, el siguiente paso lógico es una consulta privada y sin compromiso de 15 minutos. En ella, analizaremos cómo esta inversión se alinea con tus objetivos personales y resolveremos tus dudas directas.",
@@ -568,7 +568,7 @@ async function sendDossierEmail(
       intro:
         "Thank you for your interest in Playa Viva. Here is the personalised dossier you requested about this unique opportunity at Al Marjan Island.",
       effect:
-        "In this analysis, you will discover in detail the impact of the "Wynn Effect" and the real potential the area offers.",
+        "In this analysis, you will discover in detail the impact of the \"Wynn Effect\" and the real potential the area offers.",
       nextStepTitle: "Your Next Step: Let's Talk for 15 Minutes",
       nextStepBody:
         "Once you have reviewed the data, the logical next step is a private, no-obligation 15-minute consultation. In this call, we will analyse how this investment aligns with your personal goals and answer your direct questions.",
