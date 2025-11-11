@@ -282,11 +282,11 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
     const textColor = rgb(0.545, 0.451, 0.333);
     const opacity = 1.0;
 
-    // Color de sombra: negro con baja opacidad para efecto sutil
+    // Color de sombra: negro con opacidad media para máxima legibilidad
     const shadowColor = rgb(0, 0, 0);
-    const shadowOpacity = 0.35; // Sombra muy sutil pero visible
-    const shadowOffsetX = 2; // Desplazamiento horizontal de la sombra
-    const shadowOffsetY = -2; // Desplazamiento vertical de la sombra (negativo = hacia abajo)
+    const shadowOpacity = 0.65; // Sombra más intensa para mejor contraste
+    const shadowOffsetX = 3; // Desplazamiento horizontal de la sombra (aumentado)
+    const shadowOffsetY = -3; // Desplazamiento vertical de la sombra (aumentado)
 
     if (line2) {
       // Dos líneas: centrar verticalmente ambas
@@ -654,7 +654,8 @@ async function sendDossierEmail(
     const result = await resendClient.emails.send(emailPayload);
 
     console.info(`[sendDossierEmail] ✓ Email sent successfully!`);
-    console.info(`[sendDossierEmail] Resend Email ID:`, result.id);
+    console.info(`[sendDossierEmail] Resend Response:`, JSON.stringify(result, null, 2));
+    console.info(`[sendDossierEmail] Resend Email ID:`, result?.id || result?.data?.id || 'NO ID RETURNED');
     console.info("[sendDossierEmail] ===== EMAIL DEBUG END =====");
   } catch (error) {
     console.error("[sendDossierEmail] ✗ Failed to send email via Resend");
