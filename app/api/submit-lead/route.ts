@@ -641,14 +641,14 @@ async function sendDossierEmail(
           <!-- 3 Photos at the bottom -->
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
             <tr>
-              <td align="center" style="padding: 8px;">
-                <img src="${fotoComplejoUrl}" alt="Playa Viva Complejo" style="max-width: 30%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+              <td align="center" style="padding: 12px;">
+                <img src="${fotoComplejoUrl}" alt="Playa Viva Complejo" width="200" style="width: 200px; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block;" />
               </td>
-              <td align="center" style="padding: 8px;">
-                <img src="${fotoLogoUrl}" alt="Playa Viva Logo" style="max-width: 30%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+              <td align="center" style="padding: 12px;">
+                <img src="${fotoLogoUrl}" alt="Playa Viva Logo" width="200" style="width: 200px; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block;" />
               </td>
-              <td align="center" style="padding: 8px;">
-                <img src="${fotoCasinoUrl}" alt="Casino Wynn" style="max-width: 30%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+              <td align="center" style="padding: 12px;">
+                <img src="${fotoCasinoUrl}" alt="Casino Wynn" width="200" style="width: 200px; max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block;" />
               </td>
             </tr>
           </table>
