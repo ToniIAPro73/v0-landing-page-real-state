@@ -64,7 +64,7 @@ const s3Client = useS3Storage && s3Config.bucket
       forcePathStyle: true,
     })
   : null;
-const PDF_FIELD_NAME = "nombre_personalizacion_lead";
+const PDF_FIELD_NAME = "Nombre_Personalizacion_Lead";
 const PDF_STORAGE_PREFIX = "dossiers";
 const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
 const FALLBACK_PDF_FILES = ["Dossier-Playa-Viva-ES.pdf"];
@@ -173,6 +173,8 @@ type PdfResult = {
   success: boolean;
   pdf_delivery_url: string | null;
   local_path?: string | null;
+  pdf_buffer?: Buffer | null;
+  pdf_filename?: string | null;
   error?: string;
   missingBase?: boolean;
 };
@@ -204,7 +206,7 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
     `${payload.firstName} ${payload.lastName}`.trim() ||
     "Inversor Playa Viva";
   const safeName = sanitizeFileName(displayName);
-  const outputFilename = `Dossier_Playa_Viva_${safeName}.pdf`;
+  const outputFilename = `Dossier_${safeName}.pdf`;
 
   try {
     const basePdfBytes = await fs.readFile(basePdfPath);
@@ -214,7 +216,7 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
 
     try {
       const personalizationField = form.getTextField(PDF_FIELD_NAME);
-      personalizationField.setText(displayName);
+      personalizationField.setText(`${displayName},`);
       fieldFilled = true;
     } catch (error) {
       console.warn(
@@ -270,6 +272,8 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
           success: true,
           pdf_delivery_url: signedUrl,
           local_path: null,
+          pdf_buffer: pdfBuffer,
+          pdf_filename: outputFilename,
         };
       } catch (error) {
         console.error(
@@ -322,6 +326,8 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
           outputFilename,
         )}`,
         local_path: outputPath,
+        pdf_buffer: pdfBuffer,
+        pdf_filename: outputFilename,
       };
     } catch (error) {
       console.error(
@@ -348,8 +354,13 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
 async function sendDossierEmail(
   payload: LeadSubmitPayload,
   pdfUrl: string | null,
+  pdfBuffer: Buffer | null,
+  pdfFilename: string | null,
 ) {
-  if (!pdfUrl) return;
+  if (!pdfBuffer && !pdfUrl) {
+    console.warn("[sendDossierEmail] No PDF buffer or URL provided, skipping email");
+    return;
+  }
 
   const siteOrigin = (() => {
     if (payload.pageUri) {
@@ -489,12 +500,26 @@ async function sendDossierEmail(
   `;
 
   try {
-    await resendClient.emails.send({
+    const emailPayload: any = {
       from: "Uniestate Playa Viva <inversiones@uniestate.co.uk>",
       to: payload.email,
       subject: emailCopy.subject,
       html,
-    });
+    };
+
+    // Adjuntar PDF directamente al email (método principal)
+    if (pdfBuffer && pdfFilename) {
+      emailPayload.attachments = [
+        {
+          filename: pdfFilename,
+          content: pdfBuffer.toString('base64'),
+        }
+      ];
+      console.info(`[sendDossierEmail] Attaching PDF to email: ${pdfFilename}`);
+    }
+
+    await resendClient.emails.send(emailPayload);
+    console.info(`[sendDossierEmail] Email sent successfully to ${payload.email}`);
   } catch (error) {
     console.error("[sendDossierEmail] Failed to send email via Resend:", error);
   }
@@ -618,6 +643,8 @@ export async function POST(request: NextRequest) {
       pdfSuccess && pdfResult.value ? pdfResult.value : null;
     const pdfUrl = pdfValue?.pdf_delivery_url ?? null;
     const pdfLocalPath = pdfValue?.local_path ?? null;
+    const pdfBuffer = pdfValue?.pdf_buffer ?? null;
+    const pdfFilename = pdfValue?.pdf_filename ?? null;
     const pdfError =
       pdfSuccess && pdfValue?.error
         ? pdfValue.error
@@ -632,8 +659,8 @@ export async function POST(request: NextRequest) {
       void sendMissingBaseAlert(payload);
     }
 
-    if (pdfSuccess && pdfUrl) {
-      await sendDossierEmail(payload, pdfUrl);
+    if (pdfSuccess && (pdfBuffer || pdfUrl)) {
+      await sendDossierEmail(payload, pdfUrl, pdfBuffer, pdfFilename);
     }
 
     const message = basePdfMissing

@@ -13,13 +13,14 @@ const filenameIsValid = (value: string) =>
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { file: string } },
+  { params }: { params: Promise<{ file: string }> },
 ) {
   if (shouldUseS3Storage()) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const rawParam = params.file ?? "";
+  const resolvedParams = await params;
+  const rawParam = resolvedParams.file ?? "";
   const decoded = decodeURIComponent(rawParam);
 
   if (!decoded || !filenameIsValid(decoded)) {
