@@ -583,10 +583,10 @@ async function sendDossierEmail(
     },
   }[payload.language];
 
-  // URLs de las 3 fotos al pie
-  const fotoComplejoUrl = `${siteOrigin}/assets/imagenes/Foto_Complejo.png`;
-  const fotoLogoUrl = `${siteOrigin}/assets/imagenes/logo.png`;
-  const fotoCasinoUrl = `${siteOrigin}/assets/imagenes/Casino.png`;
+  // URLs de las 3 fotos al pie (usar SITE_URL para que funcionen en emails)
+  const fotoComplejoUrl = `${SITE_URL}/assets/imagenes/Foto_Complejo.png`;
+  const fotoLogoUrl = `${SITE_URL}/assets/imagenes/logo.png`;
+  const fotoCasinoUrl = `${SITE_URL}/assets/imagenes/Casino.png`;
 
   const html = `
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="font-family: sans-serif; color: #333; line-height: 1.6;">
