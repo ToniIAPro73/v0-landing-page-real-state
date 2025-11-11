@@ -1543,45 +1543,34 @@ const orchestrateLeadAutomation = async (
           )}
         </div>
 
-        {/* Language Toggle - iOS Style Switch */}
+        {/* Language Toggle - iOS Style Switch (Captura.png design) */}
         <button
           onClick={() => setLanguage(language === "es" ? "en" : "es")}
           aria-label={language === "es" ? "Switch to English" : "Cambiar a Español"}
-          className="relative flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-full shadow-lg px-3 py-2 hover:shadow-xl transition-all duration-300"
+          className="relative bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 p-1.5"
         >
-          {/* ES Label */}
-          <span
-            className={`text-sm font-bold tracking-wide transition-all duration-300 ${
-              language === "es" ? "text-brown-dark" : "text-brown-dark/30"
-            }`}
-          >
-            ES
-          </span>
+          <div className="relative flex items-center bg-cream-light/40 rounded-full px-2 py-1.5 min-w-[140px]">
+            {/* ES Label - Left side */}
+            <span className="text-sm font-bold text-brown-dark/70 w-10 text-center z-10">
+              ES
+            </span>
 
-          {/* Switch Track with Flags */}
-          <div className="relative w-20 h-9 rounded-full bg-gradient-to-r from-taupe-medium/20 to-brown-dark/20 border-2 border-brown-dark/20 flex items-center justify-between px-1.5">
-            {/* Spanish Flag - Fixed on left */}
-            <span className="text-xl z-10 pointer-events-none">🇪🇸</span>
-
-            {/* Sliding Circle (no flag inside) */}
+            {/* Sliding White Circle with Flag */}
             <div
-              className={`absolute top-0.5 w-8 h-8 rounded-full bg-gradient-to-br from-brown-dark via-taupe-medium to-gold-warm shadow-lg transition-all duration-300 ease-out ${
-                language === "es" ? "left-0.5" : "left-[calc(100%-2.125rem)]"
+              className={`absolute w-14 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ease-in-out border-2 border-brown-dark/10 ${
+                language === "es" ? "left-1" : "left-[calc(100%-3.625rem)]"
               }`}
-            />
+            >
+              <span className="text-2xl">
+                {language === "es" ? "🇪🇸" : "🇬🇧"}
+              </span>
+            </div>
 
-            {/* UK Flag - Fixed on right */}
-            <span className="text-xl z-10 pointer-events-none">🇬🇧</span>
+            {/* EN Label - Right side */}
+            <span className="text-sm font-bold text-brown-dark/70 w-10 text-center z-10">
+              EN
+            </span>
           </div>
-
-          {/* EN Label */}
-          <span
-            className={`text-sm font-bold tracking-wide transition-all duration-300 ${
-              language === "en" ? "text-brown-dark" : "text-brown-dark/30"
-            }`}
-          >
-            EN
-          </span>
         </button>
       </div>
 
