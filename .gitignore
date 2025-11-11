@@ -9,6 +9,10 @@ coverage/
 build/
 .cache/
 
+# Package manager lock files (keep only package-lock.json for npm)
+pnpm-lock.yaml
+yarn.lock
+
 # ───────────────────────────────
 # 🔹 Archivos de entorno / configuración local
 # ───────────────────────────────
