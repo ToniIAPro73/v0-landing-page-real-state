@@ -29,7 +29,7 @@ npm run start
 
 **IMPORTANT**: Claude Code works ONLY on the `development` branch. Never work on `preview` or `production` branches.
 
-```
+```text
 development → preview → production
      ↑
   (Claude works here)
@@ -46,26 +46,31 @@ development → preview → production
 ### Core Structure
 
 - **`app/`** - Next.js App Router (v16)
+
   - `page.tsx` - Main landing page (Client Component with complex state management)
   - `layout.tsx` - Root layout with metadata, Analytics integration
   - `globals.css` - Tailwind v4 configuration with custom color palette
   - `head.js` - Custom head configuration
 
 - **`components/`** - Reusable UI components
+
   - `ui/` - shadcn/ui components (Button, etc.)
   - `theme-provider.tsx` - Theme management (next-themes)
 
 - **`lib/`** - Utility functions
+
   - `utils.ts` - `cn()` helper for merging Tailwind classes (clsx + tailwind-merge)
   - `dossier-storage.ts` - Storage configuration for personalized PDFs (auto-detects environment)
   - `altcha.ts` - ALTCHA challenge creation and verification (CAPTCHA alternative)
 
 - **`app/api/`** - API Routes
+
   - `submit-lead/route.ts` - Lead submission endpoint with HubSpot integration, PDF personalization, SMTP email delivery, and S3 storage
   - `local-dossiers/[file]/route.ts` - Secure endpoint to serve locally stored personalized PDFs (fallback when S3 fails)
   - `altcha/challenge/route.ts` - ALTCHA challenge generation endpoint
 
 - **`public/`** - Static assets served directly
+
   - `assets/imagenes/` - Image galleries (compressed to <300 KB)
   - `assets/dossier/` - Investment PDF documents (ES/EN versions)
   - `assets/planos/` - Floor plan images
@@ -78,17 +83,20 @@ development → preview → production
 ### Key Technical Details
 
 **Tailwind CSS v4**: Uses PostCSS plugin (`@tailwindcss/postcss`). Custom color palette defined in `globals.css` using CSS custom properties (oklch color space):
+
 - `--gold-warm: #a29060`
 - `--taupe-medium: #817964`
 - `--olive-brown: #70623d`
 
 **Next.js Configuration** (`next.config.mjs`):
+
 - TypeScript build errors ignored (`ignoreBuildErrors: true`)
 - Images unoptimized (`unoptimized: true`)
 
 **TypeScript Paths**: `@/*` maps to root directory (defined in `tsconfig.json`)
 
 **Client-Side Features** (`app/page.tsx`):
+
 - Bilingual state management (ES/EN)
 - Complex animation sequencing for hero section
 - Gallery tabs (servicios, interior, sitios, video)
@@ -101,11 +109,13 @@ development → preview → production
 **Analytics**: Vercel Analytics integrated via `@vercel/analytics/next`
 
 **Security & Bot Protection**:
+
 - ALTCHA integration for form verification (privacy-preserving proof-of-work)
 - Custom translations for ES/EN verification messages
 - Server-side payload verification with configurable TTL
 
 **PDF Personalization System** (`app/api/submit-lead/route.ts`):
+
 - Dynamic PDF generation using pdf-lib with custom fonts (Allura-Regular.ttf)
 - Multi-language support: generates personalized dossiers in Spanish or English based on form language
 - Custom text styling: Gold-bronze gradient (#8B7355) with shadow for premium look
@@ -117,10 +127,11 @@ development → preview → production
 - Secure file serving via `/api/local-dossiers/[file]/route.ts` endpoint
 
 **Email System** (`app/api/submit-lead/route.ts`):
+
 - **SMTP delivery** via nodemailer (uniestate.co.uk mail server)
 - Language-based sender routing:
-  - Spanish: tony@uniestate.co.uk (Tony - Uniestate Playa Viva)
-  - English: michael@uniestate.co.uk (Michael - Uniestate Playa Viva)
+  - Spanish: <tony@uniestate.co.uk> (Tony - Uniestate Playa Viva)
+  - English: <michael@uniestate.co.uk> (Michael - Uniestate Playa Viva)
 - Rich HTML emails with:
   - Two premium gold gradient buttons (Download Dossier + Schedule Meeting)
   - HubSpot Meetings integration for booking
@@ -129,6 +140,7 @@ development → preview → production
 - Complete email delivery logging for debugging
 
 **Storage Infrastructure** (`lib/dossier-storage.ts`):
+
 - **Automatic environment detection** (no manual configuration needed):
   - Vercel/Production: Uses `/tmp/dossiers` (Linux temporary directory)
   - Local Development: Uses `Documents/Dossiers_Personalizados_PlayaViva` (Windows)
@@ -138,19 +150,23 @@ development → preview → production
 ## Development Guidelines
 
 ### Component Patterns
+
 - Use functional TypeScript components
 - Mark as `"use client"` only when necessary (state, effects, event handlers)
 - Follow PascalCase for components, camelCase for helpers
 - Hooks prefixed with `use`
 
 ### Styling
+
 - 2-space indentation
 - Tailwind classes ordered semantically (layout → color → effects)
 - Reuse shadow/elevation effects defined in Tailwind
 - Keep new images in `public/assets/imagenes` compressed (<300 KB)
 
 ### State Management
+
 The main landing page manages multiple state concerns:
+
 - Language switching (ES/EN)
 - Animation sequences with timed transitions
 - Section visibility tracking with Intersection Observer pattern
@@ -159,6 +175,7 @@ The main landing page manages multiple state concerns:
 - Scroll position for floating navigation buttons
 
 ### Testing
+
 - No automated test suite currently
 - Manual validation required: iPhone 12 Pro (portrait/landscape), iPad, desktop 1440px
 - Run `npm run lint` before commits
@@ -172,12 +189,14 @@ The main landing page manages multiple state concerns:
 **Recent Changes** (Last session):
 
 1. **S3 Storage Integration**:
+
    - Fixed endpoint URL issue (added automatic `https://` prefix)
    - S3 now working correctly in Vercel deployments
    - PDFs stored in `dossier-playa-viva` bucket with presigned URLs
    - Automatic fallback to local storage if S3 fails
 
 2. **Environment Detection** (`lib/dossier-storage.ts`):
+
    - Removed `DOSSIER_LOCAL_DIR` environment variable (no longer needed)
    - Automatic path detection based on environment:
      - Vercel/Production: `/tmp/dossiers`
@@ -185,6 +204,7 @@ The main landing page manages multiple state concerns:
    - Simplified deployment (no manual path configuration needed)
 
 3. **Email System Improvements**:
+
    - Complete migration from Resend to SMTP (nodemailer)
    - Language-based sender routing (Tony for ES, Michael for EN)
    - Rich HTML emails with premium styling
@@ -192,6 +212,7 @@ The main landing page manages multiple state concerns:
    - Three footer images with exact dimensions (240x160, 149x64, 240x160)
 
 4. **UI/UX Enhancements**:
+
    - Simple language toggle (ES | EN) with opacity indicators
    - Floating navigation buttons (up/down) with smart position detection
    - Premium brown-gold gradient styling throughout
@@ -202,6 +223,7 @@ The main landing page manages multiple state concerns:
    - Environment detection logging
 
 **Current Status**:
+
 - ✅ PDF personalization working (both languages)
 - ✅ SMTP email delivery working (both languages)
 - ✅ HubSpot integration working
@@ -210,21 +232,24 @@ The main landing page manages multiple state concerns:
 - ✅ Environment detection automatic (no manual configuration)
 
 **Known Issues**:
+
 - None currently - all major issues resolved
 
 ## Deployment
 
 ### Vercel URLs
 
-**Production (stable)**: https://landing-page-playa-viva.vercel.app/
+**Production (stable)**: <https://landing-page-playa-viva.vercel.app/>
+
 - This URL never changes
 - User promotes from `preview` → `production` when ready
 
 **Preview (temporary)**: Changes with each deployment
+
 - Example: `https://eslatamlandingpageplayavivauniestate-xxxxx.vercel.app/`
 - Used for testing before promoting to production
 
-**Project Dashboard**: https://vercel.com/toniIAPro73s-projects/es_latam_landing_page_playa_viva_uniestate
+**Project Dashboard**: <https://vercel.com/toniIAPro73s-projects/es_latam_landing_page_playa_viva_uniestate>
 
 ### Deployment Process
 
@@ -298,6 +323,7 @@ ALTCHA_CHALLENGE_TTL=300
 ## PR Requirements
 
 Each PR should include:
+
 - Objective and impacted sections
 - Screenshots per breakpoint and language (ES/EN)
 - Vercel preview link
@@ -308,6 +334,7 @@ Each PR should include:
 ## Next Steps
 
 1. **User to promote to production** and test complete workflow:
+
    - Fill form in both languages
    - Verify email delivery (both Tony and Michael accounts)
    - Confirm PDF downloads from S3
@@ -315,6 +342,7 @@ Each PR should include:
    - Verify PDFs are stored in S3 bucket
 
 2. **Monitor S3 storage** in first production uses:
+
    - Check bucket for uploaded PDFs
    - Verify presigned URLs expire after 24 hours
    - Monitor storage costs
