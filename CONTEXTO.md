@@ -227,7 +227,7 @@ ALTCHA_CHALLENGE_TTL=300
 
 ### PDFs base (deben existir)
 
-```text
+```tree
 public/assets/dossier/
 ├── Dossier-Playa-Viva-ES.pdf  ← PDF base español
 └── Dossier-Playa-Viva-EN.pdf  ← PDF base inglés
