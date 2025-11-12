@@ -74,7 +74,9 @@ console.log("[INIT] S3 Configuration:", {
 const s3Client = useS3Storage && s3Config.bucket
   ? new S3Client({
       region: s3Config.region as string,
-      endpoint: s3Config.endpoint,
+      endpoint: s3Config.endpoint?.startsWith('http')
+        ? s3Config.endpoint
+        : `https://${s3Config.endpoint}`,
       credentials: {
         accessKeyId: s3Config.accessKeyId as string,
         secretAccessKey: s3Config.secretAccessKey as string,
