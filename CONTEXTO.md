@@ -74,6 +74,14 @@ Email SMTP con botones premium (Descargar + Agendar reunión)
    - **Ahora**: Detección automática basada en `process.env.VERCEL` y `NODE_ENV`
    - **Beneficio**: Simplifica deployment, elimina errores de configuración
 
+2. **Sistema S3 Failover automático** ✅
+
+   - **Regiones configuradas**: Frankfurt (primaria) y Paris (fallback)
+   - **Variables S3_Endpoint y S3_Region_Code eliminadas** de archivos .env
+   - **Configuración hardcoded** en `lib/dossier-storage.ts` con función `getS3Regions()`
+   - **Failover automático**: Si Frankfurt falla, intenta automáticamente con Paris
+   - **Logs detallados**: Indica qué región se usó exitosamente
+
 3. **Sistema SMTP completo** ✅
 
    - **Servidor**: mail.uniestate.co.uk (puerto 465, SSL)
@@ -173,8 +181,7 @@ SMTP_USER_EN=michael@uniestate.co.uk
 SMTP_PASS_EN=<password>
 
 # S3 (iDrive e2)
-S3_Endpoint=s3.eu-west-4.idrivee2.com
-S3_Region_Code=eu-west-4
+# NOTA: Regiones configuradas en código (Frankfurt/Paris con failover automático)
 S3_Access_Key_ID=<key>
 S3_Secret_Access_Key=<secret>
 S3_BUCKET_NAME=dossier-playa-viva
@@ -187,9 +194,11 @@ ALTCHA_CHALLENGE_TTL=300
 ### Notas importantes
 
 - ❌ **NO configurar**: `DOSSIER_LOCAL_DIR` (detección automática)
+- ❌ **NO configurar**: `S3_Endpoint` y `S3_Region_Code` (regiones hardcoded con failover)
 - ⚠️ **S3 Endpoint**: Se normaliza automáticamente (agrega `https://`)
 - 📧 **SMTP**: Dos cuentas separadas (ES/EN) con credenciales distintas
 - 🔒 **ALTCHA_SECRET**: Debe ser idéntico en todos los entornos
+- 🌍 **S3 Regiones**: Frankfurt (primaria) → Paris (fallback automático)
 
 ## Pruebas pendientes
 

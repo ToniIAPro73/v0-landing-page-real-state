@@ -29,6 +29,12 @@ export type ResolvedS3Config = {
   secretAccessKey?: string;
 };
 
+export type S3Region = {
+  endpoint: string;
+  region: string;
+  name: string; // Human-readable name for logging
+};
+
 const normalizeBucketName = (value?: string | null) => {
   if (!value) return undefined;
   const trimmed = value.trim().replace(/(^\/+|\/+$)/g, "");
@@ -143,4 +149,24 @@ export const shouldUseS3Storage = (config?: ResolvedS3Config) => {
   }
 
   return false;
+};
+
+/**
+ * Returns available S3 regions configured for failover
+ * Primary: Frankfurt (eu-west-4)
+ * Fallback: Paris (eu-central-2)
+ */
+export const getS3Regions = (): S3Region[] => {
+  return [
+    {
+      endpoint: "s3.eu-west-4.idrivee2.com",
+      region: "eu-west-4",
+      name: "Frankfurt",
+    },
+    {
+      endpoint: "s3.eu-central-2.idrivee2.com",
+      region: "eu-central-2",
+      name: "Paris",
+    },
+  ];
 };

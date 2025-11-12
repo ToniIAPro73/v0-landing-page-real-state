@@ -2,6 +2,22 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL: Git Branch Policy
+
+**ALWAYS work ONLY on the `development` branch. NEVER work on `preview` or `production` branches.**
+
+Before ANY git operation, verify you are on the `development` branch:
+```bash
+git branch --show-current  # Must show "development"
+```
+
+If you find yourself on any other branch, immediately switch:
+```bash
+git checkout development
+```
+
+The user is responsible for ALL promotions between branches. You ONLY commit to `development`.
+
 ## Project Overview
 
 **Playa Viva Landing Page** - A real estate investment landing page for luxury beachfront properties in Al Marjan Island, Ras Al Khaimah. Built with Next.js 16 and deployed via Vercel, this project was initially generated using v0.app and is synchronized with v0 deployments.
