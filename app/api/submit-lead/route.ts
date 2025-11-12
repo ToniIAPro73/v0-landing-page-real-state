@@ -755,7 +755,7 @@ async function sendDossierEmail(
     ? "tony@uniestate.co.uk"
     : "michael@uniestate.co.uk";
   const senderName = payload.language === "es"
-    ? "Tony - Uniestate Playa Viva"
+    ? "Toni - Uniestate Playa Viva"
     : "Michael - Uniestate Playa Viva";
   const smtpUser = payload.language === "es"
     ? process.env.SMTP_USER_ES
