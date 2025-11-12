@@ -15,13 +15,12 @@ beforeEach(() => {
 });
 
 describe("getLocalDossierDir", () => {
-  it("returns override when DOSSIER_LOCAL_DIR is set", () => {
-    const customPath = path.join("D:", "custom", "folder");
-    vi.stubEnv("DOSSIER_LOCAL_DIR", customPath);
-    expect(getLocalDossierDir()).toBe(customPath);
+  it("returns /tmp/dossiers when running on Vercel", () => {
+    vi.stubEnv("VERCEL", "1");
+    expect(getLocalDossierDir()).toBe("/tmp/dossiers");
   });
 
-  it("falls back to Documents/Dossiers_Personalizados_PlayaViva", () => {
+  it("falls back to Documents/Dossiers_Personalizados_PlayaViva locally", () => {
     vi.unstubAllEnvs();
     const result = getLocalDossierDir();
     expect(result.endsWith("Dossiers_Personalizados_PlayaViva")).toBe(true);
