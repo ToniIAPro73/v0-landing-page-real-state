@@ -743,6 +743,10 @@ async function sendDossierEmail(
           <!-- P.D. 2 -->
           <p style="font-size: 13px; color: #6e5f46; margin-bottom: 12px;">
             <strong>${emailCopy.ps2}</strong><br/>
+            ${payload.language === "es"
+              ? `Tengo disponibilidad este jueves y viernes por la tarde (hora de Dubai). Si prefieres hablar antes, <a href="${hubspotMeetingsUrl}" style="color: #8B7355; text-decoration: underline;">elige tu horario aquí</a>.`
+              : `I have availability this Thursday and Friday afternoon (Dubai time). If you prefer to schedule earlier, <a href="${hubspotMeetingsUrl}" style="color: #8B7355; text-decoration: underline;">choose your time here</a>.`
+            }<br/>
             <a href="${hubspotMeetingsUrl}" style="color: #8B7355; word-break: break-all;">${hubspotMeetingsUrl}</a>
           </p>
         </td>
@@ -755,7 +759,7 @@ async function sendDossierEmail(
     ? "tony@uniestate.co.uk"
     : "michael@uniestate.co.uk";
   const senderName = payload.language === "es"
-    ? "Tony - Uniestate Playa Viva"
+    ? "Toni - Uniestate Playa Viva"
     : "Michael - Uniestate Playa Viva";
   const smtpUser = payload.language === "es"
     ? process.env.SMTP_USER_ES
