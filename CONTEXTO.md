@@ -14,7 +14,7 @@ La landing page está completamente funcional con un sistema completo de captura
 
 ### Arquitectura del flujo de leads
 
-```
+```text
 Usuario llena formulario
     ↓
 Verificación ALTCHA
@@ -31,12 +31,14 @@ Email SMTP con botones premium (Descargar + Agendar reunión)
 ### Componentes clave
 
 1. **`app/page.tsx`**:
+
    - Client Component principal con gestión de estado compleja
    - Control bilingüe (ES/EN) con toggle simple
    - Animaciones hero, galerías, apartamentos, FAQ
    - Botones flotantes de navegación (up/down) con detección inteligente de posición
 
 2. **`app/api/submit-lead/route.ts`**:
+
    - Endpoint principal de procesamiento de leads
    - Validación ALTCHA
    - Integración HubSpot
@@ -45,6 +47,7 @@ Email SMTP con botones premium (Descargar + Agendar reunión)
    - Envío SMTP con templates HTML ricos
 
 3. **`lib/dossier-storage.ts`**:
+
    - **Detección automática de entorno** (no requiere configuración manual)
    - Vercel/Production → `/tmp/dossiers`
    - Local/Development → `C:\Users\Usuario\Documents\Dossiers_Personalizados_PlayaViva`
@@ -60,28 +63,33 @@ Email SMTP con botones premium (Descargar + Agendar reunión)
 ### Sesión actual (Enero 2025)
 
 1. **Fix crítico S3** ✅
+
    - **Problema**: Endpoint sin protocolo causaba `TypeError: Invalid URL`
    - **Solución**: Normalización automática en `route.ts` - agrega `https://` si no existe
    - **Resultado**: S3 funcional en Vercel
 
 2. **Eliminación de variable DOSSIER_LOCAL_DIR** ✅
+
    - **Antes**: Requería configuración manual de ruta en cada entorno
    - **Ahora**: Detección automática basada en `process.env.VERCEL` y `NODE_ENV`
    - **Beneficio**: Simplifica deployment, elimina errores de configuración
 
 3. **Sistema SMTP completo** ✅
+
    - **Servidor**: mail.uniestate.co.uk (puerto 465, SSL)
    - **Remitentes específicos por idioma**:
-     - ES: Tony Ballesteros (tony@uniestate.co.uk)
-     - EN: Michael McMullen (michael@uniestate.co.uk)
+     - ES: Tony Ballesteros (<tony@uniestate.co.uk>)
+     - EN: Michael McMullen (<michael@uniestate.co.uk>)
    - **Templates HTML**: Botones premium dorados, 3 imágenes footer, enlaces backup
 
 4. **Integración HubSpot Meetings** ✅
+
    - Botón "Agendar Consulta de 15 Minutos" en emails
-   - URL: https://meetings-eu1.hubspot.com/toni-ballesteros-alonso
+   - URL: <https://meetings-eu1.hubspot.com/toni-ballesteros-alonso>
    - Mismo calendario para ES/EN (configurable si se necesita separación)
 
 5. **UI/UX refinado** ✅
+
    - Toggle idioma simplificado: "ES | EN" con opacidad
    - Botones flotantes navegación con gradiente marrón-dorado
    - Detección inteligente posición scroll (muestra up/down según contexto)
@@ -93,15 +101,15 @@ Email SMTP con botones premium (Descargar + Agendar reunión)
 
 ## Estado de funcionalidades
 
-| Funcionalidad | Estado | Notas |
-|--------------|--------|-------|
-| Formulario bilingüe | ✅ Funcionando | ES/EN con validación ALTCHA |
-| Generación PDF | ✅ Funcionando | Ambos idiomas, fuente Allura |
-| Almacenamiento S3 | ✅ Fix aplicado | Pendiente test final producción |
-| Email SMTP | ✅ Funcionando | Tony (ES) / Michael (EN) |
-| HubSpot leads | ✅ Funcionando | Creación automática con UTMs |
-| HubSpot Meetings | ✅ Funcionando | Botón en email |
-| Detección entorno | ✅ Automática | Sin config manual |
+| Funcionalidad       | Estado          | Notas                           |
+| ------------------- | --------------- | ------------------------------- |
+| Formulario bilingüe | ✅ Funcionando  | ES/EN con validación ALTCHA     |
+| Generación PDF      | ✅ Funcionando  | Ambos idiomas, fuente Allura    |
+| Almacenamiento S3   | ✅ Fix aplicado | Pendiente test final producción |
+| Email SMTP          | ✅ Funcionando  | Tony (ES) / Michael (EN)        |
+| HubSpot leads       | ✅ Funcionando  | Creación automática con UTMs    |
+| HubSpot Meetings    | ✅ Funcionando  | Botón en email                  |
+| Detección entorno   | ✅ Automática   | Sin config manual               |
 
 ## Problemas conocidos
 
@@ -111,7 +119,7 @@ Email SMTP con botones premium (Descargar + Agendar reunión)
 
 ### Estrategia de ramas
 
-```
+```text
 development (Claude trabaja aquí)
     ↓
 preview (Usuario promueve para testing)
@@ -120,10 +128,11 @@ production (Usuario promueve cuando valida)
 ```
 
 **IMPORTANTE**:
+
 - Claude Code **SOLO** trabaja en rama `development`
 - Usuario es responsable de promover cambios a `preview` y `production`
 - URLs de Vercel:
-  - Production (fija): https://landing-page-playa-viva.vercel.app/
+  - Production (fija): <https://landing-page-playa-viva.vercel.app/>
   - Preview (cambia): `https://eslatamlandingpageplayavivauniestate-xxxxx.vercel.app/`
 
 ### Comandos esenciales
@@ -189,19 +198,22 @@ ALTCHA_CHALLENGE_TTL=300
 **Usuario debe ejecutar después de promover a production**:
 
 1. **Formulario español**:
+
    - ✅ Llenar con datos de prueba
    - ✅ Verificar ALTCHA funciona
-   - ✅ Confirmar email llega desde tony@uniestate.co.uk
+   - ✅ Confirmar email llega desde <tony@uniestate.co.uk>
    - ✅ Descargar PDF desde enlace (debe venir de S3)
    - ✅ Verificar lead aparece en HubSpot
    - ✅ Probar botón "Agendar Consulta"
 
 2. **Formulario inglés**:
+
    - ✅ Cambiar idioma a EN
    - ✅ Repetir todas las verificaciones anteriores
-   - ✅ Confirmar email llega desde michael@uniestate.co.uk
+   - ✅ Confirmar email llega desde <michael@uniestate.co.uk>
 
 3. **Verificación S3**:
+
    - ✅ Acceder a bucket `dossier-playa-viva` en iDrive e2
    - ✅ Confirmar PDFs se están guardando en carpeta `dossiers/`
    - ✅ Verificar formato: `Dossier_Nombre_Apellido.pdf`
@@ -215,20 +227,21 @@ ALTCHA_CHALLENGE_TTL=300
 
 ### PDFs base (deben existir)
 
-```
+```text
 public/assets/dossier/
 ├── Dossier-Playa-Viva-ES.pdf  ← PDF base español
 └── Dossier-Playa-Viva-EN.pdf  ← PDF base inglés
 ```
 
 Si faltan, el sistema:
+
 1. ❌ No genera PDF personalizado
 2. 📧 Envía alerta a tony@/michael@ (según idioma)
 3. 💬 Muestra mensaje al usuario: "Dossier en mejora, intenta en unos minutos"
 
 ### Imágenes email
 
-```
+```tree
 public/assets/imagenes/
 ├── Foto_Complejo.png  (240x160px)
 ├── logo.png           (149x64px)
@@ -238,12 +251,14 @@ public/assets/imagenes/
 ## Próximos pasos sugeridos
 
 1. **Monitoreo inicial** (primera semana producción):
+
    - Revisar logs Vercel diariamente
    - Confirmar todos los PDFs van a S3
    - Verificar emails llegan consistentemente
    - Validar leads en HubSpot tienen toda la información
 
 2. **Optimizaciones futuras** (opcional):
+
    - Implementar tests automatizados (Vitest + Playwright)
    - Agregar analytics de descarga de PDFs
    - Versionar templates de email
