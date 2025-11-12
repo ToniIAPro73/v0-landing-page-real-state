@@ -472,7 +472,7 @@ export default function PlayaVivaLanding() {
         articles: [
           {
             date: "7 Noviembre 2025",
-            image: "/assets/imagenes/british_exodus.webp",
+            image: "/assets/imagenes/news1.webp",
             alt: "The National - Escape to Dubai",
             source: "The National",
             title: "Escape to Dubai from high-tax Britain more tempting as 75% fear higher rates",
@@ -482,7 +482,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "3 Julio 2025",
-            image: "/assets/imagenes/news_gulfnews_jul3.png",
+            image: "/assets/imagenes/news2.png",
             alt: "Gulf News - Wynn Resort",
             source: "Gulf News",
             title: "Ras Al Khaimah sees new luxury hotel at Wynn Al Marjan",
@@ -492,7 +492,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "30 Abril 2025",
-            image: "/assets/imagenes/news_national_apr30.png",
+            image: "/assets/imagenes/news3.png",
             alt: "The National - Gaming resort RAK",
             source: "The National",
             title: "UAE's first gaming resort set to 'open up RAK to the world'",
@@ -854,7 +854,7 @@ export default function PlayaVivaLanding() {
         articles: [
           {
             date: "November 7, 2025",
-            image: "/assets/imagenes/british_exodus.webp",
+            image: "/assets/imagenes/news1.webp",
             alt: "The National - Escape to Dubai",
             source: "The National",
             title: "Escape to Dubai from high-tax Britain more tempting as 75% fear higher rates",
@@ -864,7 +864,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "July 3, 2025",
-            image: "/assets/imagenes/news_gulfnews_jul3.png",
+            image: "/assets/imagenes/news2.png",
             alt: "Gulf News - Wynn Resort",
             source: "Gulf News",
             title: "Ras Al Khaimah sees new luxury hotel at Wynn Al Marjan",
@@ -874,7 +874,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "April 30, 2025",
-            image: "/assets/imagenes/news_national_apr30.png",
+            image: "/assets/imagenes/news3.png",
             alt: "The National - Gaming resort RAK",
             source: "The National",
             title: "UAE's first gaming resort set to 'open up RAK to the world'",
