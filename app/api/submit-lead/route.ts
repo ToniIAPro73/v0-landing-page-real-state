@@ -281,9 +281,9 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
     };
   }
 
-  if (useS3Storage && s3Client && s3Config.bucket) {
+  if (useS3Storage && s3Config.bucket) {
     console.info(
-      `[personalizePDF] Storage mode: S3 bucket "${s3Config.bucket}" (region ${s3Config.region})`,
+      `[personalizePDF] Storage mode: S3 with failover (Frankfurt → Paris)`,
     );
   } else {
     console.info(
