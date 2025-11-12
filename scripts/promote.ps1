@@ -1,150 +1,86 @@
 <#
 .SYNOPSIS
-  Promociona código entre entornos Anclora (Development → Preview → Production).
+  Sincroniza todas las ramas principales de Anclora (development, main, preview, production)
+  usando como fuente la más reciente según su commit HEAD.
 
 .DESCRIPTION
-  Script PowerShell completo para gestionar promociones de código entre entornos:
-  - Development → Main → Preview
-  - Preview → Production
-  - Development → Main → Preview → Production (modo full)
-
-  Incluye sistema de SmartBackup:
-   - Un backup por día y rama
-   - Limpieza automática de backups > 7 días
-   - Opción de forzar backup con parámetro -ForceBackup
-
-.PARAMETER Target
-  Objetivo de la promoción: preview, production o full
-
-.PARAMETER ForceBackup
-  (Opcional) Fuerza la creación de backups incluso si ya existen.
-
-.EXAMPLES
-  ./scripts/promote.ps1 preview
-  ./scripts/promote.ps1 production
-  ./scripts/promote.ps1 full
-  ./scripts/promote.ps1 full -ForceBackup
+  Detecta automáticamente cuál rama está más actualizada (según timestamp del último commit).
+  Muestra un resumen previo de la acción.
+  Luego propaga esa versión a las demás ramas de forma controlada.
 #>
 
-param(
-  [Parameter(Mandatory = $true)]
-  [ValidateSet("preview", "production", "full")]
-  [string]$Target,
+Write-Host "⚓ Iniciando promoción completa entre entornos..." -ForegroundColor Cyan
+Write-Host ""
 
-  [switch]$ForceBackup
-)
+# 1️⃣ Variables base
+$branches = @("development", "main", "preview", "production")
 
-Write-Host "`n⚓ ANCLORA PROMOTE - Flujo de promoción controlado" -ForegroundColor Cyan
-Write-Host "──────────────────────────────────────────────────────" -ForegroundColor DarkGray
+# 2️⃣ Actualiza referencias remotas
+Write-Host "🔄 Actualizando referencias remotas..." -ForegroundColor Yellow
+git fetch --all | Out-Null
 
-# --- Detección de ramas ---
-$branches = git branch -r | ForEach-Object { $_.Trim() }
-
-function Detect-Branch($patterns) {
-  foreach ($p in $patterns) {
-    $match = $branches | Where-Object { $_ -match "origin/$p$" }
-    if ($match) { return $p }
-  }
-  return $null
+# 3️⃣ Verifica existencia de ramas
+$existingBranches = @()
+foreach ($b in $branches) {
+    $exists = git branch -r | Select-String "origin/$b"
+    if ($exists) { $existingBranches += $b }
 }
-
-$devBranch = Detect-Branch @("development")
-$mainBranch = Detect-Branch @("main","master")
-$previewBranch = Detect-Branch @("preview")
-$prodBranch = Detect-Branch @("production")
-
-Write-Host "`n📦 Ramas detectadas:"
-Write-Host "  🧩 Development: $devBranch"
-Write-Host "  🔹 Main:        $mainBranch"
-Write-Host "  🌤️ Preview:     $previewBranch"
-Write-Host "  🚀 Production:  $prodBranch"
-
-if (-not $devBranch -or -not $mainBranch -or -not $previewBranch -or -not $prodBranch) {
-  Write-Host "❌ Faltan ramas esenciales en el repositorio." -ForegroundColor Red
-  exit 1
-}
-
-# --- Sistema SmartBackup ---
-function SmartBackup($branchName, [switch]$ForceBackup) {
-  $timestamp = (Get-Date -Format "yyyyMMdd")
-  $existingBackup = git branch --list "backup/$branchName-$timestamp"
-
-  if ($existingBackup -and -not $ForceBackup) {
-    Write-Host "🟢 Backup ya existe para hoy ($branchName). No se crea otro." -ForegroundColor DarkGreen
-    return
-  }
-
-  $backupBranch = "backup/$branchName-$timestamp"
-  git branch $backupBranch $branchName
-  Write-Host "💾 Backup creado: $backupBranch" -ForegroundColor Green
-
-  # Limpieza de backups antiguos (>7 días)
-  $cutoff = (Get-Date).AddDays(-7)
-  git branch --list "backup/$branchName-*" | ForEach-Object {
-    if ($_ -match "backup/$branchName-(\d{8})") {
-      $date = [datetime]::ParseExact($matches[1], "yyyyMMdd", $null)
-      if ($date -lt $cutoff) {
-        git branch -D $_.Trim()
-        Write-Host "🧹 Eliminado backup antiguo: $_" -ForegroundColor DarkYellow
-      }
-    }
-  }
-}
-
-# --- Merge seguro ---
-function Promote-Branches($from, $to, [switch]$ForceBackup) {
-  Write-Host "`n🔄 Promoviendo $from → $to..." -ForegroundColor Yellow
-  SmartBackup $to -ForceBackup:$ForceBackup
-  git fetch origin
-  git checkout $to
-  git pull origin $to
-  git merge origin/$from --no-edit
-  if ($LASTEXITCODE -eq 0) {
-    git push origin $to
-    Write-Host "✔️  Promoción completada: $from → $to" -ForegroundColor Green
-  } else {
-    Write-Host "⚠️  Conflictos detectados entre $from y $to. Resolver manualmente." -ForegroundColor Red
+if ($existingBranches.Count -eq 0) {
+    Write-Host "❌ No se encontraron ramas válidas." -ForegroundColor Red
     exit 1
-  }
 }
 
-# --- Confirmación principal ---
-function Confirm-Action($msg) {
-  $input = Read-Host "$msg (s/n)"
-  return ($input -in @("s","S"))
+# 4️⃣ Determina el commit más reciente por fecha
+$commits = @()
+foreach ($b in $existingBranches) {
+    $hash = git rev-parse "origin/$b"
+    $date = git log -1 --format=%ci "origin/$b"
+    $commits += [PSCustomObject]@{ Branch=$b; Hash=$hash; Date=[datetime]$date }
 }
 
-# --- Ejecución principal ---
-switch ($Target) {
-  "preview" {
-    Write-Host "`n🌤️ Promoción: Development → Main → Preview" -ForegroundColor Cyan
-    if (-not (Confirm-Action "¿Confirmas subir los cambios de development hasta preview?")) { exit 0 }
+$latest = $commits | Sort-Object Date -Descending | Select-Object -First 1
 
-    Promote-Branches $devBranch $mainBranch -ForceBackup:$ForceBackup
-    Promote-Branches $mainBranch $previewBranch -ForceBackup:$ForceBackup
-  }
+Write-Host "🧭 Último commit detectado:"
+Write-Host "   → Rama: $($latest.Branch)"
+Write-Host "   → Hash: $($latest.Hash.Substring(0,7))"
+Write-Host "   → Fecha: $($latest.Date)"
+Write-Host ""
 
-  "production" {
-    Write-Host "`n🚀 Promoción: Preview → Production" -ForegroundColor Cyan
-    if (-not (Confirm-Action "¿Confirmas subir los cambios de preview a producción?")) { exit 0 }
-
-    Promote-Branches $previewBranch $prodBranch -ForceBackup:$ForceBackup
-  }
-
-  "full" {
-    Write-Host "`n🌍 Promoción completa: Development → Main → Preview → Production" -ForegroundColor Cyan
-    if (-not (Confirm-Action "⚠️ Esto promoverá TODOS los cambios de development hasta production. ¿Continuar?")) { exit 0 }
-
-    Promote-Branches $devBranch $mainBranch -ForceBackup:$ForceBackup
-    Promote-Branches $mainBranch $previewBranch -ForceBackup:$ForceBackup
-    Promote-Branches $previewBranch $prodBranch -ForceBackup:$ForceBackup
-  }
+# 5️⃣ Confirmación antes de proceder
+$confirm = Read-Host "¿Deseas usar '$($latest.Branch)' como fuente para sincronizar las demás ramas? (S/N)"
+if ($confirm -ne "S" -and $confirm -ne "s") {
+    Write-Host "⛔ Operación cancelada." -ForegroundColor Red
+    exit 0
 }
 
-# --- Registro en log local ---
-$timestamp = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-$logLine = "$timestamp - Promotion executed: $Target (ForceBackup=$ForceBackup)"
-Add-Content -Path "./scripts/promotion_log.txt" -Value $logLine
+# 6️⃣ Sincroniza las demás ramas
+foreach ($b in $existingBranches) {
+    if ($b -ne $latest.Branch) {
+        Write-Host "🔁 Sincronizando '$b' con '$($latest.Branch)'..."
+        git checkout $b | Out-Null
+        git pull origin $b | Out-Null
+        git merge "origin/$($latest.Branch)" -m "Auto-sync: merge $($latest.Branch) into $b" | Out-Null
+        git push origin $b | Out-Null
+    }
+}
 
-Write-Host "`n🏁 Proceso completado correctamente." -ForegroundColor Cyan
-Write-Host "🧾 Log actualizado en scripts/promotion_log.txt"
+# 7️⃣ Verificación final
+Write-Host ""
+Write-Host "✅ Verificando sincronización final..." -ForegroundColor Yellow
+git fetch --all | Out-Null
+$finalHash = git rev-parse "origin/$($latest.Branch)"
+$aligned = @()
+foreach ($b in $existingBranches) {
+    $hash = git rev-parse "origin/$b"
+    if ($hash -eq $finalHash) { $aligned += $b }
+}
+if ($aligned.Count -eq $existingBranches.Count) {
+    Write-Host "🎯 Todas las ramas están perfectamente sincronizadas." -ForegroundColor Green
+} else {
+    Write-Host "⚠️ Algunas ramas no coinciden con la fuente:" -ForegroundColor Yellow
+    $mismatch = $existingBranches | Where-Object { $_ -notin $aligned }
+    $mismatch | ForEach-Object { Write-Host "   - $_" -ForegroundColor Red }
+}
+
+Write-Host ""
+Write-Host "🏁 Promoción completa finalizada con éxito." -ForegroundColor Cyan
