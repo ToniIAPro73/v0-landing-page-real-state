@@ -217,7 +217,7 @@ export default function PlayaVivaLanding() {
     if (validationMessage) {
       setValidationMessage(null);
     }
-  }, [language]);
+  }, [language, validationMessage]);
 
   useEffect(() => {
     const handleScroll = () => {
