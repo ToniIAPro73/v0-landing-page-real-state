@@ -2,21 +2,40 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## ⚠️ CRITICAL: Git Branch Policy
+## 🚨 CRITICAL: Git Branch Policy - READ FIRST 🚨
 
-**ALWAYS work ONLY on the `development` branch. NEVER work on `preview` or `production` branches.**
+**ABSOLUTE RULE: ONLY work on the `development` branch. NEVER EVER work on `preview` or `production`.**
 
-Before ANY git operation, verify you are on the `development` branch:
-```bash
-git branch --show-current  # Must show "development"
-```
+### Mandatory workflow for EVERY session:
 
-If you find yourself on any other branch, immediately switch:
-```bash
-git checkout development
-```
+1. **At the START of EVERY session**, immediately run:
+   ```bash
+   git branch --show-current
+   ```
+   If the output is NOT "development", immediately run:
+   ```bash
+   git checkout development
+   ```
 
-The user is responsible for ALL promotions between branches. You ONLY commit to `development`.
+2. **BEFORE making ANY edit/read/write**, verify again:
+   ```bash
+   git branch --show-current  # MUST show "development"
+   ```
+
+3. **BEFORE ANY commit**, verify one more time:
+   ```bash
+   git branch --show-current  # MUST show "development"
+   ```
+
+4. **If you ever find yourself on another branch**, STOP immediately and switch:
+   ```bash
+   git checkout development
+   ```
+
+### Why this matters:
+The user has explicitly stated MULTIPLE times that you must ONLY work on `development`. Working on other branches causes serious workflow disruptions. This is a CRITICAL requirement.
+
+The user is responsible for ALL promotions between branches. You ONLY commit to `development`. NO EXCEPTIONS.
 
 ## Project Overview
 
