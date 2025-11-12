@@ -500,6 +500,16 @@ export default function PlayaVivaLanding() {
               "Explores the groundbreaking gaming resort's influence on regional economic development and tourism growth.",
             url: "https://www.thenationalnews.com/business/economy/2025/04/30/uaes-first-casino-resort-set-to-open-up-ras-al-khaimah-to-the-world/",
           },
+          {
+            date: "18 Marzo 2025",
+            image: "/assets/imagenes/news4.png",
+            alt: "Arabian Business - Property prices",
+            source: "Arabian Business",
+            title: "Property prices rise 20% amid supply-demand gap",
+            summary:
+              "Waterfront properties near the Wynn Resort in RAK are in hottest demand, with studios and one-bedroom units leading the surge.",
+            url: "https://www.arabianbusiness.com/industries/real-estate/ras-al-khaimah-real-estate-property-prices-rise-20-amid-growing-supply-demand-gap",
+          },
         ],
       },
       specifications: {
@@ -881,6 +891,16 @@ export default function PlayaVivaLanding() {
             summary:
               "Explores the groundbreaking gaming resort's influence on regional economic development and tourism growth.",
             url: "https://www.thenationalnews.com/business/economy/2025/04/30/uaes-first-casino-resort-set-to-open-up-ras-al-khaimah-to-the-world/",
+          },
+          {
+            date: "March 18, 2025",
+            image: "/assets/imagenes/news4.png",
+            alt: "Arabian Business - Property prices",
+            source: "Arabian Business",
+            title: "Property prices rise 20% amid supply-demand gap",
+            summary:
+              "Waterfront properties near the Wynn Resort in RAK are in hottest demand, with studios and one-bedroom units leading the surge.",
+            url: "https://www.arabianbusiness.com/industries/real-estate/ras-al-khaimah-real-estate-property-prices-rise-20-amid-growing-supply-demand-gap",
           },
         ],
       },
@@ -2061,7 +2081,8 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
-      {/* Investment */}
+      {/* ==================== INVESTMENT SECTION ==================== */}
+      {/* Investment_1: Oportunidad de Inversión */}
       <section
         id="investment"
         ref={investmentRef}
@@ -2177,6 +2198,99 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
+      {/* Investment_2: Plan de Pago */}
+      <section
+        className="relative py-24 bg-cream-light"
+        style={{
+          opacity: visibleSections.investment ? 1 : 0,
+          transform: visibleSections.investment
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s",
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
+                {t.paymentPlan.title}
+              </h2>
+              <p className="text-taupe-warm text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
+                {t.paymentPlan.subtitle}
+              </p>
+            </div>
+
+            {/* Main Payment Structure */}
+            <div className="max-w-4xl mx-auto mb-16">
+              {/* 40% / 60% Display */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div className="text-center p-8 bg-white rounded-2xl border-2 border-gold-warm/30 hover:border-gold-warm transition-all duration-300">
+                  <div className="text-6xl md:text-7xl font-bold text-gold-warm mb-2">
+                    {t.paymentPlan.mainPayment}
+                  </div>
+                  <p className="text-taupe-warm text-sm md:text-base mb-4">
+                    {t.paymentPlan.mainLabel}
+                  </p>
+                  <p className="text-brown-dark text-xs md:text-sm">
+                    {t.paymentPlan.description}
+                  </p>
+                </div>
+
+                <div className="text-center p-8 bg-white rounded-2xl border-2 border-gold-warm/30 hover:border-gold-warm transition-all duration-300">
+                  <div className="text-6xl md:text-7xl font-bold text-gold-warm mb-2">
+                    {t.paymentPlan.postHandover}
+                  </div>
+                  <p className="text-taupe-warm text-sm md:text-base mb-4">
+                    {t.paymentPlan.postLabel}
+                  </p>
+                  <p className="text-brown-dark text-xs md:text-sm">
+                    {t.paymentPlan.postDetails}
+                  </p>
+                </div>
+              </div>
+
+              {/* Visual Progress Bar */}
+              <div className="mb-12">
+                <div className="flex gap-0 h-16 rounded-full overflow-hidden shadow-lg border-2 border-gold-warm/20">
+                  <div className="w-2/5 bg-gold-warm flex items-center justify-center">
+                    <span className="text-white font-bold text-sm md:text-base">40% {language === "es" ? "Ahora" : "Now"}</span>
+                  </div>
+                  <div className="w-3/5 bg-blue-50 flex items-center justify-center">
+                    <span className="text-brown-dark font-bold text-sm md:text-base">60% {language === "es" ? "Post-Entrega" : "Post-Handover"}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Features List */}
+              <div className="space-y-4">
+                {t.paymentPlan.features.map((feature, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start p-6 bg-white rounded-xl border border-gold-warm/20 hover:bg-cream-light hover:border-gold-warm/40 transition-all duration-300"
+                    style={{
+                      opacity: visibleSections.investment ? 1 : 0,
+                      transform: visibleSections.investment
+                        ? "translateY(0px)"
+                        : "translateY(20px)",
+                      transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${
+                        1 + index * 0.1
+                      }s`,
+                    }}
+                  >
+                    <CheckCircle2 className="h-6 w-6 text-gold-warm mr-4 shrink-0 mt-0.5" />
+                    <span className="text-brown-dark text-left text-sm md:text-base">
+                      {feature}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Investment_3: Trust & Noticias (Respaldado por Líderes) */}
       {/* Features */}
       <section
         id="features"
