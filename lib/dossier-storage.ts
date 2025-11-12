@@ -1,30 +1,24 @@
 import os from "os";
 import path from "path";
 
-const documentsDir = path.join(os.homedir(), "Documents");
-
-const DEFAULT_LOCAL_DIR = path.join(
-  documentsDir,
-  "Dossiers_Personalizados_PlayaViva",
-);
-
-function normalizeEnvPath(value: string) {
-  const replaced = value.replace(/\\+/g, path.sep).replace(/\/+/g, path.sep);
-  return path.normalize(replaced);
-}
-
+/**
+ * Detecta automáticamente la ruta correcta para almacenar PDFs según el entorno
+ * - Vercel/Producción: /tmp/dossiers (directorio temporal en Linux)
+ * - Local/Development: C:\Users\Usuario\Documents\Dossiers_Personalizados_PlayaViva (Windows)
+ */
 export const getLocalDossierDir = () => {
-  const envPath = process.env.DOSSIER_LOCAL_DIR;
-  if (!envPath) return DEFAULT_LOCAL_DIR;
-  try {
-    const normalized = normalizeEnvPath(envPath);
-    if (path.isAbsolute(normalized)) {
-      return normalized;
-    }
-    return path.join(process.cwd(), normalized);
-  } catch {
-    return DEFAULT_LOCAL_DIR;
+  // Detectar si estamos en Vercel o entorno de producción
+  const isVercel = Boolean(process.env.VERCEL);
+  const isProduction = process.env.NODE_ENV === "production";
+
+  // En Vercel o producción, usar directorio temporal de Linux
+  if (isVercel || isProduction) {
+    return "/tmp/dossiers";
   }
+
+  // En desarrollo local (Windows), usar la carpeta de documentos del usuario
+  const documentsDir = path.join(os.homedir(), "Documents");
+  return path.join(documentsDir, "Dossiers_Personalizados_PlayaViva");
 };
 
 export type ResolvedS3Config = {
