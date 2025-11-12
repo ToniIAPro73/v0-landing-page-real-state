@@ -1,34 +1,35 @@
 <#
 .SYNOPSIS
-  Restaurador automático de ramas Git (modo CLI, sin menú interactivo).
+  Recuperador universal de ramas Git (modo CLI) para estructura Anclora.
 
 .DESCRIPTION
-  Permite restaurar o respaldar ramas directamente mediante parámetros, 
-  pensado para CI/CD, tareas automatizadas o scripts personalizados.
+  Permite restaurar ramas específicas dentro del flujo:
+   - development → main
+   - main → preview
+   - preview → production
+  Crea backups automáticos antes de cada restauración.
 
 .PARAMETER Mode
-  Modo de operación:
-    - mainFromBranch : restaura main/master desde una rama fuente
-    - branchFromMain : restaura una rama desde main/master
-    - backup         : crea una copia de seguridad de una rama
+  Modo de restauración:
+    - DevToMain
+    - MainToPreview
+    - PreviewToProduction
+    - Manual (si se especifican Source y Target)
 
 .PARAMETER Source
-  Rama fuente (por ejemplo, "claude/playa-viva-landing-page...").
+  Rama fuente opcional (por ejemplo "development").
 
 .PARAMETER Target
-  Rama destino (opcional; detecta automáticamente main/master según el modo).
+  Rama destino opcional (por ejemplo "main").
 
-.PARAMETER AutoConfirm
-  Si se establece en $true, omite confirmaciones interactivas.
-
-.EXAMPLE
-  ./anclora_git_recover_cli.ps1 -Mode mainFromBranch -Source "claude/playa-viva..." -AutoConfirm $true
+.EXAMPLES
+  ./scripts/anclora_git_recover_cli.ps1 -Mode DevToMain -AutoConfirm $true
 #>
 
 param(
-    [Parameter(Mandatory = $true)]
-    [ValidateSet("mainFromBranch", "branchFromMain", "backup")]
-    [string]$Mode,
+    [Parameter(Mandatory = $false)]
+    [ValidateSet("DevToMain", "MainToPreview", "PreviewToProduction", "Manual")]
+    [string]$Mode = "Manual",
 
     [Parameter(Mandatory = $false)]
     [string]$Source,
@@ -40,32 +41,45 @@ param(
     [bool]$AutoConfirm = $false
 )
 
-Write-Host "`n⚓ ANCLORA GIT RECOVER CLI - Modo automatizado" -ForegroundColor Cyan
+Write-Host "`n⚓ ANCLORA GIT RECOVER CLI - Universal Recovery System" -ForegroundColor Cyan
 Write-Host "──────────────────────────────────────────────────────" -ForegroundColor DarkGray
 
-# 1️⃣ Validar entorno
+# --- 1️⃣ Validar entorno Git ---
 if (-not (Test-Path ".git")) {
     Write-Host "❌ No estás dentro de un repositorio Git." -ForegroundColor Red
     exit 1
 }
 
-# 2️⃣ Detectar rama principal
-$mainBranch = if (git branch -r | Select-String "origin/main") { "main" } elseif (git branch -r | Select-String "origin/master") { "master" } else { "" }
-if (-not $mainBranch) {
-    Write-Host "❌ No se detectó rama principal (main o master)." -ForegroundColor Red
-    exit 1
+# --- 2️⃣ Detectar ramas activas ---
+$branches = git branch -r | ForEach-Object { $_.Trim() }
+
+function Detect-Branch($patterns) {
+    foreach ($p in $patterns) {
+        $match = $branches | Where-Object { $_ -match "origin/$p$" }
+        if ($match) { return $p }
+    }
+    return $null
 }
 
-Write-Host "📦 Rama principal detectada: $mainBranch" -ForegroundColor Cyan
+$devBranch = Detect-Branch @("development")
+$mainBranch = Detect-Branch @("main","master")
+$previewBranch = Detect-Branch @("preview")
+$prodBranch = Detect-Branch @("production")
 
-# 3️⃣ Confirmación condicional
+Write-Host "📦 Ramas detectadas:"
+Write-Host "  🧩 Development: $devBranch"
+Write-Host "  🔹 Main:        $mainBranch"
+Write-Host "  🌤️ Preview:     $previewBranch"
+Write-Host "  🚀 Production:  $prodBranch"
+
+# --- 3️⃣ Confirmación auxiliar ---
 function Confirm-Action($msg) {
     if ($AutoConfirm) { return $true }
     $input = Read-Host "$msg (s/n)"
-    return ($input -in @("s", "S"))
+    return ($input -in @("s","S"))
 }
 
-# 4️⃣ Funciones auxiliares
+# --- 4️⃣ Función de backup ---
 function Backup-Branch($branchName) {
     $timestamp = (Get-Date -Format "yyyyMMdd-HHmmss")
     $backupBranch = "backup/$branchName-$timestamp"
@@ -73,73 +87,37 @@ function Backup-Branch($branchName) {
     Write-Host "💾 Copia de seguridad creada: $backupBranch" -ForegroundColor Green
 }
 
-# 5️⃣ Modo 1: Restaurar main/master desde otra rama
-if ($Mode -eq "mainFromBranch") {
-    if (-not $Source) { Write-Host "❌ Falta parámetro -Source (rama fuente)."; exit 1 }
-
-    if (-not (git show-ref --verify --quiet "refs/heads/$Source")) {
-        Write-Host "❌ La rama '$Source' no existe localmente. Ejecuta 'git fetch' primero." -ForegroundColor Red
-        exit 1
+# --- 5️⃣ Función principal ---
+function Restore-Branch($from, $to) {
+    Write-Host "`n🔄 Restaurando $to desde $from..." -ForegroundColor Yellow
+    if (-not (Confirm-Action "⚠️ Esto sobrescribirá '$to' con el contenido de '$from'. ¿Continuar?")) {
+        Write-Host "⏭️ Operación cancelada."
+        exit 0
     }
 
-    if (-not (Confirm-Action "⚠️ Esto sobrescribirá '$mainBranch' con el contenido de '$Source'. ¿Continuar?")) {
-        Write-Host "❌ Operación cancelada."; exit 0
-    }
-
-    Backup-Branch $mainBranch
-
+    Backup-Branch $to
     git fetch origin
-    git checkout $mainBranch
-    git pull origin $mainBranch
-
-    Write-Host "🔧 Copiando contenido de $Source → $mainBranch..." -ForegroundColor Cyan
-    git checkout $Source -- .
-
+    git checkout $to
+    git pull origin $to
+    git checkout $from -- .
     git add .
-    git commit -m "🔄 Restore $mainBranch from $Source (Anclora CLI)"
-    git push origin $mainBranch --force-with-lease
-
-    Write-Host "✅ Restauración completada: '$mainBranch' actualizado desde '$Source'." -ForegroundColor Green
-    exit 0
+    git commit -m "🔄 Restore $to from $from (Anclora CLI)"
+    git push origin $to --force-with-lease
+    Write-Host "✅ Restauración completada: '$to' contiene el contenido de '$from'." -ForegroundColor Green
 }
 
-# 6️⃣ Modo 2: Restaurar una rama desde main/master
-if ($Mode -eq "branchFromMain") {
-    if (-not $Target) { Write-Host "❌ Falta parámetro -Target (rama a restaurar)."; exit 1 }
-
-    if (-not (git show-ref --verify --quiet "refs/heads/$Target")) {
-        Write-Host "ℹ️ La rama '$Target' no existe localmente. Creándola desde $mainBranch..." -ForegroundColor Yellow
-        git checkout -b $Target $mainBranch
-    } else {
-        git checkout $Target
+# --- 6️⃣ Seleccionar modo ---
+switch ($Mode) {
+    "DevToMain"           { Restore-Branch $devBranch $mainBranch }
+    "MainToPreview"       { Restore-Branch $mainBranch $previewBranch }
+    "PreviewToProduction" { Restore-Branch $previewBranch $prodBranch }
+    "Manual" {
+        if (-not $Source -or -not $Target) {
+            Write-Host "❌ Debes especificar -Source y -Target en modo Manual." -ForegroundColor Red
+            exit 1
+        }
+        Restore-Branch $Source $Target
     }
-
-    if (-not (Confirm-Action "⚠️ Esto sobrescribirá '$Target' con el contenido de '$mainBranch'. ¿Continuar?")) {
-        Write-Host "❌ Operación cancelada."; exit 0
-    }
-
-    Backup-Branch $Target
-
-    Write-Host "🔧 Copiando contenido de $mainBranch → $Target..." -ForegroundColor Cyan
-    git checkout $mainBranch -- .
-
-    git add .
-    git commit -m "🔄 Restore $Target from $mainBranch (Anclora CLI)"
-    git push origin $Target --force-with-lease
-
-    Write-Host "✅ Restauración completada: '$Target' contiene ahora el contenido de '$mainBranch'." -ForegroundColor Green
-    exit 0
 }
 
-# 7️⃣ Modo 3: Backup directo
-if ($Mode -eq "backup") {
-    if (-not $Source) { Write-Host "❌ Falta parámetro -Source (rama a respaldar)."; exit 1 }
-    if (-not (git show-ref --verify --quiet "refs/heads/$Source")) {
-        Write-Host "❌ La rama '$Source' no existe localmente." -ForegroundColor Red
-        exit 1
-    }
-    Backup-Branch $Source
-    exit 0
-}
-
-Write-Host "❌ Modo no reconocido o incompleto." -ForegroundColor Red
+Write-Host "`n🏁 Proceso de recuperación finalizado." -ForegroundColor Cyan

@@ -1,97 +1,42 @@
-name: ⚓ Anclora | Auto Sync Main ↔ Claude
+name: ⚓ Anclora | Auto Sync Environments
 
 on:
-  schedule:
-    # Ejecuta todos los días a las 02:30 UTC (antes del auto-recover)
-    - cron: "30 2 * * *"
+  push:
+    branches:
+      - development
   workflow_dispatch:
 
 jobs:
-  sync-branches:
+  sync:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
-    env:
-      SOURCE_BRANCH: claude/playa-viva-landing-page-011CUsPXiqxuxCxUpCqy83GB
-      TARGET_BRANCH: main
-
     steps:
-      - name: 🔹 Checkout repository
+      - name: 🔹 Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: 🧭 Confirm environment
+      - name: 📥 Ensure script exists
         run: |
-          echo "🔍 Syncing $SOURCE_BRANCH ↔ $TARGET_BRANCH"
-          git fetch origin
-          git branch -r
-
-      - name: 💾 Create backup branches before sync
-        run: |
-          TS=$(date +"%Y%m%d-%H%M%S")
-          git fetch origin
-          git checkout ${{ env.TARGET_BRANCH }}
-          git pull origin ${{ env.TARGET_BRANCH }}
-          git branch "backup/${{ env.TARGET_BRANCH }}-$TS"
-          git push origin "backup/${{ env.TARGET_BRANCH }}-$TS"
-
-          git checkout ${{ env.SOURCE_BRANCH }}
-          git pull origin ${{ env.SOURCE_BRANCH }}
-          git branch "backup/${{ env.SOURCE_BRANCH }}-$TS"
-          git push origin "backup/${{ env.SOURCE_BRANCH }}-$TS"
-
-          echo "✅ Backups creados: backup/${{ env.TARGET_BRANCH }}-$TS y backup/${{ env.SOURCE_BRANCH }}-$TS"
-
-      - name: 🧩 Ensure sync script exists
-        run: |
-          if [ ! -f "scripts/sync_all.ps1" ]; then
-            echo "Descargando sync_all.ps1 desde remoto..."
+          if [ ! -f "scripts/anclora_sync_envs.ps1" ]; then
             mkdir -p scripts
-            curl -L -o scripts/sync_all.ps1 \
-              https://raw.githubusercontent.com/ToniIAPro73/v0-landing-page-real-state/main/scripts/sync_all.ps1
+            curl -L -o scripts/anclora_sync_envs.ps1 \
+              https://raw.githubusercontent.com/ToniIAPro73/v0-landing-page-real-state/main/scripts/anclora_sync_envs.ps1
           fi
 
-      - name: 🔄 Run bidirectional sync script
-        shell: bash
+      - name: 🔄 Run sync (Dev → Main → Preview → Production)
+        shell: pwsh
+        run: ./scripts/anclora_sync_envs.ps1 -Mode FullSync
+
+      - name: 🧾 Generate sync summary
         run: |
-          # Install PowerShell if not available
-          if ! command -v pwsh &> /dev/null; then
-            echo "Instalando PowerShell..."
-            # Use more reliable PowerShell installation for GitHub Actions
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq wget apt-transport-https software-properties-common
-            wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
-            sudo dpkg -i packages-microsoft-prod.deb
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq powershell
-          fi
+          echo "🧭 Sync run on $(date)" > sync_summary.txt
+          git log -5 --oneline >> sync_summary.txt
+          cat sync_summary.txt
 
-          # Verify PowerShell installation
-          pwsh --version
-
-          # Run PowerShell script
-          pwsh ./scripts/sync_all.ps1
-        continue-on-error: false
-
-      - name: ✅ Commit & push verification
-        run: |
-          echo "🧭 Estado final:"
-          git status
-          echo "Últimos commits:"
-          git log --oneline -5 --decorate
-
-      - name: 📜 Generate summary log
-        run: |
-          echo "🗓️ $(date '+%Y-%m-%d %H:%M:%S')" > sync_log.txt
-          echo "✔️ Sincronización completada entre $SOURCE_BRANCH y $TARGET_BRANCH" >> sync_log.txt
-          echo "-------------------------------------------" >> sync_log.txt
-          git log -3 --oneline >> sync_log.txt
-          cat sync_log.txt
-
-      - name: 📤 Upload sync log as artifact
+      - name: 📤 Upload summary
         uses: actions/upload-artifact@v4
         with:
-          name: sync_log
-          path: sync_log.txt
+          name: sync_summary
+          path: sync_summary.txt

@@ -1,66 +1,97 @@
-name: ⚓ Anclora | Auto Recover Main Branch
+name: ⚓ Anclora | Auto Recover Main
 
 on:
+  workflow_dispatch:
   schedule:
-    # Ejecuta todos los días a las 03:00 UTC
-    - cron: "0 3 * * *"
-  workflow_dispatch: # Permite ejecución manual desde GitHub Actions
+    - cron: "0 3 * * *" # Cada noche a las 03:00 UTC
 
 jobs:
-  recover-main:
+  recover:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Permite commits y push
+      contents: write
+
     steps:
       - name: 🔹 Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Clona todo el historial de Git
+          fetch-depth: 0
 
-      - name: ⚙️ Set up PowerShell
+      - name: 🧭 Detect divergence between development and main
+        id: divergence-check
         run: |
-          # Install PowerShell on Ubuntu
-          wget -q "https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb"
-          sudo dpkg -i packages-microsoft-prod.deb
-          sudo apt-get update
-          sudo apt-get install -y powershell
-
-      - name: 🧭 Detect current date and create backup branch
-        id: backup
-        run: |
-          echo "📦 Creando copia de seguridad de main..."
-          TS=$(date +"%Y%m%d-%H%M%S")
-          BACKUP_BRANCH="backup/main-${TS}"
           git fetch origin
-          git checkout main
-          git pull origin main
-          git checkout -b "$BACKUP_BRANCH"
-          git push origin "$BACKUP_BRANCH"
-          echo "✅ Backup branch created: $BACKUP_BRANCH"
-
-      - name: 📥 Ensure recovery script exists
-        run: |
-          if [ ! -f "scripts/anclora_git_recover_cli.ps1" ]; then
-            echo "Script no encontrado, descargando..."
-            mkdir -p scripts
-            curl -L -o scripts/anclora_git_recover_cli.ps1 \
-              https://raw.githubusercontent.com/ToniIAPro73/v0-landing-page-real-state/main/scripts/anclora_git_recover_cli.ps1
+          DEV_COMMITS=$(git rev-list --left-right --count origin/development...origin/main | cut -f1)
+          echo "DEV_COMMITS=$DEV_COMMITS" >> $GITHUB_OUTPUT
+          if [ "$DEV_COMMITS" -gt 0 ]; then
+            echo "Detected divergence; triggering recovery"
+            echo "needs_recovery=true" >> $GITHUB_OUTPUT
+          else
+            echo "No divergence detected"
+            echo "needs_recovery=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: 🔄 Restore main branch from Claude branch
+      - name: 🔄 Restore main from development
+        if: ${{ steps.divergence-check.outputs.needs_recovery == 'true' }}
+        shell: pwsh
+        id: recovery-step
+        run: |
+          $ErrorActionPreference = "Stop"
+          Write-Host "🔄 Starting recovery process..."
+          Write-Host "📊 DEV_COMMITS: ${{ steps.divergence-check.outputs.DEV_COMMITS }}"
+
+          if (Test-Path "scripts/anclora_git_recover_cli.ps1") {
+            try {
+              ./scripts/anclora_git_recover_cli.ps1 `
+                -Mode mainFromBranch `
+                -Source "development" `
+                -AutoConfirm $true
+              Write-Host "✅ Recovery completed successfully"
+              echo "recovery_status=success" >> $env:GITHUB_OUTPUT
+            }
+            catch {
+              Write-Host "❌ Recovery failed: $($_.Exception.Message)"
+              Write-Host "Stack trace: $($_.ScriptStackTrace)"
+              echo "recovery_status=failed" >> $env:GITHUB_OUTPUT
+              exit 1
+            }
+          } else {
+            Write-Host "❌ Error: Recovery script not found at scripts/anclora_git_recover_cli.ps1"
+            Write-Host "📁 Current directory: $(Get-Location)"
+            Write-Host "📂 Available scripts:"
+            if (Test-Path "scripts") {
+              Get-ChildItem "scripts" | ForEach-Object { Write-Host "  - $($_.Name)" }
+            } else {
+              Write-Host "  No scripts directory found"
+            }
+            echo "recovery_status=script_not_found" >> $env:GITHUB_OUTPUT
+            exit 1
+          }
+
+      - name: ✅ Summary
         shell: pwsh
         run: |
-          ./scripts/anclora_git_recover_cli.ps1 `
-            -Mode mainFromBranch `
-            -Source "claude/playa-viva-landing-page-011CUsPXiqxuxCxUpCqy83GB" `
-            -AutoConfirm $true
+          Write-Host "🕒 Recovery process completed at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss UTC') -UFormat '%z'"
 
-      - name: ✅ Verification summary
-        run: |
-          echo "🧭 Verificando última sincronización..."
-          git checkout main
-          git status
-          echo "Último commit:"
-          git log -1 --oneline
-          echo "───────────────────────────────"
-          echo "✅ Main restaurado y backup remoto creado correctamente."
+          $needsRecovery = "${{ steps.divergence-check.outputs.needs_recovery }}"
+          $devCommits = "${{ steps.divergence-check.outputs.DEV_COMMITS }}"
+          $recoveryStatus = if ("${{ steps.recovery-step.outcome }}") { "${{ steps.recovery-step.outcome }}" } else { "not_executed" }
+
+          if ($needsRecovery -eq "false") {
+            Write-Host "✅ No divergence detected between development and main branches"
+            Write-Host "📊 Branch status: development and main are in sync"
+          } else {
+            Write-Host "🔄 Divergence detected: $devCommits commits ahead"
+            if ($recoveryStatus -eq "success") {
+              Write-Host "✅ Recovery: Main branch has been synchronized with development"
+            } else {
+              Write-Host "❌ Recovery: Process failed or was not executed"
+              Write-Host "📋 Check previous steps for detailed error information"
+            }
+          }
+
+          Write-Host ""
+          Write-Host "📈 Process Summary:"
+          Write-Host "  • Development commits ahead: $devCommits"
+          Write-Host "  • Recovery needed: $needsRecovery"
+          Write-Host "  • Recovery status: $recoveryStatus"
