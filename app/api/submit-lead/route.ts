@@ -15,6 +15,8 @@ import {
   getLocalDossierDir,
   resolveS3Config,
   shouldUseS3Storage,
+  getS3Regions,
+  type S3Region,
 } from "@/lib/dossier-storage";
 import { verifyAltchaPayload } from "@/lib/altcha";
 
@@ -57,33 +59,19 @@ const PDF_BASE_FILES = {
 const LOCAL_PDF_OUTPUT_DIR = getLocalDossierDir();
 const s3Config = resolveS3Config();
 const useS3Storage = shouldUseS3Storage(s3Config);
+const s3Regions = getS3Regions();
 
 // DEBUG: Log S3 configuration at startup
 console.log("[INIT] S3 Configuration:", {
-  endpoint: s3Config.endpoint,
   bucket: s3Config.bucket,
-  region: s3Config.region,
   hasAccessKeyId: !!s3Config.accessKeyId,
   hasSecretAccessKey: !!s3Config.secretAccessKey,
   useS3Storage,
+  regions: s3Regions.map((r) => `${r.name} (${r.region})`),
   VERCEL: process.env.VERCEL,
   NODE_ENV: process.env.NODE_ENV,
   DISABLE_S3_STORAGE: process.env.DISABLE_S3_STORAGE,
 });
-
-const s3Client = useS3Storage && s3Config.bucket
-  ? new S3Client({
-      region: s3Config.region as string,
-      endpoint: s3Config.endpoint?.startsWith('http')
-        ? s3Config.endpoint
-        : `https://${s3Config.endpoint}`,
-      credentials: {
-        accessKeyId: s3Config.accessKeyId as string,
-        secretAccessKey: s3Config.secretAccessKey as string,
-      },
-      forcePathStyle: true,
-    })
-  : null;
 const PDF_FIELD_NAME = "Nombre_Personalizacion_Lead";
 const PDF_STORAGE_PREFIX = "dossiers";
 const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
@@ -190,6 +178,95 @@ type PdfResult = {
   error?: string;
   missingBase?: boolean;
 };
+
+/**
+ * Creates an S3 client for a specific region
+ */
+function createS3Client(region: S3Region, bucket: string): S3Client {
+  const endpoint = region.endpoint.startsWith('http')
+    ? region.endpoint
+    : `https://${region.endpoint}`;
+
+  return new S3Client({
+    region: region.region,
+    endpoint,
+    credentials: {
+      accessKeyId: s3Config.accessKeyId as string,
+      secretAccessKey: s3Config.secretAccessKey as string,
+    },
+    forcePathStyle: true,
+  });
+}
+
+/**
+ * Attempts to upload to S3 with automatic failover between regions
+ * Tries Frankfurt first, falls back to Paris if it fails
+ */
+async function uploadToS3WithFailover(
+  pdfBuffer: Buffer,
+  key: string,
+  bucket: string
+): Promise<{ success: boolean; signedUrl?: string; region?: string; error?: string }> {
+  const regions = getS3Regions();
+
+  for (let i = 0; i < regions.length; i++) {
+    const region = regions[i];
+    const isPrimary = i === 0;
+
+    try {
+      console.info(`[uploadToS3] Attempting upload to ${region.name} (${region.region})...`);
+
+      const client = createS3Client(region, bucket);
+
+      // Upload the PDF
+      await client.send(
+        new PutObjectCommand({
+          Bucket: bucket,
+          Key: key,
+          Body: pdfBuffer,
+          ContentType: "application/pdf",
+        }),
+      );
+
+      // Generate signed URL
+      const signedUrl = await getSignedUrl(
+        client,
+        new GetObjectCommand({
+          Bucket: bucket,
+          Key: key,
+        }),
+        { expiresIn: 60 * 60 * 24 }, // 24 hours
+      );
+
+      console.info(`[uploadToS3] ✓ Successfully uploaded to ${region.name} (${region.region})`);
+
+      return {
+        success: true,
+        signedUrl,
+        region: region.name,
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`[uploadToS3] ✗ Failed to upload to ${region.name}: ${errorMessage}`);
+
+      // If this is the last region, return the error
+      if (i === regions.length - 1) {
+        return {
+          success: false,
+          error: `All S3 regions failed. Last error: ${errorMessage}`,
+        };
+      }
+
+      // Otherwise, try the next region
+      console.info(`[uploadToS3] Trying fallback region...`);
+    }
+  }
+
+  return {
+    success: false,
+    error: "No S3 regions configured",
+  };
+}
 
 async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
   const language = payload.language || "es";
@@ -388,51 +465,39 @@ async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
     const pdfBytes = await pdfDoc.save();
     const pdfBuffer = Buffer.from(pdfBytes);
 
-    if (useS3Storage && s3Client && s3Config.bucket) {
+    if (useS3Storage && s3Config.bucket) {
       const key = `${PDF_STORAGE_PREFIX}/${outputFilename}`;
-      try {
-        await s3Client.send(
-          new PutObjectCommand({
-            Bucket: s3Config.bucket,
-            Key: key,
-            Body: pdfBuffer,
-            ContentType: "application/pdf",
-          }),
-        );
+      console.info(`[personalizePDF] Attempting S3 upload with failover...`);
 
-        const signedUrl = await getSignedUrl(
-          s3Client,
-          new GetObjectCommand({
-            Bucket: s3Config.bucket,
-            Key: key,
-          }),
-          { expiresIn: 60 * 60 * 24 },
-        );
+      const uploadResult = await uploadToS3WithFailover(
+        pdfBuffer,
+        key,
+        s3Config.bucket,
+      );
 
+      if (uploadResult.success && uploadResult.signedUrl) {
         console.info(
-          `[personalizePDF] Uploaded dossier to S3 bucket "${s3Config.bucket}"`,
+          `[personalizePDF] ✓ Successfully uploaded dossier to S3 (${uploadResult.region})`,
         );
 
         return {
           success: true,
-          pdf_delivery_url: signedUrl,
+          pdf_delivery_url: uploadResult.signedUrl,
           local_path: null,
           pdf_buffer: pdfBuffer,
           pdf_filename: outputFilename,
         };
-      } catch (error) {
+      } else {
         console.error(
-          "[personalizePDF] Error uploading dossier to S3, falling back to local storage:",
-          error,
+          `[personalizePDF] ✗ S3 upload failed: ${uploadResult.error}`,
         );
+        console.info("[personalizePDF] Falling back to local storage...");
+
         if (!LOCAL_PDF_OUTPUT_DIR) {
           return {
             success: false,
             pdf_delivery_url: null,
-            error:
-              error instanceof Error
-                ? error.message
-                : "S3 upload failed without fallback directory",
+            error: uploadResult.error || "S3 upload failed without fallback directory",
           };
         }
       }

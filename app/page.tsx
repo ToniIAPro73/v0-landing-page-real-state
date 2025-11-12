@@ -212,6 +212,13 @@ export default function PlayaVivaLanding() {
     };
   }, []);
 
+  // Clear validation message when language changes
+  useEffect(() => {
+    if (validationMessage) {
+      setValidationMessage(null);
+    }
+  }, [language]);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
