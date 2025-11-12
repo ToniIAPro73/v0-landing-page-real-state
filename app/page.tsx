@@ -471,31 +471,34 @@ export default function PlayaVivaLanding() {
         readMore: "Leer en el medio",
         articles: [
           {
-            image: "/assets/imagenes/news1.png",
+            date: "7 Noviembre 2025",
+            image: "/assets/imagenes/british_exodus.webp",
+            alt: "The National - Escape to Dubai",
+            source: "The National",
+            title: "Escape to Dubai from high-tax Britain more tempting as 75% fear higher rates",
+            summary:
+              "Reports record migration of wealthy individuals to UAE, with the emirates experiencing 'a net inflow of 9,800 millionaires from around the world in the past year.'",
+            url: "https://www.thenationalnews.com/news/uae/2025/11/07/flight-to-dubai-from-high-tax-britain-more-temping-as-75-fear-new-levies/",
+          },
+          {
+            date: "3 Julio 2025",
+            image: "/assets/imagenes/news_gulfnews_jul3.png",
             alt: "Gulf News - Wynn Resort",
             source: "Gulf News",
-            title: "Wynn Resort impulsa USD 5.1B en Ras Al Khaimah",
+            title: "Ras Al Khaimah sees new luxury hotel at Wynn Al Marjan",
             summary:
-              "El emirato aprueba el primer resort con casino de la región, detonando demanda residencial y hotelera en Al Marjan Island.",
-            url: "https://gulfnews.com/business/property/wynn-resort-ras-al-khaimah-gets-green-light-1.96136123",
+              "Features 'UAE's first gaming resort – the $5.1 billion Wynn Al Marjan Island resort' launching in early 2027 with 'ultra-luxury offering, Enclave.'",
+            url: "https://gulfnews.com/business/tourism/uaes-first-gaming-resort-ras-al-khaimah-sees-new-luxury-hotel-at-wynn-al-marjan-1.500185592",
           },
           {
-            image: "/assets/imagenes/news2.png",
-            alt: "Arabian Business - Tourism",
-            source: "Arabian Business",
-            title: "RAK recibe 1.2M de visitantes de alto gasto",
+            date: "30 Abril 2025",
+            image: "/assets/imagenes/news_national_apr30.png",
+            alt: "The National - Gaming resort RAK",
+            source: "The National",
+            title: "UAE's first gaming resort set to 'open up RAK to the world'",
             summary:
-              "El turismo premium del emirato crece 24% interanual apoyado por el efecto Wynn y nuevos desarrollos residenciales.",
-            url: "https://www.arabianbusiness.com/industries/travel-hospitality/ras-al-khaimah-tourism-records-1-2-million-visitors",
-          },
-          {
-            image: "/assets/imagenes/news3.png",
-            alt: "Fitch Ratings - RAK",
-            source: "Fitch Ratings",
-            title: "Fitch reafirma a Ras Al Khaimah en AA-",
-            summary:
-              "La calificación soberana subraya la solidez fiscal del emirato y refuerza la seguridad jurídica para los proyectos inmobiliarios.",
-            url: "https://www.fitchratings.com/research/sovereigns/fitch-affirms-ras-al-khaimah-at-aa-outlook-stable-06-07-2023",
+              "Explores the groundbreaking gaming resort's influence on regional economic development and tourism growth.",
+            url: "https://www.thenationalnews.com/business/economy/2025/04/30/uaes-first-casino-resort-set-to-open-up-ras-al-khaimah-to-the-world/",
           },
         ],
       },
@@ -552,33 +555,21 @@ export default function PlayaVivaLanding() {
         ],
       },
       paymentPlan: {
-        title: "Plan de Pago Flexible",
-        subtitle: "Solo 1% mensual durante 5 años",
+        title: "Plan de Pago",
+        subtitle: "Inversión flexible con términos competitivos",
         description:
-          "Un esquema de financiamiento diseñado para inversores internacionales, permitiéndole posicionarse en Al Marjan Island con pagos mensuales mínimos.",
-        timeline: [
-          {
-            stage: "Reserva",
-            amount: "€5,000",
-            description: "Reserva tu unidad",
-          },
-          {
-            stage: "Contrato",
-            amount: "15%",
-            description: "Al firmar contrato",
-          },
-          {
-            stage: "Durante construcción",
-            amount: "1% mensual",
-            description: "60 meses (5 años)",
-          },
-          {
-            stage: "Entrega Q2 2026",
-            amount: "Saldo",
-            description: "Balance al entregar llaves",
-          },
+          "40% durante construcción antes de entrega. Balance 60% a 1% mensual durante 60 meses post-entrega.",
+        mainPayment: "40%",
+        mainLabel: "Al Comprar",
+        postHandover: "60%",
+        postLabel: "Post-Entrega",
+        postDetails: "1% mensual durante 60 meses",
+        features: [
+          "40% durante construcción antes de entrega",
+          "Balance 60% a 1% mensual durante 60 meses post-entrega",
+          "Esquema flexible para inversores internacionales",
+          "Maximiza tu liquidez durante el periodo de construcción",
         ],
-        note: "* Plan sujeto a aprobación. Consulte con nuestro equipo para opciones personalizadas.",
       },
       investment: {
         title: "Oportunidad de Inversión",
@@ -862,31 +853,34 @@ export default function PlayaVivaLanding() {
         readMore: "Read full article",
         articles: [
           {
-            image: "/assets/imagenes/news1.png",
+            date: "November 7, 2025",
+            image: "/assets/imagenes/british_exodus.webp",
+            alt: "The National - Escape to Dubai",
+            source: "The National",
+            title: "Escape to Dubai from high-tax Britain more tempting as 75% fear higher rates",
+            summary:
+              "Reports record migration of wealthy individuals to UAE, with the emirates experiencing 'a net inflow of 9,800 millionaires from around the world in the past year.'",
+            url: "https://www.thenationalnews.com/news/uae/2025/11/07/flight-to-dubai-from-high-tax-britain-more-temping-as-75-fear-new-levies/",
+          },
+          {
+            date: "July 3, 2025",
+            image: "/assets/imagenes/news_gulfnews_jul3.png",
             alt: "Gulf News - Wynn Resort",
             source: "Gulf News",
-            title: "Wynn Resort drives a $5.1B push in Ras Al Khaimah",
+            title: "Ras Al Khaimah sees new luxury hotel at Wynn Al Marjan",
             summary:
-              "Authorities approve the UAE's first integrated resort with gaming on Al Marjan Island, unlocking premium residential demand.",
-            url: "https://gulfnews.com/business/property/wynn-resort-ras-al-khaimah-gets-green-light-1.96136123",
+              "Features 'UAE's first gaming resort – the $5.1 billion Wynn Al Marjan Island resort' launching in early 2027 with 'ultra-luxury offering, Enclave.'",
+            url: "https://gulfnews.com/business/tourism/uaes-first-gaming-resort-ras-al-khaimah-sees-new-luxury-hotel-at-wynn-al-marjan-1.500185592",
           },
           {
-            image: "/assets/imagenes/news2.png",
-            alt: "Arabian Business - Tourism",
-            source: "Arabian Business",
-            title: "RAK welcomes 1.2M high-spending visitors",
+            date: "April 30, 2025",
+            image: "/assets/imagenes/news_national_apr30.png",
+            alt: "The National - Gaming resort RAK",
+            source: "The National",
+            title: "UAE's first gaming resort set to 'open up RAK to the world'",
             summary:
-              "Tourism arrivals jumped 24% year-on-year as the Wynn Effect and new luxe developments put the emirate on global radars.",
-            url: "https://www.arabianbusiness.com/industries/travel-hospitality/ras-al-khaimah-tourism-records-1-2-million-visitors",
-          },
-          {
-            image: "/assets/imagenes/news3.png",
-            alt: "Fitch Ratings - RAK",
-            source: "Fitch Ratings",
-            title: "Fitch reaffirms Ras Al Khaimah at AA- Stable",
-            summary:
-              "The sovereign rating highlights robust public finances and underpins investor confidence in long-term real estate projects.",
-            url: "https://www.fitchratings.com/research/sovereigns/fitch-affirms-ras-al-khaimah-at-aa-outlook-stable-06-07-2023",
+              "Explores the groundbreaking gaming resort's influence on regional economic development and tourism growth.",
+            url: "https://www.thenationalnews.com/business/economy/2025/04/30/uaes-first-casino-resort-set-to-open-up-ras-al-khaimah-to-the-world/",
           },
         ],
       },
@@ -943,33 +937,21 @@ export default function PlayaVivaLanding() {
         ],
       },
       paymentPlan: {
-        title: "Flexible Payment Plan",
-        subtitle: "Only 1% monthly for 5 years",
+        title: "Payment Plan",
+        subtitle: "Flexible investment with competitive terms",
         description:
-          "A financing scheme designed for international investors, allowing you to position yourself in Al Marjan Island with minimum monthly payments.",
-        timeline: [
-          {
-            stage: "Booking",
-            amount: "£5,000",
-            description: "Reserve your unit",
-          },
-          {
-            stage: "Contract",
-            amount: "15%",
-            description: "Upon signing contract",
-          },
-          {
-            stage: "During construction",
-            amount: "1% monthly",
-            description: "60 months (5 years)",
-          },
-          {
-            stage: "Handover Q2 2026",
-            amount: "Balance",
-            description: "Balance upon key handover",
-          },
+          "40% during construction before handover. Balance 60% at 1% per month for 60 months post-handover.",
+        mainPayment: "40%",
+        mainLabel: "On Purchase",
+        postHandover: "60%",
+        postLabel: "Post-Handover",
+        postDetails: "1% per month for 60 months",
+        features: [
+          "40% during construction before handover",
+          "Balance 60% at 1% per month for 60 months post-handover",
+          "Flexible scheme for international investors",
+          "Maximize your liquidity during construction period",
         ],
-        note: "* Plan subject to approval. Consult with our team for custom options.",
       },
       investment: {
         title: "Investment Opportunity",
@@ -2079,6 +2061,122 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
+      {/* Investment */}
+      <section
+        id="investment"
+        ref={investmentRef}
+        className="relative py-24 bg-white"
+        style={{
+          opacity: visibleSections.investment ? 1 : 0,
+          transform: visibleSections.investment
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-16">
+              <h2
+                className="text-4xl md:text-5xl font-light text-brown-dark mb-6"
+                style={{
+                  opacity: visibleSections.investment ? 1 : 0,
+                  transform: visibleSections.investment
+                    ? "translateY(0px)"
+                    : "translateY(20px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+              >
+                {t.investment.title}
+              </h2>
+              <h3
+                className="text-2xl text-gold-warm mb-8"
+                style={{
+                  opacity: visibleSections.investment ? 1 : 0,
+                  transform: visibleSections.investment
+                    ? "translateY(0px)"
+                    : "translateY(20px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s",
+                }}
+              >
+                {t.investment.subtitle}
+              </h3>
+              <p
+                className="text-taupe-warm text-base md:text-lg leading-relaxed max-w-3xl mx-auto"
+                style={{
+                  opacity: visibleSections.investment ? 1 : 0,
+                  transform: visibleSections.investment
+                    ? "translateY(0px)"
+                    : "translateY(20px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s",
+                }}
+              >
+                {t.investment.description}
+              </p>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+              {t.investment.stats.map((stat, index) => (
+                <div
+                  key={index}
+                  className="bg-cream-light border-2 border-gold-warm/30 rounded-2xl p-6 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-2"
+                  style={{
+                    opacity: visibleSections.investment ? 1 : 0,
+                    transform: visibleSections.investment
+                      ? "translateY(0px)"
+                      : "translateY(30px)",
+                    transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+                      0.3 + index * 0.1
+                    }s`,
+                  }}
+                >
+                  <div className="flex justify-center mb-4">
+                    <div className="bg-gold-warm/20 p-3 rounded-full">
+                      <stat.icon className="h-8 w-8 text-gold-warm" />
+                    </div>
+                  </div>
+                  <div className="text-4xl font-bold text-gold-warm mb-2 text-center">
+                    {stat.value}
+                  </div>
+                  <h4 className="text-brown-dark font-semibold mb-2 text-center text-sm md:text-base">
+                    {stat.label}
+                  </h4>
+                  <p className="text-taupe-warm text-xs md:text-sm text-center leading-relaxed">
+                    {stat.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Benefits Grid */}
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {t.investment.benefits.map((benefit, index) => (
+                <div
+                  key={index}
+                  className="flex items-start p-5 bg-cream-light/50 rounded-xl border border-gold-warm/20 hover:bg-cream-light hover:border-gold-warm/40 transition-all duration-300"
+                  style={{
+                    opacity: visibleSections.investment ? 1 : 0,
+                    transform: visibleSections.investment
+                      ? "translateY(0px)"
+                      : "translateY(20px)",
+                    transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${
+                      0.7 + index * 0.1
+                    }s`,
+                  }}
+                >
+                  <CheckCircle2 className="h-6 w-6 text-gold-warm mr-3 shrink-0 mt-0.5" />
+                  <span className="text-brown-dark text-left text-sm md:text-base">
+                    {benefit}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
       <section
         id="features"
@@ -2462,180 +2560,158 @@ const orchestrateLeadAutomation = async (
               <p className="text-center text-sm text-taupe-warm mb-6 uppercase tracking-wider">
                 {t.trust.partners}
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch justify-items-center">
-                {t.trust.articles.map((article, index) => (
+
+              {/* Desktop/Tablet: Horizontal Scroll */}
+              <div className="hidden md:block">
+                <div className="relative">
                   <div
-                    key={index}
-                    className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-1 w-full max-w-xs flex flex-col"
+                    className="flex gap-8 overflow-x-auto pb-4 px-0 items-stretch justify-start scrollbar-thin scrollbar-thumb-gold-warm/40 scrollbar-track-gold-warm/10"
                     style={{
-                      opacity: visibleSections.trust ? 1 : 0,
-                      transform: visibleSections.trust
-                        ? "translateY(0px)"
-                        : "translateY(30px)",
-                      transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
-                        index * 0.15
-                      }s`,
+                      scrollBehavior: 'smooth',
+                      WebkitOverflowScrolling: 'touch',
                     }}
                   >
-                    <Image
-                      src={article.image}
-                      alt={article.alt}
-                      width={480}
-                      height={320}
-                      className="w-full h-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
-                      sizes="(max-width: 768px) 80vw, 20vw"
-                    />
-                    <div className="mt-4 space-y-2 flex-1 flex flex-col">
-                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brown-dark/60">
-                        {article.source}
-                      </p>
-                      <h4 className="text-lg font-semibold text-brown-dark leading-snug">
-                        {article.title}
-                      </h4>
-                      <p className="text-sm text-brown-dark/70 flex-1">
-                        {article.summary}
-                      </p>
-                      <a
-                        href={article.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-gold-warm hover:underline"
+                    {t.trust.articles.map((article, index) => (
+                      <div
+                        key={index}
+                        className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-1 w-full min-w-[320px] max-w-xs flex flex-col shrink-0"
+                        style={{
+                          opacity: visibleSections.trust ? 1 : 0,
+                          transform: visibleSections.trust
+                            ? "translateY(0px)"
+                            : "translateY(30px)",
+                          transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+                            index * 0.15
+                          }s`,
+                        }}
                       >
-                        {t.trust.readMore}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M7 17 17 7" />
-                          <path d="M7 7h10v10" />
-                        </svg>
-                      </a>
-                    </div>
+                        <Image
+                          src={article.image}
+                          alt={article.alt}
+                          width={480}
+                          height={320}
+                          className="w-full h-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
+                          sizes="(max-width: 768px) 80vw, 20vw"
+                        />
+                        <div className="mt-4 space-y-2 flex-1 flex flex-col">
+                          <div className="flex items-center justify-between">
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brown-dark/60">
+                              {article.source}
+                            </p>
+                            {article.date && (
+                              <p className="text-xs text-taupe-warm">
+                                {article.date}
+                              </p>
+                            )}
+                          </div>
+                          <h4 className="text-lg font-semibold text-brown-dark leading-snug">
+                            {article.title}
+                          </h4>
+                          <p className="text-sm text-brown-dark/70 flex-1">
+                            {article.summary}
+                          </p>
+                          <a
+                            href={article.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-gold-warm hover:underline"
+                          >
+                            {t.trust.readMore}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              className="h-4 w-4"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M7 17 17 7" />
+                              <path d="M7 7h10v10" />
+                            </svg>
+                          </a>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Investment */}
-      <section
-        id="investment"
-        ref={investmentRef}
-        className="relative py-24 bg-white"
-        style={{
-          opacity: visibleSections.investment ? 1 : 0,
-          transform: visibleSections.investment
-            ? "translateY(0px)"
-            : "translateY(50px)",
-          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
-      >
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-16">
-              <h2
-                className="text-4xl md:text-5xl font-light text-brown-dark mb-6"
-                style={{
-                  opacity: visibleSections.investment ? 1 : 0,
-                  transform: visibleSections.investment
-                    ? "translateY(0px)"
-                    : "translateY(20px)",
-                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-                }}
-              >
-                {t.investment.title}
-              </h2>
-              <h3
-                className="text-2xl text-gold-warm mb-8"
-                style={{
-                  opacity: visibleSections.investment ? 1 : 0,
-                  transform: visibleSections.investment
-                    ? "translateY(0px)"
-                    : "translateY(20px)",
-                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s",
-                }}
-              >
-                {t.investment.subtitle}
-              </h3>
-              <p
-                className="text-taupe-warm text-base md:text-lg leading-relaxed max-w-3xl mx-auto"
-                style={{
-                  opacity: visibleSections.investment ? 1 : 0,
-                  transform: visibleSections.investment
-                    ? "translateY(0px)"
-                    : "translateY(20px)",
-                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s",
-                }}
-              >
-                {t.investment.description}
-              </p>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-              {t.investment.stats.map((stat, index) => (
+              {/* Mobile: Vertical Scroll */}
+              <div className="md:hidden">
                 <div
-                  key={index}
-                  className="bg-cream-light border-2 border-gold-warm/30 rounded-2xl p-6 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-2"
+                  className="flex flex-col gap-6 overflow-y-auto max-h-[900px] px-0 scrollbar-thin scrollbar-thumb-gold-warm/40 scrollbar-track-gold-warm/10"
                   style={{
-                    opacity: visibleSections.investment ? 1 : 0,
-                    transform: visibleSections.investment
-                      ? "translateY(0px)"
-                      : "translateY(30px)",
-                    transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
-                      0.3 + index * 0.1
-                    }s`,
+                    scrollBehavior: 'smooth',
+                    WebkitOverflowScrolling: 'touch',
                   }}
                 >
-                  <div className="flex justify-center mb-4">
-                    <div className="bg-gold-warm/20 p-3 rounded-full">
-                      <stat.icon className="h-8 w-8 text-gold-warm" />
+                  {t.trust.articles.map((article, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-1 flex flex-col w-full"
+                      style={{
+                        opacity: visibleSections.trust ? 1 : 0,
+                        transform: visibleSections.trust
+                          ? "translateY(0px)"
+                          : "translateY(30px)",
+                        transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+                          index * 0.15
+                        }s`,
+                      }}
+                    >
+                      <Image
+                        src={article.image}
+                        alt={article.alt}
+                        width={480}
+                        height={320}
+                        className="w-full h-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
+                        sizes="(max-width: 768px) 80vw, 20vw"
+                      />
+                      <div className="mt-4 space-y-2 flex-1 flex flex-col">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brown-dark/60">
+                            {article.source}
+                          </p>
+                          {article.date && (
+                            <p className="text-xs text-taupe-warm">
+                              {article.date}
+                            </p>
+                          )}
+                        </div>
+                        <h4 className="text-lg font-semibold text-brown-dark leading-snug">
+                          {article.title}
+                        </h4>
+                        <p className="text-sm text-brown-dark/70 flex-1">
+                          {article.summary}
+                        </p>
+                        <a
+                          href={article.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-gold-warm hover:underline"
+                        >
+                          {t.trust.readMore}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M7 17 17 7" />
+                            <path d="M7 7h10v10" />
+                          </svg>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-4xl font-bold text-gold-warm mb-2 text-center">
-                    {stat.value}
-                  </div>
-                  <h4 className="text-brown-dark font-semibold mb-2 text-center text-sm md:text-base">
-                    {stat.label}
-                  </h4>
-                  <p className="text-taupe-warm text-xs md:text-sm text-center leading-relaxed">
-                    {stat.description}
-                  </p>
+                  ))}
                 </div>
-              ))}
-            </div>
-
-            {/* Benefits Grid */}
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {t.investment.benefits.map((benefit, index) => (
-                <div
-                  key={index}
-                  className="flex items-start p-5 bg-cream-light/50 rounded-xl border border-gold-warm/20 hover:bg-cream-light hover:border-gold-warm/40 transition-all duration-300"
-                  style={{
-                    opacity: visibleSections.investment ? 1 : 0,
-                    transform: visibleSections.investment
-                      ? "translateY(0px)"
-                      : "translateY(20px)",
-                    transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${
-                      0.7 + index * 0.1
-                    }s`,
-                  }}
-                >
-                  <CheckCircle2 className="h-6 w-6 text-gold-warm mr-3 shrink-0 mt-0.5" />
-                  <span className="text-brown-dark text-left text-sm md:text-base">
-                    {benefit}
-                  </span>
-                </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
