@@ -57,6 +57,20 @@ const PDF_BASE_FILES = {
 const LOCAL_PDF_OUTPUT_DIR = getLocalDossierDir();
 const s3Config = resolveS3Config();
 const useS3Storage = shouldUseS3Storage(s3Config);
+
+// DEBUG: Log S3 configuration at startup
+console.log("[INIT] S3 Configuration:", {
+  endpoint: s3Config.endpoint,
+  bucket: s3Config.bucket,
+  region: s3Config.region,
+  hasAccessKeyId: !!s3Config.accessKeyId,
+  hasSecretAccessKey: !!s3Config.secretAccessKey,
+  useS3Storage,
+  VERCEL: process.env.VERCEL,
+  NODE_ENV: process.env.NODE_ENV,
+  DISABLE_S3_STORAGE: process.env.DISABLE_S3_STORAGE,
+});
+
 const s3Client = useS3Storage && s3Config.bucket
   ? new S3Client({
       region: s3Config.region as string,
