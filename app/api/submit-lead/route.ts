@@ -641,7 +641,8 @@ async function sendDossierEmail(
       buttonLabel: "Descargar mi Dossier",
       meetingButtonLabel: "Agendar mi Consulta de 15 Minutos",
       ps1: "P.D. Si el botón de descarga no funciona, copia y pega este enlace en tu navegador:",
-      ps2: "P.D. 2 Si el botón de agendar cita no funciona, este es el enlace:",
+      ps1b: "P.D.1. Tengo disponibilidad este jueves y viernes por la tarde (hora de Dubai). Si prefieres hablar antes, elige tu horario aquí.",
+      ps2: "P.D.2. Si el botón de agendar cita no funciona, este es el enlace:",
     },
     en: {
       subject: "Your Playa Viva dossier is ready | The Wynn Effect",
@@ -659,8 +660,9 @@ async function sendDossierEmail(
       signature: "Best regards,<br/>Michael McMullen, Official Agent at Uniestate UK<br/>michael@uniestate.co.uk",
       buttonLabel: "Download my Dossier",
       meetingButtonLabel: "Schedule my 15-Minute Consultation",
-      ps1: "P.S. If the download button doesn't work, please copy and paste this link into your browser:",
-      ps2: "P.S. 2 If the scheduling button doesn't work, this is the link:",
+      ps1: "P.S. If the download button doesn't work, copy and paste this link into your browser:",
+      ps1b: "P.S.1. I have availability this Thursday and Friday afternoon (Dubai time). If you'd prefer to talk sooner, choose your time slot here.",
+      ps2: "P.S.2. If the book appointment button doesn't work, here's the link:",
     },
   }[payload.language];
 
@@ -734,19 +736,21 @@ async function sendDossierEmail(
             </tr>
           </table>
 
-          <!-- P.D. 1 -->
+          <!-- P.D. / P.S. 1 -->
           <p style="font-size: 13px; color: #6e5f46; margin-bottom: 12px;">
             <strong>${emailCopy.ps1}</strong><br/>
             <a href="${absoluteUrl}" style="color: #8B7355; word-break: break-all;">${absoluteUrl}</a>
           </p>
 
-          <!-- P.D. 2 -->
+          <!-- P.D.1 / P.S.1 -->
+          <p style="font-size: 13px; color: #6e5f46; margin-bottom: 12px;">
+            <strong>${emailCopy.ps1b}</strong><br/>
+            <a href="${hubspotMeetingsUrl}" style="background:linear-gradient(135deg,#d4af37,#c4a037);color:#1f1509;padding:10px 24px;border-radius:6px;text-decoration:none;font-weight:600;display:inline-block;font-size:13px;">${emailCopy.meetingButtonLabel}</a>
+          </p>
+
+          <!-- P.D.2 / P.S.2 -->
           <p style="font-size: 13px; color: #6e5f46; margin-bottom: 12px;">
             <strong>${emailCopy.ps2}</strong><br/>
-            ${payload.language === "es"
-              ? `Tengo disponibilidad este jueves y viernes por la tarde (hora de Dubai). Si prefieres hablar antes, <a href="${hubspotMeetingsUrl}" style="color: #8B7355; text-decoration: underline;">elige tu horario aquí</a>.`
-              : `I have availability this Thursday and Friday afternoon (Dubai time). If you prefer to schedule earlier, <a href="${hubspotMeetingsUrl}" style="color: #8B7355; text-decoration: underline;">choose your time here</a>.`
-            }<br/>
             <a href="${hubspotMeetingsUrl}" style="color: #8B7355; word-break: break-all;">${hubspotMeetingsUrl}</a>
           </p>
         </td>
