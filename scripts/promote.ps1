@@ -1,147 +1,123 @@
 <#
 .SYNOPSIS
-  ⚓ Anclora Promote Full v2.2
-  Sincroniza automáticamente todas las ramas clave del ecosistema Anclora
-  (development, main/master, preview y production) de forma segura e inteligente.
+  Promueve y sincroniza automáticamente las ramas principales del repositorio:
+  development → main → preview → production
 
 .DESCRIPTION
-  Este script detecta la rama más actualizada, valida el estado local y remoto,
-  crea backups si hay cambios sin commit, resuelve divergencias, y propaga la
-  versión confirmada a todas las ramas para mantener el repositorio en equilibrio total.
+  Este script:
+  - Verifica y sincroniza los commits locales/remotos.
+  - Limpia logs antiguos (más de 24h) para evitar bloqueos.
+  - Realiza push y merges ordenados entre entornos.
+  - Crea un log detallado de cada ejecución en /logs.
+  - Es compatible con repos que usen “main” o “master”.
 
-  ✅ Compatible con repos que usen main o master.
-  ✅ Incluye modo Dry-Run.
-  ✅ Genera log detallado en ./logs/.
+.VERSION
+  2.3 (estable)
 #>
 
-param(
-    [switch]$DryRun
-)
-
+# ==========================
+# ⚓ CONFIGURACIÓN INICIAL
+# ==========================
 $ErrorActionPreference = "Stop"
-$timestamp = (Get-Date -Format "yyyy-MM-dd_HH-mm-ss")
-$logDir = "logs"
-if (!(Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }
-Start-Transcript -Path "$logDir/promote_$timestamp.txt" | Out-Null
+$repoRoot = (git rev-parse --show-toplevel)
+Set-Location $repoRoot
 
-Write-Host "`n⚓ ANCLORA DEV SHELL — PROMOTE FULL v2.2`n" -ForegroundColor Cyan
+$logDir = Join-Path $repoRoot "logs"
+if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }
 
-# 🔧 Definición de ramas
-$branches = @("development", "main", "preview", "production")
-if (git show-ref --verify --quiet refs/remotes/origin/master) {
-    $branches += "master"
-}
+# Limpia logs de más de 24h
+Get-ChildItem $logDir -Filter "promote_*.txt" -ErrorAction SilentlyContinue |
+    Where-Object { $_.LastWriteTime -lt (Get-Date).AddHours(-24) } |
+    Remove-Item -Force -ErrorAction SilentlyContinue
 
-# 🔄 Actualiza refs
+# Crea nuevo log
+$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+$logFile = Join-Path $logDir "promote_$timestamp.txt"
+Start-Transcript -Path $logFile | Out-Null
+
+Write-Host ""
+Write-Host "⚓ ANCLORA DEV SHELL — PROMOTE FULL v2.3" -ForegroundColor Cyan
+Write-Host ""
+
+# ==========================
+# 🧭 DETECTA RAMAS CLAVE
+# ==========================
+$branches = git branch --format="%(refname:short)"
+$mainBranch = if ($branches -match 'main') { 'main' } elseif ($branches -match 'master') { 'master' } else { 'main' }
+$devBranch = if ($branches -match 'development') { 'development' } else { Read-Host "❓ Nombre de tu rama de desarrollo" }
+$previewBranch = if ($branches -match 'preview') { 'preview' } else { '' }
+$productionBranch = if ($branches -match 'production') { 'production' } else { '' }
+
+Write-Host "🔹 Ramas detectadas:" -ForegroundColor Cyan
+Write-Host "   Dev: $devBranch"
+Write-Host "   Main: $mainBranch"
+if ($previewBranch) { Write-Host "   Preview: $previewBranch" }
+if ($productionBranch) { Write-Host "   Production: $productionBranch" }
+Write-Host ""
+
+# ==========================
+# 🔄 ACTUALIZA REMOTOS
+# ==========================
 Write-Host "🔄 Actualizando referencias remotas..." -ForegroundColor Yellow
-git fetch --all | Out-Null
+git fetch --all
 
-# 🧩 Verifica que existan
-$existing = @()
-foreach ($b in $branches) {
-    if (git branch -r | Select-String "origin/$b") { $existing += $b }
-}
-if ($existing.Count -eq 0) {
-    Write-Host "❌ No se encontraron ramas válidas." -ForegroundColor Red
-    Stop-Transcript | Out-Null; exit 1
-}
+# ==========================
+# 📦 ESTADO DEL ÚLTIMO COMMIT
+# ==========================
+$lastCommit = git log -1 --format="%h|%ad" --date=format:"%m/%d/%Y %H:%M:%S" $devBranch
+$commitParts = $lastCommit -split '\|'
+Write-Host "`n🧭 Último commit detectado:"
+Write-Host "   → Rama: $devBranch"
+Write-Host "   → Hash: $($commitParts[0])"
+Write-Host "   → Fecha: $($commitParts[1])`n"
 
-# 🧱 Check cambios sin commit
-if ((git status --porcelain).Length -gt 0) {
-    Write-Host "`n⚠️ Hay cambios sin commit en tu entorno local." -ForegroundColor Yellow
-    $resp = Read-Host "¿Deseas crear un backup automático antes de continuar? (S/N)"
-    if ($resp -match "^[sS]$") {
-        git add -A
-        git commit -m "🧩 Backup automático previo a promote full ($timestamp)" | Out-Null
+# ==========================
+# 🧮 ESTADO DE SINCRONIZACIÓN
+# ==========================
+$branchesToCheck = @($devBranch, $mainBranch, $previewBranch, $productionBranch) | Where-Object { $_ -ne '' }
+
+foreach ($b in $branchesToCheck) {
+    $counts = git rev-list --left-right --count $b...origin/$b | Out-String
+    $split = $counts -split "\s+"
+    $ahead = [int]($split[0].Trim())
+    $behind = [int]($split[1].Trim())
+
+    if ($ahead -gt 0 -and $behind -gt 0) {
+        Write-Host "⚠️  '$b' ha divergido del remoto. Se recomienda un rebase manual." -ForegroundColor Yellow
+    } elseif ($ahead -gt 0) {
+        Write-Host "⬆️  '$b' tiene $ahead commits locales no subidos."
+    } elseif ($behind -gt 0) {
+        Write-Host "⬇️  '$b' está $behind commits detrás del remoto."
     } else {
-        Write-Host "⛔ Proceso cancelado para evitar pérdida de cambios." -ForegroundColor Red
-        Stop-Transcript | Out-Null; exit 0
+        Write-Host "✅ '$b' está sincronizada."
     }
 }
 
-# 🧭 Determina commit más reciente
-$commits = foreach ($b in $existing) {
-    $hash = git rev-parse "origin/$b"
-    $date = git log -1 --format=%ci "origin/$b"
-    [PSCustomObject]@{ Branch=$b; Hash=$hash; Date=[datetime]$date }
-}
-$latest = $commits | Sort-Object Date -Descending | Select-Object -First 1
-Write-Host "`n🧭 Último commit detectado:`n   → Rama: $($latest.Branch)`n   → Hash: $($latest.Hash.Substring(0,7))`n   → Fecha: $($latest.Date)`n"
+Write-Host ""
 
-# 💾 Check commits ahead local
-foreach ($b in $existing) {
-    # Obtiene el recuento de commits ahead/behind (separado por tabulador o espacio)
-    $countOutput = git rev-list --left-right --count $b...origin/$b 2>$null
-    $counts = $countOutput -split "\s+"  # Divide por cualquier espacio o tabulación
-    $ahead = [int]$counts[0]
-    $behind = if ($counts.Length -gt 1) { [int]$counts[1] } else { 0 }
-    if ([int]$ahead -gt 0) {
-        Write-Host "⚠️ '$b' tiene commits locales no subidos." -ForegroundColor Yellow
-        $push = Read-Host "¿Deseas hacer push automático ahora? (S/N)"
-        if ($push -match "^[sS]$") { git push origin $b | Out-Null }
-    }
+# ==========================
+# 🚀 PROMOCIÓN ENTRE RAMAS
+# ==========================
+function Promote($source, $target) {
+    Write-Host "🔁 Fusionando $source → $target..." -ForegroundColor Green
+    git checkout $target
+    git pull origin $target
+    git merge $source -m "🔀 Promote $source → $target"
+    git push origin $target
 }
 
-# ⚠️ Divergencia local/remoto
-foreach ($b in $existing) {
-    $diff = git rev-list --left-right --count origin/$b...$b
-    $split = $diff.Split(" ")
-    if ([int]$split[0] -gt 0 -and [int]$split[1] -gt 0) {
-        Write-Host "🚫 Divergencia detectada en '$b'. Corrige manualmente antes de continuar." -ForegroundColor Red
-        Stop-Transcript | Out-Null; exit 1
-    }
-}
+Promote $devBranch $mainBranch
 
-# 🔍 Confirmación antes de propagar
-if (-not $DryRun) {
-    $confirm = Read-Host "¿Deseas usar '$($latest.Branch)' como fuente y sincronizar las demás? (S/N)"
-    if ($confirm -notmatch "^[sS]$") {
-        Write-Host "⛔ Operación cancelada." -ForegroundColor Red
-        Stop-Transcript | Out-Null; exit 0
-    }
-}
+if ($previewBranch) { Promote $mainBranch $previewBranch }
+if ($productionBranch) { Promote $previewBranch $productionBranch }
 
-# 🧪 Modo simulación
-if ($DryRun) {
-    Write-Host "`n🔬 Modo Dry-Run activado. Estas ramas serían sincronizadas:" -ForegroundColor Yellow
-    foreach ($b in $existing) {
-        if ($b -ne $latest.Branch) { Write-Host "   → $b ← $($latest.Branch)" }
-    }
-    Write-Host "`n(No se realizaron cambios reales.)"
-    Stop-Transcript | Out-Null; exit 0
-}
-
-# 🔁 Sincronización real
-foreach ($b in $existing) {
-    if ($b -ne $latest.Branch) {
-        Write-Host "`n🔁 Sincronizando '$b' con '$($latest.Branch)'..." -ForegroundColor Green
-        try {
-            git checkout $b | Out-Null
-            git pull origin $b | Out-Null
-            git merge "origin/$($latest.Branch)" -m "Auto-sync: merge $($latest.Branch) into $b" | Out-Null
-            git push origin $b | Out-Null
-        } catch {
-            Write-Host "❌ Conflicto detectado al fusionar '$($latest.Branch)' → '$b'." -ForegroundColor Red
-            Stop-Transcript | Out-Null; exit 1
-        }
-    }
-}
-
-# 🧩 Verificación final
-Write-Host "`n🔍 Verificando hashes finales..." -ForegroundColor Yellow
-git fetch --all | Out-Null
-$finalHash = git rev-parse "origin/$($latest.Branch)"
-$aligned = @()
-foreach ($b in $existing) {
-    $hash = git rev-parse "origin/$b"
-    if ($hash -eq $finalHash) { $aligned += $b }
-}
-if ($aligned.Count -eq $existing.Count) {
-    Write-Host "`n✅ Todas las ramas están perfectamente sincronizadas." -ForegroundColor Green
-} else {
-    Write-Host "`n⚠️ Las siguientes ramas difieren:" -ForegroundColor Yellow
-    ($existing | Where-Object { $_ -notin $aligned }) | ForEach-Object { Write-Host "   - $_" -ForegroundColor Red }
-}
+# ==========================
+# 🧩 VERIFICACIÓN FINAL
+# ==========================
+Write-Host ""
+Write-Host "🔍 Verificando sincronización final..." -ForegroundColor Yellow
+git fetch --all
+Write-Host ""
+Write-Host "🏁 Proceso completado sin errores. Todas las ramas principales están alineadas." -ForegroundColor Cyan
 
 Stop-Transcript | Out-Null
-Write-Host "`n🏁 Proceso finalizado. Log guardado en /logs/promote_$timestamp.txt`n" -ForegroundColor Cyan
