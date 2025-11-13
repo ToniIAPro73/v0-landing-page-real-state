@@ -217,58 +217,69 @@ The main landing page manages multiple state concerns:
 - Test both languages (ES/EN) for all interactive features
 - Verify email delivery and PDF generation in both languages
 
-## Current Context (January 2025)
+## Current Context (November 2025)
 
-**Active Work**: Full PDF personalization system with S3 storage, SMTP email delivery, and automated environment detection.
+**Active Work**: Features section restructuring and news carousel updates with bilingual translations.
 
-**Recent Changes** (Last session):
+**Recent Changes** (Current session - November 2025):
 
-1. **S3 Storage Integration**:
+1. **Features Section Complete Restructure** (`app/page.tsx` lines 376-477, 857-956):
 
-   - Fixed endpoint URL issue (added automatic `https://` prefix)
-   - S3 now working correctly in Vercel deployments
-   - PDFs stored in `dossier-playa-viva` bucket with presigned URLs
-   - Automatic fallback to local storage if S3 fails
+   - Eliminated old "Características Exclusivas" (4 simple icon cards)
+   - Created 4 specialized subsections:
+     - **FEATURES_1: Development Structure** - Building showcase with grayscale-to-color effect
+     - **FEATURES_2: Specifications** - 4 elegant cards with unit details and pricing
+     - **FEATURES_3: Playa Viva Views** - Tab-based gallery (4 views with images)
+     - **FEATURES_4: Services/Amenities** - Carousel with 5 amenity items
+   - All sections bilingual (ES/EN) with premium visual effects
+   - Added state management: `activePlayaVivaTab`
+   - Implemented responsive design (desktop/tablet/mobile)
 
-2. **Environment Detection** (`lib/dossier-storage.ts`):
+2. **Amenities Section Naming Update**:
 
-   - Removed `DOSSIER_LOCAL_DIR` environment variable (no longer needed)
-   - Automatic path detection based on environment:
-     - Vercel/Production: `/tmp/dossiers`
-     - Local/Development: `C:\Users\Usuario\Documents\Dossiers_Personalizados_PlayaViva`
-   - Simplified deployment (no manual path configuration needed)
+   - Spanish title: "Amenities" → "Servicios"
+   - English title: "Amenities" (unchanged)
+   - Item titles translated to Spanish:
+     - Outdoor Cinema → Cine Exterior
+     - Spa & Wellness → Spa y Bienestar
+     - Fitness Center → Centro de Fitness
+     - Outdoor Swimming Pools → Piscinas Exteriores
+     - Retail & Dining → Comercios y Restauración
 
-3. **Email System Improvements**:
+3. **News Article Updates**:
 
-   - Complete migration from Resend to SMTP (nodemailer)
-   - Language-based sender routing (Tony for ES, Michael for EN)
-   - Rich HTML emails with premium styling
-   - HubSpot Meetings integration for booking
-   - Three footer images with exact dimensions (240x160, 149x64, 240x160)
+   - New Wynn Resorts article added as first item (November 10, 2025)
+   - Image: `news_1.png`
+   - Source: Hotel Management Network
+   - URL: https://www.hotelmanagement-network.com/news/wynn-resorts-marjan-second-resort/
+   - Date updated: "23 Enero 2025" → "10 Noviembre 2025" (ES & EN)
 
-4. **UI/UX Enhancements**:
+4. **Code Organization**:
 
-   - Simple language toggle (ES | EN) with opacity indicators
-   - Floating navigation buttons (up/down) with smart position detection
-   - Premium brown-gold gradient styling throughout
+   - Added comment identifiers for all Features subsections
+   - Improved code readability with clear section markers
+   - Maintained consistent styling with project theme
 
-5. **Debugging & Logging**:
-   - Added comprehensive S3 configuration logging at startup
-   - SMTP delivery logging for troubleshooting
-   - Environment detection logging
+5. **Images Used** (all verified):
+   - `building-structure.webp`, `view1.webp`, `view2.jpg`, `view3.webp`
+   - `beach.webp`, `cinema.webp`
+   - `foto galeria 4.jpg`, `foto galeria 7.jpg`, `foto galeria 11.webp`
+   - `retail.webp`, `news_1.png`, `news_2.webp`, `news_3.png`, `news_4.png`, `news_5.png`
 
 **Current Status**:
 
-- ✅ PDF personalization working (both languages)
-- ✅ SMTP email delivery working (both languages)
-- ✅ HubSpot integration working
-- ✅ ALTCHA verification working
-- ✅ S3 storage fixed and working (awaiting final production test)
-- ✅ Environment detection automatic (no manual configuration)
+- ✅ Features completely restructured (4 subsections with premium styling)
+- ✅ All translations bilingual (ES/EN)
+- ✅ News carousel updated with new article and date fixes
+- ✅ Amenities section renamed to "Servicios" in Spanish
+- ✅ All items translated to Spanish
+- ✅ npm run lint passing without errors
+- ✅ TypeScript compilation successful
+- ✅ Responsive design verified
 
 **Known Issues**:
 
-- None currently - all major issues resolved
+- None currently - all changes tested and verified
 
 ## Deployment
 

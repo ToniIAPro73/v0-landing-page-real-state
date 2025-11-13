@@ -1,11 +1,13 @@
 # Contexto del proyecto Playa Viva
 
-## Estado actual (Enero 2025)
+## Estado actual (Noviembre 2025)
 
-La landing page está completamente funcional con un sistema completo de captura y personalización de leads:
+La landing page está completamente funcional con sistema de captura de leads, sección Features reestructurada, y news carousel actualizado:
 
 - **Plataforma**: Next.js 16 con App Router desplegado en Vercel
 - **Idiomas**: Bilingüe español/inglés con cambio dinámico
+- **Features**: 4 subsecciones especializadas (Development, Specifications, Playa Viva Views, Services/Amenities)
+- **Noticias**: Carrusel con 5 artículos, incluido nuevo artículo Wynn Resorts (10 Nov 2025)
 - **Formulario**: Captura de leads con verificación ALTCHA (alternativa privada a CAPTCHA)
 - **Personalización**: Generación dinámica de PDFs personalizados con el nombre del lead
 - **Almacenamiento**: Sistema dual S3 (producción) + local (fallback/desarrollo)
@@ -60,60 +62,67 @@ Email SMTP con botones premium (Descargar + Agendar reunión)
 
 ## Últimos cambios implementados
 
-### Sesión actual (Enero 2025)
+### Sesión actual (Noviembre 2025)
 
-1. **Fix crítico S3** ✅
+1. **Reestructuración completa de Features (`app/page.tsx` líneas 376-477, 857-956)** ✅
 
-   - **Problema**: Endpoint sin protocolo causaba `TypeError: Invalid URL`
-   - **Solución**: Normalización automática en `route.ts` - agrega `https://` si no existe
-   - **Resultado**: S3 funcional en Vercel
+   - **Antes**: Sección "Características Exclusivas" con 4 tarjetas simples con iconos
+   - **Después**: 4 subsecciones especializadas:
+     - **FEATURES_1 - Development Structure**: Showcase de edificio con efecto grayscale→color
+     - **FEATURES_2 - Specifications**: 4 cards elegantes con detalles de unidades y precios
+     - **FEATURES_3 - Playa Viva Views**: Galería de tabs (4 vistas con imágenes diferentes)
+     - **FEATURES_4 - Services/Amenities**: Carrusel horizontal (desktop) / vertical (mobile)
+   - **Estado**: Bilingüe completo (ES/EN) con efectos visuales premium
 
-2. **Eliminación de variable DOSSIER_LOCAL_DIR** ✅
+2. **Renombrado de sección Amenities a "Servicios" (solo ES)** ✅
 
-   - **Antes**: Requería configuración manual de ruta en cada entorno
-   - **Ahora**: Detección automática basada en `process.env.VERCEL` y `NODE_ENV`
-   - **Beneficio**: Simplifica deployment, elimina errores de configuración
+   - **Español**: "Amenities" → "Servicios" (línea 448)
+   - **Inglés**: "Amenities" (sin cambios)
+   - **Titles de items traducidos al español**:
+     - Outdoor Cinema → Cine Exterior
+     - Spa & Wellness → Spa y Bienestar
+     - Fitness Center → Centro de Fitness
+     - Outdoor Swimming Pools → Piscinas Exteriores
+     - Retail & Dining → Comercios y Restauración
 
-2. **Sistema S3 Failover automático** ✅
+3. **Actualización de artículos de noticias** ✅
 
-   - **Regiones configuradas**: Frankfurt (primaria) y Paris (fallback)
-   - **Variables S3_Endpoint y S3_Region_Code eliminadas** de archivos .env
-   - **Configuración hardcoded** en `lib/dossier-storage.ts` con función `getS3Regions()`
-   - **Failover automático**: Si Frankfurt falla, intenta automáticamente con Paris
-   - **Logs detallados**: Indica qué región se usó exitosamente
+   - **Nuevo artículo**: Wynn Resorts announces second resort (10 Noviembre 2025)
+   - **Fuente**: Hotel Management Network
+   - **Imagen**: `news_1.png`
+   - **URL**: https://www.hotelmanagement-network.com/news/wynn-resorts-marjan-second-resort/
+   - **Fecha actualizada**: "23 Enero 2025" → "10 Noviembre 2025" (ES & EN)
+   - **Total de artículos**: 5 (nuevo + 4 existentes)
 
-3. **Sistema SMTP completo** ✅
+4. **Gestión de imágenes actualizada** ✅
 
-   - **Servidor**: mail.uniestate.co.uk (puerto 465, SSL)
-   - **Remitentes específicos por idioma**:
-     - ES: Tony Ballesteros (<tony@uniestate.co.uk>)
-     - EN: Michael McMullen (<michael@uniestate.co.uk>)
-   - **Templates HTML**: Botones premium dorados, 3 imágenes footer, enlaces backup
+   - **Building Structure**: `building-structure.webp` (nueva)
+   - **Playa Viva Views**: `view1.webp`, `view2.jpg`, `view3.webp`, `beach.webp`
+   - **Services**: `cinema.webp`, `foto galeria 7.jpg`, `foto galeria 4.jpg`, `foto galeria 11.webp`, `retail.webp`
+   - **News**: `news_1.png`, `news_2.webp`, `news_3.png`, `news_4.png`, `news_5.png`
 
-4. **Integración HubSpot Meetings** ✅
+5. **Mejoras de código** ✅
 
-   - Botón "Agendar Consulta de 15 Minutos" en emails
-   - URL: <https://meetings-eu1.hubspot.com/toni-ballesteros-alonso>
-   - Mismo calendario para ES/EN (configurable si se necesita separación)
+   - Añadido estado React: `activePlayaVivaTab` (línea 143)
+   - Comentarios identificadores para todas las subsecciones de Features
+   - Responsive design verificado (desktop/tablet/mobile)
+   - Animaciones escalonadas (stagger effects)
+   - Efectos hover premium (elevation, shadows, color transitions)
 
-5. **UI/UX refinado** ✅
+### Cambios previos (Enero 2025)
 
-   - Toggle idioma simplificado: "ES | EN" con opacidad
-   - Botones flotantes navegación con gradiente marrón-dorado
-   - Detección inteligente posición scroll (muestra up/down según contexto)
-
-6. **Logs de debugging** ✅
-   - Configuración S3 al inicio del servidor
-   - Proceso SMTP completo (de, para, asunto, resultado)
-   - Detección de entorno (VERCEL, NODE_ENV, variables)
+**Sistema de S3, Email SMTP, HubSpot y ALTCHA completamente implementados y funcionales**
 
 ## Estado de funcionalidades
 
 | Funcionalidad       | Estado          | Notas                           |
 | ------------------- | --------------- | ------------------------------- |
+| Sección Features    | ✅ Reestructurada | 4 subsecciones con efectos premium |
+| Carrusel Noticias   | ✅ Actualizado  | 5 artículos, nuevo Wynn 10/11   |
+| Servicios/Amenities | ✅ Traducido    | "Servicios" en ES, items ES/EN   |
 | Formulario bilingüe | ✅ Funcionando  | ES/EN con validación ALTCHA     |
 | Generación PDF      | ✅ Funcionando  | Ambos idiomas, fuente Allura    |
-| Almacenamiento S3   | ✅ Fix aplicado | Pendiente test final producción |
+| Almacenamiento S3   | ✅ Funcionando  | Automatizado, producción OK      |
 | Email SMTP          | ✅ Funcionando  | Tony (ES) / Michael (EN)        |
 | HubSpot leads       | ✅ Funcionando  | Creación automática con UTMs    |
 | HubSpot Meetings    | ✅ Funcionando  | Botón en email                  |
@@ -291,6 +300,7 @@ public/assets/imagenes/
 
 ---
 
-**Última actualización**: Enero 2025
+**Última actualización**: Noviembre 2025
 **Estado general**: ✅ Sistema completamente funcional - listo para producción
-**Pendiente**: Test final de S3 en producción después de promote
+**Cambios recientes**: Features reestructurada en 4 subsecciones + News carousel actualizado
+**Verificación**: npm run lint ✅ | TypeScript ✅ | Responsive design ✅
