@@ -1,0 +1,51 @@
+**********************
+PowerShell transcript start
+Start time: 20251113005854
+Username: PORTATIL-TONI\Usuario
+RunAs User: PORTATIL-TONI\Usuario
+Configuration Name: 
+Machine: PORTATIL-TONI (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Program Files\PowerShell\7\pwsh.dll -noexit -command try { . "c:\Users\Usuario\AppData\Local\Programs\Microsoft VS Code\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
+Process ID: 33676
+PSVersion: 7.5.4
+PSEdition: Core
+GitCommitId: 7.5.4
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+
+⚓ ANCLORA DEV SHELL — PROMOTE FULL v2.2
+🔄 Actualizando referencias remotas...
+
+🧭 Último commit detectado:
+   → Rama: development
+   → Hash: 6bfc13c
+   → Fecha: 11/13/2025 00:14:37
+PS>TerminatingError(): "Cannot convert value "0	0" to type "System.Int32". Error: "The input string '0	0' was not in a correct format.""
+>> TerminatingError(): "Cannot convert value "0	0" to type "System.Int32". Error: "The input string '0	0' was not in a correct format.""
+Cannot convert value "0	0" to type "System.Int32". Error: "The input string '0	0' was not in a correct format."
+InvalidArgument: C:\Users\Usuario\Workspace\01_Proyectos\Playa-Viva-landing-page\scripts\promote.ps1:74:9
+Line |
+  74 |      if ([int]$ahead -gt 0) {
+     |          ~~~~~~~~~~~~~~~~~
+     | Cannot convert value "0 0" to type "System.Int32". Error: "The input string '0
+     | 0' was not in a correct format."
+
+PS>TerminatingError(): "Cannot overwrite variable IsLinux because it is read-only or constant."
+>> TerminatingError(): "Exception calling "Invoke" with "0" argument(s): "Cannot overwrite variable IsLinux because it is read-only or constant.""
+>> TerminatingError(): "Exception calling "Invoke" with "0" argument(s): "Cannot overwrite variable IsLinux because it is read-only or constant.""
+Exception calling "Invoke" with "0" argument(s): "Cannot overwrite variable IsLinux because it is read-only or constant."
+PS>cls
+PS>TerminatingError(): "Cannot overwrite variable IsLinux because it is read-only or constant."
+>> TerminatingError(): "Exception calling "Invoke" with "0" argument(s): "Cannot overwrite variable IsLinux because it is read-only or constant.""
+>> TerminatingError(): "Exception calling "Invoke" with "0" argument(s): "Cannot overwrite variable IsLinux because it is read-only or constant.""
+Exception calling "Invoke" with "0" argument(s): "Cannot overwrite variable IsLinux because it is read-only or constant."
+PS>./scripts/promote.ps1
+
+
+⚓ ANCLORA DEV SHELL — PROMOTE FULL v2.2
+🔄 Actualizando referencias remotas...

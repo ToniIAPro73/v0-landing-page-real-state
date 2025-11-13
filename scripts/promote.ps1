@@ -70,7 +70,11 @@ Write-Host "`n🧭 Último commit detectado:`n   → Rama: $($latest.Branch)`n  
 
 # 💾 Check commits ahead local
 foreach ($b in $existing) {
-    $ahead = (git rev-list --left-right --count $b...origin/$b).Split(" ")[0]
+    # Obtiene el recuento de commits ahead/behind (separado por tabulador o espacio)
+    $countOutput = git rev-list --left-right --count $b...origin/$b 2>$null
+    $counts = $countOutput -split "\s+"  # Divide por cualquier espacio o tabulación
+    $ahead = [int]$counts[0]
+    $behind = if ($counts.Length -gt 1) { [int]$counts[1] } else { 0 }
     if ([int]$ahead -gt 0) {
         Write-Host "⚠️ '$b' tiene commits locales no subidos." -ForegroundColor Yellow
         $push = Read-Host "¿Deseas hacer push automático ahora? (S/N)"

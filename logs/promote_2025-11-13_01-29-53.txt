@@ -1,0 +1,22 @@
+**********************
+PowerShell transcript start
+Start time: 20251113012953
+Username: PORTATIL-TONI\Usuario
+RunAs User: PORTATIL-TONI\Usuario
+Configuration Name: 
+Machine: PORTATIL-TONI (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Program Files\PowerShell\7\pwsh.dll -noexit -command try { . "c:\Users\Usuario\AppData\Local\Programs\Microsoft VS Code\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
+Process ID: 33676
+PSVersion: 7.5.4
+PSEdition: Core
+GitCommitId: 7.5.4
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+
+⚓ ANCLORA DEV SHELL — PROMOTE FULL v2.2
+🔄 Actualizando referencias remotas...
