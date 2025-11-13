@@ -140,6 +140,7 @@ export default function PlayaVivaLanding() {
   const [activeApartment, setActiveApartment] = useState<
     "studio" | "oneBed" | "twoBed" | "threeBed"
   >("studio");
+  const [activePlayaVivaTab, setActivePlayaVivaTab] = useState(0);
   const [locationView, setLocationView] = useState<"map" | "collage">("map");
   const firstNameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
@@ -374,30 +375,106 @@ export default function PlayaVivaLanding() {
         },
       },
       features: {
-        title: "Características Exclusivas",
-        items: [
-          {
-            icon: Home,
-            title: "Residencias de Lujo",
-            description: "Apartamentos y penthouses con vistas al mar arábigo",
-          },
-          {
-            icon: MapPin,
-            title: "Ubicación Privilegiada",
-            description: "En el corazón de Al Marjan Island, Ras Al Khaimah",
-          },
-          {
-            icon: Star,
-            title: "Instalaciones Premium",
-            description:
-              "Piscinas infinity, spa, gimnasio y club de playa privado",
-          },
-          {
-            icon: Users,
-            title: "Comunidad Exclusiva",
-            description: "Un enclave privado para inversores sofisticados",
-          },
-        ],
+        // FEATURES_1: Development Structure
+        development: {
+          title: "Estructura del Desarrollo",
+          tagline: "Arquitectura contemporánea frente al mar",
+          description: [
+            "Una torre icónica de 24 plantas que combina elegancia atemporal con el entorno costero de Al Marjan Island.",
+            "Diseño arquitectónico que maximiza vistas panorámicas al Golfo Arábigo desde cada residencia."
+          ],
+          image: "/assets/imagenes/building-structure.webp",
+        },
+        // FEATURES_2: Specifications
+        specifications: {
+          title: "Especificaciones",
+          tagline: "Detalles que definen la excelencia",
+          cards: [
+            {
+              title: "Studios",
+              size: "37-45 m²",
+              price: "Desde €170,000",
+              features: "Cocina integrada, baño premium, balcón privado"
+            },
+            {
+              title: "1 Dormitorio",
+              size: "60-75 m²",
+              price: "Desde €285,000",
+              features: "Suite en-suite, vestidor, zona de lavandería"
+            },
+            {
+              title: "2 Dormitorios",
+              size: "95-110 m²",
+              price: "Desde €450,000",
+              features: "Dos suites, cocina isla, balcones duales"
+            },
+            {
+              title: "3 Dormitorios",
+              size: "145-165 m²",
+              price: "Desde €650,000",
+              features: "Master suite, cuarto de servicio, terraza 25m²"
+            }
+          ]
+        },
+        // FEATURES_3: Playa Viva Views
+        playaViva: {
+          title: "Playa Viva",
+          tagline: "Cuatro perspectivas de vida frente al mar",
+          tabs: [
+            {
+              label: "Coastal Community",
+              image: "/assets/imagenes/view1.webp",
+              description: "Comunidad exclusiva en primera línea de playa"
+            },
+            {
+              label: "Inspired Design",
+              image: "/assets/imagenes/view2.jpg",
+              description: "Arquitectura que captura la esencia del Mediterráneo"
+            },
+            {
+              label: "Effortless Luxury",
+              image: "/assets/imagenes/view3.webp",
+              description: "Lujo sin esfuerzo en cada detalle"
+            },
+            {
+              label: "Beach Access",
+              image: "/assets/imagenes/beach.webp",
+              description: "Acceso directo a playas de arena blanca"
+            }
+          ]
+        },
+        // FEATURES_4: Amenities Carousel
+        amenities: {
+          title: "Amenities",
+          tagline: "Espacios diseñados para el bienestar",
+          items: [
+            {
+              title: "Outdoor Cinema",
+              image: "/assets/imagenes/cinema.webp",
+              description: "Cine al aire libre con proyección bajo las estrellas"
+            },
+            {
+              title: "Spa & Wellness",
+              image: "/assets/imagenes/foto galeria 7.jpg",
+              description: "Centro de bienestar con tratamientos de lujo"
+            },
+            {
+              title: "Fitness Center",
+              image: "/assets/imagenes/foto galeria 4.jpg",
+              description: "Gimnasio equipado con tecnología de última generación"
+            },
+            {
+              title: "Outdoor Swimming Pools",
+              image: "/assets/imagenes/foto galeria 11.webp",
+              description: "Piscinas infinity con vistas al mar Arábigo"
+            },
+            {
+              title: "Retail & Dining",
+              image: "/assets/imagenes/retail.webp",
+              description: "Gastronomía y retail de primer nivel"
+            }
+          ]
+        }
       },
       gallery: {
         title: "El Proyecto",
@@ -471,8 +548,18 @@ export default function PlayaVivaLanding() {
         readMore: "Leer en el medio",
         articles: [
           {
+            date: "23 Enero 2025",
+            image: "/assets/imagenes/news_1.png",
+            alt: "Hotel Management Network - Wynn Resorts Second Resort",
+            source: "Hotel Management Network",
+            title: "Wynn Resorts reveals plans for second resort at Ras Al Khaimah",
+            summary:
+              "Wynn Resorts anuncia planes para un segundo resort de lujo en Ras Al Khaimah, reforzando el posicionamiento de Al Marjan Island como destino premium en los EAU.",
+            url: "https://www.hotelmanagement-network.com/news/wynn-resorts-marjan-second-resort/",
+          },
+          {
             date: "7 Noviembre 2025",
-            image: "/assets/imagenes/news1.webp",
+            image: "/assets/imagenes/news_5.png",
             alt: "The National - Escape to Dubai",
             source: "The National",
             title: "Escape to Dubai from high-tax Britain more tempting as 75% fear higher rates",
@@ -482,7 +569,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "3 Julio 2025",
-            image: "/assets/imagenes/news2.png",
+            image: "/assets/imagenes/news_2.webp",
             alt: "Gulf News - Wynn Resort",
             source: "Gulf News",
             title: "Ras Al Khaimah sees new luxury hotel at Wynn Al Marjan",
@@ -492,7 +579,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "30 Abril 2025",
-            image: "/assets/imagenes/news3.png",
+            image: "/assets/imagenes/news_3.png",
             alt: "The National - Gaming resort RAK",
             source: "The National",
             title: "UAE's first gaming resort set to 'open up RAK to the world'",
@@ -502,7 +589,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "18 Marzo 2025",
-            image: "/assets/imagenes/news4.png",
+            image: "/assets/imagenes/news_4.png",
             alt: "Arabian Business - Property prices",
             source: "Arabian Business",
             title: "Property prices rise 20% amid supply-demand gap",
@@ -767,29 +854,106 @@ export default function PlayaVivaLanding() {
         },
       },
       features: {
-        title: "Exclusive Features",
-        items: [
-          {
-            icon: Home,
-            title: "Luxury Residences",
-            description: "Apartments and penthouses with Arabian Sea views",
-          },
-          {
-            icon: MapPin,
-            title: "Prime Location",
-            description: "In the heart of Al Marjan Island, Ras Al Khaimah",
-          },
-          {
-            icon: Star,
-            title: "Premium Amenities",
-            description: "Infinity pools, spa, gym and private beach club",
-          },
-          {
-            icon: Users,
-            title: "Exclusive Community",
-            description: "A private enclave for sophisticated investors",
-          },
-        ],
+        // FEATURES_1: Development Structure
+        development: {
+          title: "Development Structure",
+          tagline: "Contemporary architecture facing the sea",
+          description: [
+            "An iconic 24-story tower combining timeless elegance with the coastal setting of Al Marjan Island.",
+            "Architectural design that maximizes panoramic views of the Arabian Gulf from every residence."
+          ],
+          image: "/assets/imagenes/building-structure.webp",
+        },
+        // FEATURES_2: Specifications
+        specifications: {
+          title: "Specifications",
+          tagline: "Details that define excellence",
+          cards: [
+            {
+              title: "Studios",
+              size: "37-45 m²",
+              price: "From £150,000",
+              features: "Integrated kitchen, premium bathroom, private balcony"
+            },
+            {
+              title: "1 Bedroom",
+              size: "60-75 m²",
+              price: "From £250,000",
+              features: "En-suite bedroom, walk-in closet, laundry area"
+            },
+            {
+              title: "2 Bedrooms",
+              size: "95-110 m²",
+              price: "From £400,000",
+              features: "Two suites, island kitchen, dual balconies"
+            },
+            {
+              title: "3 Bedrooms",
+              size: "145-165 m²",
+              price: "From £575,000",
+              features: "Master suite, maid's room, 25m² terrace"
+            }
+          ]
+        },
+        // FEATURES_3: Playa Viva Views
+        playaViva: {
+          title: "Playa Viva",
+          tagline: "Four perspectives of beachfront living",
+          tabs: [
+            {
+              label: "Coastal Community",
+              image: "/assets/imagenes/view1.webp",
+              description: "Exclusive beachfront community"
+            },
+            {
+              label: "Inspired Design",
+              image: "/assets/imagenes/view2.jpg",
+              description: "Architecture capturing Mediterranean essence"
+            },
+            {
+              label: "Effortless Luxury",
+              image: "/assets/imagenes/view3.webp",
+              description: "Effortless luxury in every detail"
+            },
+            {
+              label: "Beach Access",
+              image: "/assets/imagenes/beach.webp",
+              description: "Direct access to white sandy beaches"
+            }
+          ]
+        },
+        // FEATURES_4: Amenities Carousel
+        amenities: {
+          title: "Amenities",
+          tagline: "Spaces designed for wellbeing",
+          items: [
+            {
+              title: "Outdoor Cinema",
+              image: "/assets/imagenes/cinema.webp",
+              description: "Open-air cinema with screenings under the stars"
+            },
+            {
+              title: "Spa & Wellness",
+              image: "/assets/imagenes/foto galeria 7.jpg",
+              description: "Wellness center with luxury treatments"
+            },
+            {
+              title: "Fitness Center",
+              image: "/assets/imagenes/foto galeria 4.jpg",
+              description: "Gym equipped with state-of-the-art technology"
+            },
+            {
+              title: "Outdoor Swimming Pools",
+              image: "/assets/imagenes/foto galeria 11.webp",
+              description: "Infinity pools with Arabian Sea views"
+            },
+            {
+              title: "Retail & Dining",
+              image: "/assets/imagenes/retail.webp",
+              description: "World-class dining and retail"
+            }
+          ]
+        }
       },
       gallery: {
         title: "The Project",
@@ -863,8 +1027,18 @@ export default function PlayaVivaLanding() {
         readMore: "Read full article",
         articles: [
           {
+            date: "January 23, 2025",
+            image: "/assets/imagenes/news_1.png",
+            alt: "Hotel Management Network - Wynn Resorts Second Resort",
+            source: "Hotel Management Network",
+            title: "Wynn Resorts reveals plans for second resort at Ras Al Khaimah",
+            summary:
+              "Wynn Resorts announces plans for a second luxury resort in Ras Al Khaimah, reinforcing Al Marjan Island's positioning as a premium UAE destination.",
+            url: "https://www.hotelmanagement-network.com/news/wynn-resorts-marjan-second-resort/",
+          },
+          {
             date: "November 7, 2025",
-            image: "/assets/imagenes/news1.webp",
+            image: "/assets/imagenes/news_5.png",
             alt: "The National - Escape to Dubai",
             source: "The National",
             title: "Escape to Dubai from high-tax Britain more tempting as 75% fear higher rates",
@@ -874,7 +1048,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "July 3, 2025",
-            image: "/assets/imagenes/news2.png",
+            image: "/assets/imagenes/news_2.webp",
             alt: "Gulf News - Wynn Resort",
             source: "Gulf News",
             title: "Ras Al Khaimah sees new luxury hotel at Wynn Al Marjan",
@@ -884,7 +1058,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "April 30, 2025",
-            image: "/assets/imagenes/news3.png",
+            image: "/assets/imagenes/news_3.png",
             alt: "The National - Gaming resort RAK",
             source: "The National",
             title: "UAE's first gaming resort set to 'open up RAK to the world'",
@@ -894,7 +1068,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "March 18, 2025",
-            image: "/assets/imagenes/news4.png",
+            image: "/assets/imagenes/news_4.png",
             alt: "Arabian Business - Property prices",
             source: "Arabian Business",
             title: "Property prices rise 20% amid supply-demand gap",
@@ -2482,12 +2656,12 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
-      {/* ==================== CARACTERÍSTICAS ==================== */}
-      {/* Features */}
+      {/* ==================== MENÚ: FEATURES ==================== */}
+      {/* Features Section - 4 Subsections */}
       <section
         id="features"
         ref={featuresRef}
-        className="relative py-24 bg-cream-light"
+        className="relative py-24 bg-cream-light space-y-24"
         style={{
           opacity: visibleSections.features ? 1 : 0,
           transform: visibleSections.features
@@ -2496,38 +2670,226 @@ const orchestrateLeadAutomation = async (
           transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
+        {/* ==================== FEATURES_1: DEVELOPMENT STRUCTURE ==================== */}
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
-              {t.features.title}
-            </h2>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-4">
+                {t.features.development.title}
+              </h2>
+              <h3 className="text-xl md:text-2xl text-gold-warm mb-6">
+                {t.features.development.tagline}
+              </h3>
+              <div className="space-y-3 max-w-3xl mx-auto">
+                {t.features.development.description.map((text, index) => (
+                  <p key={index} className="text-taupe-warm text-base md:text-lg leading-relaxed">
+                    {text}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-2">
+              <Image
+                src={t.features.development.image}
+                alt={t.features.development.title}
+                width={1200}
+                height={800}
+                className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                sizes="(max-width: 1024px) 100vw, 75vw"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent p-6">
+                <h4 className="text-white text-2xl font-semibold drop-shadow-lg">
+                  {t.features.development.title}
+                </h4>
+              </div>
+            </div>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {t.features.items.map((item, index) => (
-              <div
-                key={index}
-                className="text-center p-6 bg-white/50 rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                style={{
-                  opacity: visibleSections.features ? 1 : 0,
-                  transform: visibleSections.features
-                    ? "translateY(0px)"
-                    : "translateY(30px)",
-                  transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
-                    index * 0.1
-                  }s`,
-                }}
-              >
-                <div className="flex justify-center mb-4">
-                  <item.icon className="h-12 w-12 text-gold-warm" />
+        </div>
+
+        {/* ==================== FEATURES_2: SPECIFICATIONS ==================== */}
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-4">
+                {t.features.specifications.title}
+              </h2>
+              <h3 className="text-xl md:text-2xl text-gold-warm">
+                {t.features.specifications.tagline}
+              </h3>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {t.features.specifications.cards.map((card, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-2"
+                  style={{
+                    opacity: visibleSections.features ? 1 : 0,
+                    transform: visibleSections.features
+                      ? "translateY(0px)"
+                      : "translateY(30px)",
+                    transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s`,
+                  }}
+                >
+                  <h3 className="text-2xl font-semibold text-brown-dark mb-3">
+                    {card.title}
+                  </h3>
+                  <p className="text-lg text-gold-warm mb-2 font-medium">{card.size}</p>
+                  <p className="text-xl font-bold text-brown-dark mb-4">{card.price}</p>
+                  <p className="text-sm text-taupe-warm leading-relaxed">{card.features}</p>
                 </div>
-                <h3 className="text-xl font-semibold text-brown-dark mb-3">
-                  {item.title}
-                </h3>
-                <p className="text-taupe-warm leading-relaxed">
-                  {item.description}
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ==================== FEATURES_3: PLAYA VIVA VIEWS ==================== */}
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-4">
+                {t.features.playaViva.title}
+              </h2>
+              <h3 className="text-xl md:text-2xl text-gold-warm">
+                {t.features.playaViva.tagline}
+              </h3>
+            </div>
+
+            {/* Tabs */}
+            <div className="flex justify-center gap-4 mb-12 flex-wrap">
+              {t.features.playaViva.tabs.map((tab, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActivePlayaVivaTab(index)}
+                  className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                    activePlayaVivaTab === index
+                      ? "bg-gold-warm text-brown-dark shadow-lg"
+                      : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Active Tab Content */}
+            <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
+              <Image
+                src={t.features.playaViva.tabs[activePlayaVivaTab].image}
+                alt={t.features.playaViva.tabs[activePlayaVivaTab].label}
+                width={1200}
+                height={800}
+                className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                sizes="(max-width: 1024px) 100vw, 75vw"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-8">
+                <h4 className="text-white text-2xl md:text-3xl font-semibold mb-2 drop-shadow-lg">
+                  {t.features.playaViva.tabs[activePlayaVivaTab].label}
+                </h4>
+                <p className="text-white/90 text-base md:text-lg drop-shadow-md">
+                  {t.features.playaViva.tabs[activePlayaVivaTab].description}
                 </p>
               </div>
-            ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ==================== FEATURES_4: AMENITIES CAROUSEL ==================== */}
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-4">
+                {t.features.amenities.title}
+              </h2>
+              <h3 className="text-xl md:text-2xl text-gold-warm">
+                {t.features.amenities.tagline}
+              </h3>
+            </div>
+
+            {/* Desktop: Horizontal Scroll */}
+            <div className="hidden md:block">
+              <div
+                className="flex gap-6 overflow-x-auto pb-6 px-1 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-gold-warm/40 scrollbar-track-gold-warm/10"
+                style={{
+                  scrollBehavior: 'smooth',
+                  WebkitOverflowScrolling: 'touch',
+                }}
+              >
+                {t.features.amenities.items.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex-none w-80 snap-center bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-2"
+                    style={{
+                      opacity: visibleSections.features ? 1 : 0,
+                      transform: visibleSections.features
+                        ? "translateY(0px)"
+                        : "translateY(30px)",
+                      transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15}s`,
+                    }}
+                  >
+                    <div className="relative h-64 overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover filter grayscale hover:grayscale-0 transition-all duration-300"
+                        sizes="320px"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <h4 className="text-xl font-semibold text-brown-dark mb-3">
+                        {item.title}
+                      </h4>
+                      <p className="text-sm text-taupe-warm leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile: Vertical Scroll */}
+            <div className="md:hidden">
+              <div
+                className="flex flex-col gap-6 overflow-y-auto max-h-[900px] px-0 scrollbar-thin scrollbar-thumb-gold-warm/40 scrollbar-track-gold-warm/10"
+                style={{
+                  scrollBehavior: 'smooth',
+                  WebkitOverflowScrolling: 'touch',
+                }}
+              >
+                {t.features.amenities.items.map((item, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300"
+                    style={{
+                      opacity: visibleSections.features ? 1 : 0,
+                      transform: visibleSections.features
+                        ? "translateY(0px)"
+                        : "translateY(30px)",
+                      transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15}s`,
+                    }}
+                  >
+                    <div className="relative h-64 overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover filter grayscale hover:grayscale-0 transition-all duration-300"
+                        sizes="(max-width: 768px) 100vw, 320px"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <h4 className="text-xl font-semibold text-brown-dark mb-3">
+                        {item.title}
+                      </h4>
+                      <p className="text-sm text-taupe-warm leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

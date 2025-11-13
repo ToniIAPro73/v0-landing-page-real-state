@@ -1,0 +1,1000 @@
+            icon: DollarSign,
+            value: "1%",
+            label: "Monthly payment for 5 years",
+            description: "Flexible financing plan",
+          },
+        ],
+        benefits: [
+          "7-8% gross rental yields",
+          "Proximity to Wynn Resort ($5.1B)",
+          "Fully furnished delivery with Smart Home",
+          "Post-casino opening appreciation potential",
+        ],
+      },
+      leadForm: {
+        title: "Exclusive Investment Dossier",
+        subtitle: "Complete financial analysis and Wynn Effect projections",
+        badge: "Exclusive Investment Dossier",
+        intro: "Comprehensive financial analysis and Wynn Effect projections",
+        description:
+          "Access the most complete investment analysis with profitability projections, architectural plans, specification sheets, and the financial impact of the emblematic Wynn Resort on Al Marjan Island. Join an exclusive community that anticipates opportunities ahead of the market.",
+        features: [
+          "2026-2032 return scenarios and exit strategies",
+          "Cash-flow simulation with the 1% monthly plan",
+          "Masterplan, unit typologies, and delivered specs",
+          "Milestone calendar, permits, and after-sales support",
+        ],
+        form: {
+          firstNamePlaceholder: "First name",
+          lastNamePlaceholder: "Last name",
+          emailPlaceholder: "Email",
+          ctaButton: "Download Exclusive Dossier",
+          sending: "Preparing your dossier...",
+          privacy:
+            "We only use your details to personalize the dossier and trigger the described automation.",
+          successMessage:
+            "Thank you, {{name}}. Your personalized dossier is on its way to your inbox.",
+          errorMessage:
+            "We couldn't finalize the send. Please try again or contact our team.",
+        },
+      },
+      location: {
+        title: "Al Marjan Island",
+        subtitle: "The future of luxury living in the UAE",
+        description:
+          "Located on the coast of Ras Al Khaimah, Al Marjan Island is a new architectural jewel that redefines the concept of luxury living. With over 7 kilometers of pristine beaches, this artificial island combines natural beauty with modern sophistication.",
+      },
+      faq: {
+        eyebrow: "Strategic Questions",
+        title: "Frequently Asked Questions",
+        subtitle:
+          "Detailed answers based on conversations with international investors",
+        highlights: [
+          "Information validated alongside marketing, legal, and sales",
+          "Data updated quarterly according to commercial progress",
+          "Available in Spanish and English upon request",
+        ],
+        cta: "Speak with a specialist",
+        questions: [
+          {
+            question: "What is Playa Viva?",
+            answer:
+              "Playa Viva is a luxury residential development on Al Marjan Island, Ras Al Khaimah. Three elegant towers offer fully furnished studios plus 1, 2, and 3-bedroom apartments tailored to contemporary beachfront living.",
+          },
+          {
+            question: "What types of apartments are available?",
+            answer:
+              "Studios plus 1, 2, and 3-bedroom apartments ranging from 300 to 1,800 sq. ft. with starting prices from £150,000. Every residence features open layouts, panoramic sea views, private balconies, and integrated smart-home systems.",
+          },
+          {
+            question: "What amenities does Playa Viva offer?",
+            answer:
+              "A state-of-the-art fitness center, luxury spa, indoor and outdoor pools, rooftop cinema, children's play areas, private beach access, jogging and cycling tracks, tennis courts, ground-floor retail, and 24/7 concierge and security.",
+          },
+          {
+            question: "When will Playa Viva be completed?",
+            answer:
+              "Completion and handover are scheduled for Q3 2026. All apartments will be delivered fully furnished and ready for immediate occupancy or rental.",
+          },
+          {
+            question: "Is Playa Viva a good investment opportunity?",
+            answer:
+              "Yes. Its prime location beside the upcoming $5.1B Wynn Resort & Casino, resort-grade amenities, and the rapid growth of Al Marjan Island support 7-8% rental yields and compelling capital appreciation.",
+          },
+          {
+            question: "Who is the developer of Playa Viva?",
+            answer:
+              "Uniestate Properties develops Playa Viva. Established in 1995, the developer has 30 years of experience, more than 3,000 delivered units across 3.5 million sq. ft., and over 50,000 satisfied clients.",
+          },
+          {
+            question: "What are the payment terms?",
+            answer:
+              "A flexible structure with 20% down payment, 20% during construction, 1% at handover, and the remaining 59% through convenient 1% monthly payments over five years via Uniestate's in-house financing.",
+          },
+          {
+            question: "Where is Playa Viva located?",
+            answer:
+              "On Al Marjan Island in Ras Al Khaimah, 12 minutes from RAK Central, 25 minutes from RAK Mall, and 34 minutes from RAK International Airport, with direct highway access to Dubai.",
+          },
+          {
+            question: "What are the service fees at Playa Viva?",
+            answer: "Service fees are charged at AED 18 per square foot.",
+          },
+        ],
+      },
+    },
+  };
+
+  const t = content[language];
+  const priceString = language === "es" ? "192.000€" : "£172,000";
+  const pricePrefix = language === "es" ? "Desde" : "Starting from";
+  const mobileMenuLabels =
+    language === "es"
+      ? { open: "Abrir menú de navegación", close: "Cerrar menú de navegación" }
+      : { open: "Open navigation menu", close: "Close navigation menu" };
+
+  const apartmentConfigs = {
+    studio: {
+      image: "/assets/imagenes/studio.webp",
+      sizeSqftRange: [300, 462] as [number, number],
+      bedrooms: 0,
+      bathrooms: 1,
+    },
+    oneBed: {
+      image: "/assets/imagenes/1-bedroom.webp",
+      sizeSqftRange: [600, 850] as [number, number],
+      bedrooms: 1,
+      bathrooms: 1,
+    },
+    twoBed: {
+      image: "/assets/imagenes/2-bedroom.webp",
+      sizeSqftRange: [1100, 1200] as [number, number],
+      bedrooms: 2,
+      bathrooms: 1,
+    },
+    threeBed: {
+      image: "/assets/imagenes/3-bedroom.png",
+      sizeSqftRange: [1700, 1800] as [number, number],
+      bedrooms: 3,
+      bathrooms: 2,
+    },
+  };
+
+  const apartmentPrices = {
+    studio: { en: "£172,000", es: "192.000€" },
+    oneBed: { en: "£325,000", es: "370.000€" },
+    twoBed: { en: "£526,000", es: "598.000€" },
+    threeBed: { en: "£795,000", es: "905.000€" },
+  } as const;
+
+  const formatSizeRange = (range: [number, number]) => {
+    if (language === "es") {
+      const sqm = range.map((value) => Math.round(value / 10.7639));
+      return `${sqm[0]}-${sqm[1]} m²`;
+    }
+    return `${range[0]}-${range[1]} sq ft`;
+  };
+
+  const formatBedroomValue = (count: number) => {
+    if (count === 0) {
+      return language === "es" ? "Estudio" : "Studio";
+    }
+    const plural = count > 1;
+    return language === "es"
+      ? `${count} ${plural ? "habitaciones" : "habitación"}`
+      : `${count} ${plural ? "bedrooms" : "bedroom"}`;
+  };
+
+  const formatBathroomValue = (count: number) => {
+    const valueString =
+      language === "es" ? count.toString().replace(".", ",") : count.toString();
+    const plural = count > 1;
+    return language === "es"
+      ? `${valueString} ${plural ? "baños" : "baño"}`
+      : `${valueString} ${plural ? "baths" : "bath"}`;
+  };
+
+  const infoLabels = {
+    size: language === "es" ? "Superficie" : "Interior size",
+    price: language === "es" ? "Desde" : "From",
+    bedrooms: language === "es" ? "Dormitorios" : "Bedrooms",
+    bathrooms: language === "es" ? "Baños" : "Bathrooms",
+    parking: "Parking",
+  };
+
+  const statCardBaseClasses =
+    "rounded-2xl border border-gold-warm/30 p-4 shadow-sm bg-gradient-to-br from-[#fdf9f3] via-[#f7ede1] to-[#f1e2d3] text-brown-dark transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:brightness-95";
+
+  const apartmentCopy = t.apartments.tabs[activeApartment];
+  const activeApartmentConfig = apartmentConfigs[activeApartment];
+  const activeApartmentPrice = apartmentPrices[activeApartment][language];
+  const highlightItems = [...apartmentCopy.highlights, t.apartments.note];
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Residence",
+    name: "Playa Viva Residences",
+    description:
+      language === "es"
+        ? "Residencias frente al mar en Al Marjan Island con entrega llave en mano y plan 1% mensual."
+        : "Seafront residences in Al Marjan Island with turnkey delivery and a 1% monthly plan.",
+    url: SITE_URL,
+    image: `${SITE_URL}/assets/imagenes/hero-image.webp`,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Al Marjan Island",
+      addressLocality: "Ras Al Khaimah",
+      addressCountry: "AE",
+    },
+    offers: [
+      {
+        "@type": "AggregateOffer",
+        priceCurrency: "GBP",
+        lowPrice: "172000",
+        highPrice: "795000",
+        offerCount: 4,
+        availability: "https://schema.org/InStock",
+      },
+      {
+        "@type": "AggregateOffer",
+        priceCurrency: "EUR",
+        lowPrice: "192000",
+        highPrice: "905000",
+        offerCount: 4,
+        availability: "https://schema.org/InStock",
+      },
+    ],
+    seller: {
+      "@type": "Organization",
+      name: "Uniestate",
+      url: "https://www.uniestate.co.uk",
+    },
+  };
+  const featureColumns = [
+    t.leadForm.features.slice(0, 2),
+    t.leadForm.features.slice(2),
+  ];
+  const LuxuryBadge = ({
+    label,
+    alignment = "center",
+  }: {
+    label: string;
+    alignment?: "start" | "center";
+  }) => (
+    <div
+      className={`inline-flex w-full ${
+        alignment === "center" ? "justify-center" : "justify-start"
+      }`}
+    >
+      <div className="relative px-10 py-3.5 rounded-full border-2 border-[#A29060] bg-linear-to-br from-[#f5f1ea]/95 via-white/90 to-[#ede8df]/95 text-[#A29060] font-bold tracking-[0.35em] shadow-[0_8px_32px_rgba(162,144,96,0.3),0_0_0_1px_rgba(162,144,96,0.2)_inset,0_1px_2px_rgba(255,255,255,0.8)_inset] backdrop-blur-md overflow-hidden group transition-all duration-500 hover:shadow-[0_16px_48px_rgba(162,144,96,0.6),0_0_60px_rgba(162,144,96,0.3),0_0_0_2px_rgba(162,144,96,0.5)_inset,0_2px_4px_rgba(255,255,255,1)_inset] hover:scale-105 hover:border-[#d4b876] cursor-pointer">
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-[#A29060]/60 to-transparent group-hover:via-[#d4b876] transition-all duration-500"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-[#A29060]/0 via-[#A29060]/0 to-[#A29060]/0 group-hover:from-[#A29060]/10 group-hover:via-white/20 group-hover:to-[#d4b876]/10 transition-all duration-500"></div>
+        <div
+          className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 2px 2px, #A29060 1px, transparent 0)",
+            backgroundSize: "16px 16px",
+          }}
+        ></div>
+        <span className="relative z-10 group-hover:drop-shadow-[0_0_8px_rgba(162,144,96,0.4)] transition-all duration-500 uppercase tracking-[0.35em] text-xs md:text-sm">
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+  const nameLabel = language === "es" ? "Nombre completo" : "Full name";
+  const emailLabel = "Email";
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setShowMenu(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const scrollToBottom = () => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+  };
+
+  const showBackToHero = scrollProgress >= 1;
+
+const orchestrateLeadAutomation = async (
+  payload: LeadAutomationPayload,
+): Promise<LeadAutomationResult> => {
+  const getHubSpotCookie = () => {
+    if (typeof document === "undefined") return "";
+    const cookies = document.cookie.split(";");
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split("=");
+      if (name === "hubspotutk") {
+        return value;
+      }
+    }
+    return "";
+  };
+
+  const hubspotutk = getHubSpotCookie() || `generated_${Date.now()}`;
+  const pageUri =
+    typeof window !== "undefined" ? window.location.href : SITE_URL;
+
+  const response = await fetch("/api/submit-lead", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      fullName: payload.fullName,
+      email: payload.email,
+      language: payload.language,
+      hubspotutk,
+      pageUri,
+      utm: payload.utm,
+      altchaPayload: payload.altchaPayload,
+    }),
+  });
+
+  if (!response.ok) {
+    let errorMessage = "Error procesando lead";
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData?.error || errorMessage;
+    } catch {
+      // swallow
+    }
+    throw new Error(errorMessage);
+  }
+
+  return response.json();
+};
+
+  const fieldErrorCopy: Record<LeadFieldKey, string> = {
+    firstName:
+      language === "es"
+        ? "Indica tu nombre para personalizar el dossier."
+        : "Please include your first name so we can personalize the dossier.",
+    lastName:
+      language === "es"
+        ? "Añade tus apellidos para continuar."
+        : "Please add your last name to continue.",
+    email:
+      language === "es"
+        ? "Necesitamos tu email para enviarte el dossier."
+        : "We need your email address to deliver the dossier.",
+    privacy:
+      language === "es"
+        ? "Debes aceptar la política de privacidad para recibir el dossier."
+        : "You must accept the privacy policy before receiving the dossier.",
+    captcha:
+      language === "es"
+        ? "Completa la verificación de seguridad para continuar."
+        : "Please complete the security verification to continue.",
+  };
+
+  const emailInvalidCopy =
+    language === "es"
+      ? "Introduce un correo electrónico válido."
+      : "Please enter a valid email address.";
+  const altchaErrorCopy =
+    language === "es"
+      ? "Completa la verificación de seguridad antes de solicitar el dossier."
+      : "Please complete the security verification before requesting the dossier.";
+
+  const altchaTitle =
+    language === "es"
+      ? "Protección ALTCHA sin fricción"
+      : "ALTCHA frictionless protection";
+  const altchaCopy =
+    language === "es"
+      ? "ALTCHA verifica silenciosamente en tu dispositivo sin rastrear ni mostrar badges ajenos. Mantiene fuera a los bots sin romper la experiencia de lujo."
+      : "ALTCHA verifies silently on-device with zero tracking or foreign badges, blocking bots without breaking the luxury experience.";
+  const altchaStrings =
+    language === "es"
+      ? '{"label":"Verificando...","verified":"✓ Verificado","failed":"Vuelve a intentarlo"}'
+      : '{"label":"Verifying...","verified":"✓ Verified","failed":"Please try again"}';
+  const consentTitle =
+    language === "es" ? "Privacidad de datos" : "Data privacy";
+  const consentCopy =
+    language === "es"
+      ? "Añade un campo de privacidad de datos cuando necesites el consentimiento explícito de tus contactos. Refuerza la confianza y mantiene la trazabilidad legal."
+      : "Add a dedicated data-privacy field whenever you need your contacts' consent. It reinforces trust and keeps compliance effortless.";
+  const privacyCheckboxLabel =
+    language === "es"
+      ? "Acepto la política de privacidad y autorizo el uso de mis datos para recibir el dossier personalizado."
+      : "I accept the privacy policy and authorise the use of my data to receive the personalised dossier.";
+
+  const focusField = (
+    ref: { current: HTMLElement | null },
+    field: LeadFieldKey,
+    message: string
+  ) => {
+    setValidationMessage({ field, message });
+    requestAnimationFrame(() => {
+      ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (ref.current instanceof HTMLElement) {
+        ref.current.focus();
+      }
+    });
+  };
+
+  const handleLeadSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmData: Record<string, string> = {
+      utm_source: urlParams.get("utm_source") || "",
+      utm_medium: urlParams.get("utm_medium") || "",
+      utm_campaign: urlParams.get("utm_campaign") || "",
+      utm_term: urlParams.get("utm_term") || "",
+      utm_content: urlParams.get("utm_content") || "",
+    };
+
+    const trimmedFirstName = formData.firstName.trim();
+    const trimmedLastName = formData.lastName.trim();
+    const trimmedEmail = formData.email.trim();
+    const fallbackName = language === "es" ? "inversor" : "investor";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!trimmedFirstName) {
+      focusField(firstNameRef, "firstName", fieldErrorCopy.firstName);
+      return;
+    }
+
+    if (!trimmedLastName) {
+      focusField(lastNameRef, "lastName", fieldErrorCopy.lastName);
+      return;
+    }
+
+    if (!trimmedEmail) {
+      focusField(emailRef, "email", fieldErrorCopy.email);
+      return;
+    }
+
+    if (!emailRegex.test(trimmedEmail)) {
+      focusField(emailRef, "email", emailInvalidCopy);
+      return;
+    }
+
+    const formElement = event.currentTarget;
+    const formEntries = new FormData(formElement);
+    const altchaPayload = formEntries.get("altcha_payload")?.toString() ?? "";
+
+    if (!altchaPayload) {
+      focusField(altchaRef, "captcha", altchaErrorCopy);
+      return;
+    }
+
+    if (!privacyAccepted) {
+      focusField(privacyRef, "privacy", fieldErrorCopy.privacy);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setAutomationFeedback(null);
+    setValidationMessage(null);
+
+    try {
+      const leadData: LeadAutomationPayload = {
+        firstName: trimmedFirstName,
+        lastName: trimmedLastName,
+        fullName: `${trimmedFirstName} ${trimmedLastName}`.trim(),
+        email: trimmedEmail,
+        language,
+        utm: utmData,
+        altchaPayload,
+      };
+
+      const result = await orchestrateLeadAutomation(leadData);
+
+      if (result?.pdf_url) {
+        const absoluteUrl = result.pdf_url.startsWith("http")
+          ? result.pdf_url
+          : `${window.location.origin}${result.pdf_url}`;
+        const link = document.createElement("a");
+        link.href = absoluteUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      setAutomationFeedback({
+        type: "success",
+        userName: trimmedFirstName || fallbackName,
+      });
+      setFormData({ firstName: "", lastName: "", email: "" });
+      setPrivacyAccepted(false);
+
+      setTimeout(() => {
+        setAutomationFeedback(null);
+      }, 5000);
+    } catch (error) {
+      console.error("Lead automation failed", error);
+      setAutomationFeedback({
+        type: "error",
+        userName: "",
+      });
+
+      setTimeout(() => {
+        setAutomationFeedback(null);
+      }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-cream-light">
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <Script
+        src="https://cdn.jsdelivr.net/npm/altcha/dist/altcha.min.js"
+        type="module"
+        strategy="afterInteractive"
+        crossOrigin="anonymous"
+      />
+      {/* Navigation and Language Toggle - Fixed Bottom Right */}
+      <div className="fixed bottom-6 right-6 z-100 flex flex-col items-end gap-3">
+        {/* Scroll Navigation Buttons */}
+        <div className="flex flex-col gap-2">
+          {/* Scroll Up Button - Show in middle and bottom sections */}
+          {(scrollPosition === "middle" || scrollPosition === "bottom") && (
+            <button
+              onClick={scrollToTop}
+              aria-label={language === "es" ? "Ir al inicio" : "Go to top"}
+              className="group w-12 h-12 rounded-full bg-gradient-to-br from-brown-dark via-taupe-medium to-brown-dark border-2 border-gold-warm/30 hover:border-gold-warm/60 shadow-[0_8px_24px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_32px_rgba(162,144,96,0.4)] transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95"
+            >
+              <ChevronUp className="w-6 h-6 text-gold-warm group-hover:text-white transition-colors duration-300" strokeWidth={3} />
+            </button>
+          )}
+
+          {/* Scroll Down Button - Show in top and middle sections */}
+          {(scrollPosition === "top" || scrollPosition === "middle") && (
+            <button
+              onClick={scrollToBottom}
+              aria-label={language === "es" ? "Ir al final" : "Go to bottom"}
+              className="group w-12 h-12 rounded-full bg-gradient-to-br from-brown-dark via-taupe-medium to-brown-dark border-2 border-gold-warm/30 hover:border-gold-warm/60 shadow-[0_8px_24px_rgba(0,0,0,0.35)] hover:shadow-[0_12px_32px_rgba(162,144,96,0.4)] transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95"
+            >
+              <ChevronDown className="w-6 h-6 text-gold-warm group-hover:text-white transition-colors duration-300" strokeWidth={3} />
+            </button>
+          )}
+        </div>
+
+        {/* Language Toggle - Simple */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setLanguage(language === "es" ? "en" : "es")}
+          className="bg-white/95 backdrop-blur-sm border-brown-dark/20 hover:bg-cream-light text-brown-dark shadow-lg rounded-full px-4 py-2"
+          aria-label={language === "es" ? "Switch to English" : "Cambiar a Español"}
+        >
+          <span className={language === "es" ? "font-bold" : "opacity-60"}>ES</span>
+          <span className="mx-2 text-brown-dark/40">|</span>
+          <span className={language === "en" ? "font-bold" : "opacity-60"}>EN</span>
+        </Button>
+      </div>
+
+      {/* Sticky Navigation Menu - Uniestate UK Style */}
+      <nav
+        className={`landing-nav fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm transition-transform duration-300 ${
+          showNavbar ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        <div className="landing-nav__inner container mx-auto px-4 md:px-6">
+          <div className="landing-nav__bar flex items-center justify-between h-14 md:h-16">
+            {/* Logo Uniestate */}
+            <div className="shrink-0">
+              <span
+                className="text-brown-dark text-base md:text-lg font-bold tracking-tight"
+                style={{
+                  fontFamily: "system-ui, -apple-system, sans-serif",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                UNIESTATE
+              </span>
+            </div>
+
+            {/* Desktop Menu - Centered (shows on tablet landscape and up) */}
+            <div className="hidden md:flex items-center space-x-1 flex-1 justify-center">
+              <button
+                onClick={() => scrollToSection("wynn-effect")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.wynnEffect}
+              </button>
+              <button
+                onClick={() => scrollToSection("investment")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.investment}
+              </button>
+              <button
+                onClick={() => scrollToSection("features")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.features}
+              </button>
+              <button
+                onClick={() => scrollToSection("gallery")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.gallery}
+              </button>
+              <button
+                onClick={() => scrollToSection("apartments")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.apartments}
+              </button>
+              <button
+                onClick={() => scrollToSection("location")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.location}
+              </button>
+              <button
+                onClick={() => scrollToSection("faq")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.faq}
+              </button>
+              <button
+                onClick={() => scrollToSection("dossier")}
+                className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-xs md:text-sm font-normal px-2 md:px-3 py-2 hover:underline underline-offset-4 decoration-gold-warm hover:-translate-y-0.5"
+              >
+                {t.menu.dossier}
+              </button>
+            </div>
+
+            {/* Book Now Button - Desktop */}
+            <div className="hidden md:block shrink-0">
+              <Button
+                onClick={() => scrollToSection("dossier")}
+                className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm rounded-md shadow-md transition-all duration-200 flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                {language === "es" ? "Dossier Exclusivo" : "Exclusive Dossier"}
+              </Button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              onClick={() => setShowMenu(!showMenu)}
+              className="md:hidden text-brown-dark hover:text-gold-warm p-2"
+              aria-label={
+                showMenu ? mobileMenuLabels.close : mobileMenuLabels.open
+              }
+              aria-expanded={showMenu}
+              aria-controls="mobile-nav-menu"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {showMenu ? (
+                  <path d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Mobile Menu Dropdown */}
+          {showMenu && (
+            <div
+              id="mobile-nav-menu"
+              className="md:hidden py-4 border-t border-brown-dark/10 bg-cream-light"
+            >
+              <div className="flex flex-col space-y-3">
+                <button
+                  onClick={() => scrollToSection("wynn-effect")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.wynnEffect}
+                </button>
+                <button
+                  onClick={() => scrollToSection("investment")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.investment}
+                </button>
+                <button
+                  onClick={() => scrollToSection("features")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.features}
+                </button>
+                <button
+                  onClick={() => scrollToSection("gallery")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.gallery}
+                </button>
+                <button
+                  onClick={() => scrollToSection("apartments")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.apartments}
+                </button>
+                <button
+                  onClick={() => scrollToSection("location")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.location}
+                </button>
+                <button
+                  onClick={() => scrollToSection("faq")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.faq}
+                </button>
+                <button
+                  onClick={() => scrollToSection("dossier")}
+                  className="text-brown-dark/70 hover:text-brown-dark transition-all duration-200 text-sm font-normal text-left py-2 hover:underline underline-offset-4 decoration-gold-warm"
+                >
+                  {t.menu.dossier}
+                </button>
+                <Button
+                  onClick={() => scrollToSection("dossier")}
+                  size="sm"
+                  className="bg-gold-warm hover:bg-gold-warm/90 text-brown-dark font-semibold px-4 py-1.5 text-xs rounded-md shadow-md w-full mt-2 flex items-center justify-center gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  {language === "es"
+                    ? "Dossier Exclusivo"
+                    : "Exclusive Dossier"}
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* ==================== SECCIÓN: HERO ==================== */}
+      {/* Hero Section */}
+      <section
+        id="hero"
+        className="hero-section relative min-h-svh overflow-hidden pt-14 md:pt-0"
+      >
+        {/* Background */}
+        <div
+          className="absolute inset-0 z-0 transition-all ease-out"
+          style={{
+            opacity: animationStates.backgroundImage ? 1 : 0,
+            transform: animationStates.backgroundImage
+              ? "scale(1)"
+              : "scale(1.05)",
+            filter: animationStates.logo
+              ? `brightness(${0.55 + scrollProgress * 0.45}) saturate(${
+                  0.4 + scrollProgress * 0.6
+                }) blur(${3 - scrollProgress * 3}px)`
+              : "brightness(1) saturate(1) blur(0px)",
+            transitionDuration: animationStates.logo ? "2000ms" : "700ms",
+          }}
+        >
+          <Image
+            src="/hero-background.png"
+            alt="Playa Viva Al Marjan Island"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+            onError={(e) => {
+              e.currentTarget.src = "/fixed-hero-background.png";
+            }}
+          />
+        </div>
+
+        {/* Content */}
+        <div
+          className="hero-content relative z-10 h-full flex flex-col items-center justify-center px-4"
+          style={{
+            opacity: 1 - scrollProgress,
+            transition: "opacity 0.1s linear",
+          }}
+        >
+          <div
+            ref={heroStackRef}
+            className="hero-container container max-w-6xl mx-auto"
+            style={{
+              transform: heroScale < 1 ? `scale(${heroScale})` : undefined,
+              transformOrigin: "top center",
+            }}
+          >
+            <div className="hero-stack flex flex-col items-center justify-center text-center space-y-2 mt-0">
+              {/* Logo */}
+              <div
+                className="transition-all ease-out mt-12"
+                style={{
+                  opacity: animationStates.logo ? 1 : 0,
+                  transform: animationStates.logo ? "scale(1)" : "scale(0.3)",
+                  filter: animationStates.logo ? "blur(0px)" : "blur(12px)",
+                  transitionDuration: "2500ms",
+                }}
+              >
+                <div className="flex justify-center">
+                  <Image
+                    src="/logo-playa-viva.png"
+                    alt="Playa Viva Logo"
+                    width={640}
+                    height={256}
+                    priority
+                    className="w-auto h-36 sm:h-48 md:h-56 lg:h-64 xl:h-72 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110 object-contain"
+                    sizes="(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 30vw"
+                  />
+                </div>
+              </div>
+
+              {/* Subtitle pill: stronger background for readability + gold halo */}
+              <div
+                className="transition-all ease-out"
+                style={{
+                  opacity: animationStates.subtitle ? 1 : 0,
+                  transform: animationStates.subtitle
+                    ? "scale(1)"
+                    : "scale(0.3)",
+                  filter: animationStates.subtitle ? "blur(0px)" : "blur(12px)",
+                  transitionDuration: "2000ms",
+                }}
+              >
+                <div className="hero-subtitle inline-block bg-black/65 sm:bg-black/55 rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 border border-gold-warm/60 ring-2 ring-gold-warm/75 shadow-[0_0_40px_rgba(162,144,96,0.7)]">
+                  <p className="font-arabic text-gold-warm text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-semibold tracking-[0.02em] sm:tracking-[0.04em] md:tracking-[0.06em] uppercase [text-shadow:0_1px_8px_rgba(0,0,0,0.65)] whitespace-nowrap">
+                    {t.hero.subtitle}
+                  </p>
+                </div>
+              </div>
+
+              {/* Description - Sophisticated styling and legibility */}
+              <div
+                className="transition-all ease-out max-w-5xl"
+                style={{
+                  opacity: animationStates.description ? 1 : 0,
+                  transform: animationStates.description
+                    ? "scale(1)"
+                    : "scale(0.3)",
+                  filter: animationStates.description
+                    ? "blur(0px)"
+                    : "blur(12px)",
+                  transitionDuration: "2000ms",
+                }}
+              >
+                <div className="hero-description relative mx-auto px-2">
+                  <p className="relative text-[#FFFFFF] text-sm sm:text-base md:text-lg font-medium px-3 sm:px-6 py-2 sm:py-3 tracking-[0.01em] text-center whitespace-nowrap [@media(max-width:768px)]:whitespace-normal">
+                    {t.hero.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Price Card: solid background enforced + stronger gold halo on hover */}
+              <div
+                className="transition-all ease-out"
+                style={{
+                  opacity: animationStates.priceBox ? 1 : 0,
+                  transform: animationStates.priceBox
+                    ? "scale(1)"
+                    : "scale(0.3)",
+                  filter: animationStates.priceBox ? "blur(0px)" : "blur(12px)",
+                  transitionDuration: "2000ms",
+                }}
+              >
+                <div className="relative">
+                  <div
+                    className="hero-price-card rounded-2xl p-3 sm:p-4 shadow-2xl max-w-[90vw] sm:max-w-160 mx-auto transition-all duration-200 border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 hover:-translate-y-[3px] hover:ring-gold-warm/85 hover:shadow-[0_24px_52px_rgba(0,0,0,0.6),0_0_56px_rgba(162,144,96,0.7)]"
+                    style={{ backgroundColor: "#6E5F46" }} // sólido y opaco garantizado
+                  >
+                    <div className="space-y-1.5 sm:space-y-2 text-center">
+                      <div className="hero-price-value text-gold-warm text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold whitespace-nowrap [text-shadow:1px_1px_3px_rgba(0,0,0,0.9)]">
+                        {pricePrefix}
+                        {"\u00A0"}
+                        {priceString}
+                      </div>
+                      <div className="hero-price-payment text-cream-light text-xs sm:text-sm md:text-base font-medium [text-shadow:1px_1px_2px_rgba(0,0,0,0.8)]">
+                        {t.hero.payment}
+                      </div>
+                      <div className="hero-price-handover text-cream-light text-xs sm:text-xs md:text-sm font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.85)]">
+                        {t.hero.handover}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Button: Single Dossier download button centered */}
+              <div
+                className="transition-all ease-out"
+                style={{
+                  opacity: animationStates.ctaButtons ? 1 : 0,
+                  transform: animationStates.ctaButtons
+                    ? "scale(1)"
+                    : "scale(0.3)",
+                  filter: animationStates.ctaButtons
+                    ? "blur(0px)"
+                    : "blur(12px)",
+                  transitionDuration: "2000ms",
+                }}
+              >
+                <div className="flex flex-col gap-3 items-center">
+                  <Button
+                    onClick={() => scrollToSection("dossier")}
+                    size="lg"
+                    className="hero-cta bg-gold-warm text-brown-dark font-bold antialiased tracking-wide px-10 py-4 text-base sm:text-lg rounded-xl border-2 border-brown-dark/85 ring-2 ring-gold-warm/65 shadow-2xl transition-all duration-200 hover:bg-gold-warm/80 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(0,0,0,0.55),0_0_48px_rgba(162,144,96,0.65)] hover:ring-gold-warm/85 hover:scale-105"
+                  >
+                    <span className="flex items-center gap-3">
+                      <Download className="h-5 w-5" />
+                      <span>
+                        {language === "es"
+                          ? "Dossier Exclusivo"
+                          : "Exclusive Dossier"}
+                      </span>
+                    </span>
+                  </Button>
+
+                  {/* Scroll Indicator (sm+) */}
+                  <div
+                    className="hero-scroll-indicator mt-2 hidden sm:flex justify-center pointer-events-none animate-bounce"
+                    style={{
+                      opacity: animationStates.scrollIndicator ? 1 : 0,
+                      transform: animationStates.scrollIndicator
+                        ? "translateY(0px)"
+                        : "translateY(20px)",
+                    }}
+                  >
+                    <div className="w-6 h-10 border-2 border-yellow-400/70 rounded-full flex items-start justify-center p-2">
+                      <div className="w-1.5 h-3 bg-yellow-400/80 rounded-full animate-pulse" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== SECCIÓN: WYNN EFFECT ==================== */}
+      {/* The Wynn Effect - CRITICAL SECTION */}
+      <section
+        id="wynn-effect"
+        ref={wynnEffectRef}
+        className="relative py-20 md:py-32 bg-linear-to-br from-brown-dark via-brown-dark to-olive-brown overflow-hidden"
+        style={{
+          opacity: visibleSections.wynnEffect ? 1 : 0,
+          transform: visibleSections.wynnEffect
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, ${`var(--gold-warm)`} 1px, transparent 0)`,
+              backgroundSize: "40px 40px",
+            }}
+          />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Header */}
+          <div className="text-center mb-16 max-w-4xl mx-auto">
+            <LuxuryBadge
+              label={
+                language === "es"
+                  ? "Oportunidad Histórica"
+                  : "Historic Opportunity"
+              }
+            />
+            <h2
+              className="text-4xl md:text-6xl font-light text-cream-light mb-6 font-arabic"
+              style={{
+                opacity: visibleSections.wynnEffect ? 1 : 0,
+                transform: visibleSections.wynnEffect
+                  ? "translateY(0px)"
+                  : "translateY(20px)",
+                transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s",
+              }}
+            >
+              {t.wynnEffect.title}
+            </h2>
+            <h3
