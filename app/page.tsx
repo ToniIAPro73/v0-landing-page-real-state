@@ -445,31 +445,31 @@ export default function PlayaVivaLanding() {
         },
         // FEATURES_4: Amenities Carousel
         amenities: {
-          title: "Amenities",
+          title: "Servicios",
           tagline: "Espacios diseñados para el bienestar",
           items: [
             {
-              title: "Outdoor Cinema",
+              title: "Cine Exterior",
               image: "/assets/imagenes/cinema.webp",
               description: "Cine al aire libre con proyección bajo las estrellas"
             },
             {
-              title: "Spa & Wellness",
+              title: "Spa y Bienestar",
               image: "/assets/imagenes/foto galeria 7.jpg",
               description: "Centro de bienestar con tratamientos de lujo"
             },
             {
-              title: "Fitness Center",
+              title: "Centro de Fitness",
               image: "/assets/imagenes/foto galeria 4.jpg",
               description: "Gimnasio equipado con tecnología de última generación"
             },
             {
-              title: "Outdoor Swimming Pools",
+              title: "Piscinas Exteriores",
               image: "/assets/imagenes/foto galeria 11.webp",
               description: "Piscinas infinity con vistas al mar Arábigo"
             },
             {
-              title: "Retail & Dining",
+              title: "Comercios y Restauración",
               image: "/assets/imagenes/retail.webp",
               description: "Gastronomía y retail de primer nivel"
             }
@@ -548,7 +548,7 @@ export default function PlayaVivaLanding() {
         readMore: "Leer en el medio",
         articles: [
           {
-            date: "23 Enero 2025",
+            date: "10 Noviembre 2025",
             image: "/assets/imagenes/news_1.png",
             alt: "Hotel Management Network - Wynn Resorts Second Resort",
             source: "Hotel Management Network",
@@ -1027,7 +1027,7 @@ export default function PlayaVivaLanding() {
         readMore: "Read full article",
         articles: [
           {
-            date: "January 23, 2025",
+            date: "November 10, 2025",
             image: "/assets/imagenes/news_1.png",
             alt: "Hotel Management Network - Wynn Resorts Second Resort",
             source: "Hotel Management Network",
