@@ -380,10 +380,10 @@ export default function PlayaVivaLanding() {
           title: "Estructura del Desarrollo",
           tagline: "Arquitectura contemporánea frente al mar",
           description: [
-            "Una torre icónica de 24 plantas que combina elegancia atemporal con el entorno costero de Al Marjan Island.",
+            "Tres torres icónicas que combinan elegancia atemporal con el entorno costero de Al Marjan Island.",
             "Diseño arquitectónico que maximiza vistas panorámicas al Golfo Arábigo desde cada residencia."
           ],
-          image: "/assets/imagenes/building-structure.webp",
+          image: "/assets/imagenes/collage_estructura_es.png",
         },
         // FEATURES_2: Specifications
         specifications: {
@@ -392,25 +392,25 @@ export default function PlayaVivaLanding() {
           cards: [
             {
               title: "Studios",
-              size: "37-45 m²",
+              size: "27.87-42.9 m² (300-462 SqFt)",
               price: "Desde €170,000",
               features: "Cocina integrada, baño premium, balcón privado"
             },
             {
               title: "1 Dormitorio",
-              size: "60-75 m²",
+              size: "55.74-78.97 m² (600-850 SqFt)",
               price: "Desde €285,000",
               features: "Suite en-suite, vestidor, zona de lavandería"
             },
             {
               title: "2 Dormitorios",
-              size: "95-110 m²",
+              size: "102.19-111.48 m² (1100-1200 SqFt)",
               price: "Desde €450,000",
               features: "Dos suites, cocina isla, balcones duales"
             },
             {
               title: "3 Dormitorios",
-              size: "145-165 m²",
+              size: "157.94-167.22 m² (1700-1800 SqFt)",
               price: "Desde €650,000",
               features: "Master suite, cuarto de servicio, terraza 25m²"
             }
@@ -422,22 +422,22 @@ export default function PlayaVivaLanding() {
           tagline: "Cuatro perspectivas de vida frente al mar",
           tabs: [
             {
-              label: "Coastal Community",
+              label: "Comunidad Costera",
               image: "/assets/imagenes/view1.webp",
               description: "Comunidad exclusiva en primera línea de playa"
             },
             {
-              label: "Inspired Design",
+              label: "Diseño Inspirado",
               image: "/assets/imagenes/view2.jpg",
               description: "Arquitectura que captura la esencia del Mediterráneo"
             },
             {
-              label: "Effortless Luxury",
+              label: "Lujo sin Esfuerzo",
               image: "/assets/imagenes/view3.webp",
               description: "Lujo sin esfuerzo en cada detalle"
             },
             {
-              label: "Beach Access",
+              label: "Acceso a Playa",
               image: "/assets/imagenes/beach.webp",
               description: "Acceso directo a playas de arena blanca"
             }
@@ -465,7 +465,7 @@ export default function PlayaVivaLanding() {
             },
             {
               title: "Piscinas Exteriores",
-              image: "/assets/imagenes/foto galeria 11.webp",
+              image: "/assets/imagenes/Piscina_mejorada.png",
               description: "Piscinas infinity con vistas al mar Arábigo"
             },
             {
@@ -484,7 +484,7 @@ export default function PlayaVivaLanding() {
       },
       apartments: {
         title: "Colección de Apartamentos",
-        subtitle: "Espacios diseñados para cada etapa de inversión",
+        subtitle: "Espacios diseñados para cada perfil inversor",
         description:
           "Desde estudios boutique hasta áticos de tres dormitorios, cada tipología ofrece vistas al mar, entrega llave en mano y acceso al plan de pago del 1% mensual.",
         note: "Los precios son estimaciones orientativas basadas en el tipo de cambio vigente y pueden variar sin previo aviso.",
@@ -677,8 +677,8 @@ export default function PlayaVivaLanding() {
           {
             icon: TrendingUp,
             value: "7-8%",
-            label: "Rendimientos brutos de alquiler",
-            description: "Yields actuales en Al Marjan Island",
+            label: "Rendimientos",
+            description: "Rendimientos actuales en Al Marjan Island",
           },
           {
             icon: TrendingUp,
@@ -700,7 +700,7 @@ export default function PlayaVivaLanding() {
           },
         ],
         benefits: [
-          "Rendimientos brutos del 7-8% en alquileres",
+          "Márgenes de beneficio operativo cercanos al 8%",
           "Proximidad al Wynn Resort ($5.1B)",
           "Entrega totalmente amueblado y con Smart Home",
           "Potencial de revalorización post-apertura casino",
@@ -859,10 +859,10 @@ export default function PlayaVivaLanding() {
           title: "Development Structure",
           tagline: "Contemporary architecture facing the sea",
           description: [
-            "An iconic 24-story tower combining timeless elegance with the coastal setting of Al Marjan Island.",
+            "Three iconic towers combining timeless elegance with the coastal setting of Al Marjan Island.",
             "Architectural design that maximizes panoramic views of the Arabian Gulf from every residence."
           ],
-          image: "/assets/imagenes/building-structure.webp",
+          image: "/assets/imagenes/collage_estructura_en.png",
         },
         // FEATURES_2: Specifications
         specifications: {
@@ -871,26 +871,26 @@ export default function PlayaVivaLanding() {
           cards: [
             {
               title: "Studios",
-              size: "37-45 m²",
-              price: "From £150,000",
+              size: "27.87-42.9 m² (300-462 SqFt)",
+              price: "From £146,200",
               features: "Integrated kitchen, premium bathroom, private balcony"
             },
             {
               title: "1 Bedroom",
-              size: "60-75 m²",
-              price: "From £250,000",
+              size: "55.74-78.97 m² (600-850 SqFt)",
+              price: "From £245,100",
               features: "En-suite bedroom, walk-in closet, laundry area"
             },
             {
               title: "2 Bedrooms",
-              size: "95-110 m²",
-              price: "From £400,000",
+              size: "102.19-111.48 m² (1100-1200 SqFt)",
+              price: "From £387,000",
               features: "Two suites, island kitchen, dual balconies"
             },
             {
               title: "3 Bedrooms",
-              size: "145-165 m²",
-              price: "From £575,000",
+              size: "157.94-167.22 m² (1700-1800 SqFt)",
+              price: "From £559,000",
               features: "Master suite, maid's room, 25m² terrace"
             }
           ]
@@ -944,7 +944,7 @@ export default function PlayaVivaLanding() {
             },
             {
               title: "Outdoor Swimming Pools",
-              image: "/assets/imagenes/foto galeria 11.webp",
+              image: "/assets/imagenes/Piscina_mejorada.png",
               description: "Infinity pools with Arabian Sea views"
             },
             {
@@ -963,7 +963,7 @@ export default function PlayaVivaLanding() {
       },
       apartments: {
         title: "Apartment Collection",
-        subtitle: "Layouts tailored to every investment thesis",
+        subtitle: "Layouts tailored to every investment profile",
         description:
           "From boutique studios to three-bedroom residences, each typology delivers sea views, turnkey interiors, and access to the 1% monthly payment plan.",
         note: "Prices are indicative estimates based on prevailing FX and may adjust at the time of reservation.",
@@ -1179,7 +1179,7 @@ export default function PlayaVivaLanding() {
           },
         ],
         benefits: [
-          "7-8% gross rental yields",
+          "Operating profit margins close to 8%",
           "Proximity to Wynn Resort ($5.1B)",
           "Fully furnished delivery with Smart Home",
           "Post-casino opening appreciation potential",
@@ -3418,10 +3418,10 @@ const orchestrateLeadAutomation = async (
                         <Bot className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-cream-light mb-1">
+                        <p className="text-sm font-semibold text-white mb-1">
                           {altchaTitle}
                         </p>
-                        <p className="text-xs text-cream-light/75 leading-relaxed">
+                        <p className="text-xs text-white/75 leading-relaxed">
                           {altchaCopy}
                         </p>
                       </div>
@@ -3433,10 +3433,10 @@ const orchestrateLeadAutomation = async (
                         <ShieldCheck className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-cream-light mb-1">
+                        <p className="text-sm font-semibold text-white mb-1">
                           {consentTitle}
                         </p>
-                        <p className="text-xs text-cream-light/75 leading-relaxed">
+                        <p className="text-xs text-white/75 leading-relaxed">
                           {consentCopy}
                         </p>
                       </div>
