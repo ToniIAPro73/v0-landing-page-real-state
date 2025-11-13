@@ -508,7 +508,7 @@ export default function PlayaVivaLanding() {
             title: "Property prices rise 20% amid supply-demand gap",
             summary:
               "Waterfront properties near the Wynn Resort in RAK are in hottest demand, with studios and one-bedroom units leading the surge.",
-            url: "https://www.arabianbusiness.com/industries/real-estate/ras-al-khaimah-real-estate-property-prices-rise-20-amid-growing-supply-demand-gap",
+            url: "https://www.arabianbusiness.com/industries/real-estate/ras-al-khaimah-real-estate-property-prices-sise-20-amid-growing-supply-demand-gap",
           },
         ],
       },
@@ -900,7 +900,7 @@ export default function PlayaVivaLanding() {
             title: "Property prices rise 20% amid supply-demand gap",
             summary:
               "Waterfront properties near the Wynn Resort in RAK are in hottest demand, with studios and one-bedroom units leading the surge.",
-            url: "https://www.arabianbusiness.com/industries/real-estate/ras-al-khaimah-real-estate-property-prices-rise-20-amid-growing-supply-demand-gap",
+            url: "https://www.arabianbusiness.com/industries/real-estate/ras-al-khaimah-real-estate-property-prices-sise-20-amid-growing-supply-demand-gap",
           },
         ],
       },
@@ -1750,6 +1750,7 @@ const orchestrateLeadAutomation = async (
         </div>
       </nav>
 
+      {/* ==================== SECCIÓN: HERO ==================== */}
       {/* Hero Section */}
       <section
         id="hero"
@@ -1949,6 +1950,7 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
+      {/* ==================== SECCIÓN: WYNN EFFECT ==================== */}
       {/* The Wynn Effect - CRITICAL SECTION */}
       <section
         id="wynn-effect"
@@ -2081,8 +2083,8 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
-      {/* ==================== INVESTMENT SECTION ==================== */}
-      {/* Investment_1: Oportunidad de Inversión */}
+      {/* ==================== MENÚ: INVERSIÓN ==================== */}
+      {/* INVESTMENT_1: OPORTUNIDAD DE INVERSIÓN */}
       <section
         id="investment"
         ref={investmentRef}
@@ -2198,7 +2200,7 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
-      {/* Investment_2: Plan de Pago */}
+      {/* INVESTMENT_2: PLAN DE PAGO */}
       <section
         className="relative py-24 bg-cream-light"
         style={{
@@ -2290,358 +2292,7 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
-      {/* Investment_3: Trust & Noticias (Respaldado por Líderes) */}
-      {/* Features */}
-      <section
-        id="features"
-        ref={featuresRef}
-        className="relative py-24 bg-cream-light"
-        style={{
-          opacity: visibleSections.features ? 1 : 0,
-          transform: visibleSections.features
-            ? "translateY(0px)"
-            : "translateY(50px)",
-          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
-      >
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
-              {t.features.title}
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {t.features.items.map((item, index) => (
-              <div
-                key={index}
-                className="text-center p-6 bg-white/50 rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                style={{
-                  opacity: visibleSections.features ? 1 : 0,
-                  transform: visibleSections.features
-                    ? "translateY(0px)"
-                    : "translateY(30px)",
-                  transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
-                    index * 0.1
-                  }s`,
-                }}
-              >
-                <div className="flex justify-center mb-4">
-                  <item.icon className="h-12 w-12 text-gold-warm" />
-                </div>
-                <h3 className="text-xl font-semibold text-brown-dark mb-3">
-                  {item.title}
-                </h3>
-                <p className="text-taupe-warm leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery */}
-      <section
-        id="gallery"
-        ref={galleryRef}
-        className="relative py-24 bg-white"
-        style={{
-          opacity: visibleSections.gallery ? 1 : 0,
-          transform: visibleSections.gallery
-            ? "translateY(0px)"
-            : "translateY(50px)",
-          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
-      >
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12 max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
-              {t.gallery.title}
-            </h2>
-            <h3 className="text-2xl text-gold-warm mb-6">
-              {t.gallery.subtitle}
-            </h3>
-            <p className="text-taupe-warm text-base md:text-lg leading-relaxed">
-              {t.gallery.description}
-            </p>
-          </div>
-
-          {/* Gallery Tabs */}
-          <div className="flex justify-center gap-4 mb-12 flex-wrap">
-            <button
-              onClick={() => setActiveGalleryTab("servicios")}
-              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
-                activeGalleryTab === "servicios"
-                  ? "bg-gold-warm text-brown-dark shadow-lg"
-                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
-              }`}
-            >
-              {language === "es"
-                ? "Servicios e Instalaciones"
-                : "Services & Facilities"}
-            </button>
-            <button
-              onClick={() => setActiveGalleryTab("interior")}
-              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
-                activeGalleryTab === "interior"
-                  ? "bg-gold-warm text-brown-dark shadow-lg"
-                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
-              }`}
-            >
-              {language === "es" ? "Interiores" : "Interiors"}
-            </button>
-            <button
-              onClick={() => setActiveGalleryTab("sitios")}
-              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
-                activeGalleryTab === "sitios"
-                  ? "bg-gold-warm text-brown-dark shadow-lg"
-                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
-              }`}
-            >
-              {language === "es" ? "Sitios de Interés" : "Points of Interest"}
-            </button>
-            <button
-              onClick={() => setActiveGalleryTab("video")}
-              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
-                activeGalleryTab === "video"
-                  ? "bg-gold-warm text-brown-dark shadow-lg"
-                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
-              }`}
-            >
-              {language === "es" ? "Video" : "Video"}
-            </button>
-          </div>
-
-          {/* Servicios e Instalaciones */}
-          {activeGalleryTab === "servicios" && (
-            <div className="max-w-6xl mx-auto">
-              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
-                <Image
-                  src="/assets/imagenes/Collage-servicios-instalaciones.png"
-                  alt="Servicios e Instalaciones - Playa Viva"
-                  className="w-full h-auto"
-                  width={1210}
-                  height={968}
-                  loading="lazy"
-                  sizes="(max-width: 1024px) 100vw, 75vw"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Interior */}
-          {activeGalleryTab === "interior" && (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
-              {[
-                {
-                  src: "/assets/imagenes/studio.webp",
-                  span: "md:col-span-2 md:row-span-2",
-                },
-                { src: "/assets/imagenes/1-bedroom.webp", span: "" },
-                { src: "/assets/imagenes/2-bedroom.webp", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%201.jpg", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%202.jpg", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%203.jpg", span: "" },
-              ].map((image, index) => (
-                <div
-                  key={index}
-                  className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
-                >
-                  <div className="aspect-square relative">
-                    <Image
-                      src={image.src}
-                      alt={`Interior ${index + 1}`}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-linear-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Sitios de Interés */}
-          {activeGalleryTab === "sitios" && (
-            <div className="max-w-6xl mx-auto">
-              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
-                <Image
-                  src="/assets/imagenes/Collage_sitios_interes.png"
-                  alt="Sitios de interes cercanos a Playa Viva"
-                  className="w-full h-auto"
-                  width={1210}
-                  height={968}
-                  loading="lazy"
-                  sizes="(max-width: 1024px) 100vw, 75vw"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Video */}
-          {activeGalleryTab === "video" && (
-            <div className="max-w-6xl mx-auto">
-              <div className="relative rounded-3xl overflow-hidden border-2 border-gold-warm/40 shadow-2xl bg-black aspect-video">
-                <iframe
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/KbazzvTtRkY?rel=0&modestbranding=1"
-                  title="Playa Viva Overview"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-                <div className="absolute inset-0 pointer-events-none bg-linear-to-t from-black/20 via-transparent to-transparent" />
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Apartments */}
-      <section
-        id="apartments"
-        ref={apartmentsRef}
-        className="relative py-24 bg-linear-to-br from-cream-light via-white to-cream-light"
-        style={{
-          opacity: visibleSections.apartments ? 1 : 0,
-          transform: visibleSections.apartments
-            ? "translateY(0px)"
-            : "translateY(50px)",
-          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
-      >
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-light text-brown-dark mb-4">
-                {t.apartments.title}
-              </h2>
-              <h3 className="text-xl text-gold-warm mb-4">
-                {t.apartments.subtitle}
-              </h3>
-              <p className="text-taupe-warm text-base md:text-lg max-w-3xl mx-auto">
-                {t.apartments.description}
-              </p>
-            </div>
-
-            <div className="flex justify-center gap-4 mb-12 flex-wrap">
-              {(["studio", "oneBed", "twoBed", "threeBed"] as const).map(
-                (key) => (
-                  <button
-                    key={key}
-                    onClick={() => setActiveApartment(key)}
-                    className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
-                      activeApartment === key
-                        ? "bg-gold-warm text-brown-dark shadow-lg"
-                        : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
-                    }`}
-                  >
-                    {t.apartments.tabs[key].label}
-                  </button>
-                )
-              )}
-            </div>
-
-            <div className="space-y-10">
-              <div
-                className="relative max-w-5xl mx-auto rounded-3xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_30px_60px_rgba(0,0,0,0.25)]"
-                style={{
-                  opacity: visibleSections.apartments ? 1 : 0,
-                  transform: visibleSections.apartments
-                    ? undefined
-                    : "translateY(30px)",
-                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-                }}
-              >
-                <Image
-                  src={activeApartmentConfig.image}
-                  alt={apartmentCopy.headline}
-                  width={1600}
-                  height={1000}
-                  className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
-                  sizes="(max-width: 768px) 100vw, 75vw"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 via-black/10 to-transparent p-6">
-                  <p className="text-sm text-white uppercase tracking-[0.3em]">
-                    {apartmentCopy.label}
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 md:p-10 shadow-2xl border border-brown-dark/10 max-w-5xl mx-auto flex flex-col lg:flex-row gap-10">
-                <div className="flex-1 space-y-4">
-                  <p className="text-xs uppercase tracking-[0.4em] text-brown-dark/60">
-                    {apartmentCopy.label}
-                  </p>
-                  <h3 className="text-2xl md:text-4xl font-light text-brown-dark">
-                    {apartmentCopy.headline}
-                  </h3>
-                  <p className="text-brown-dark/80 text-base md:text-lg">
-                    {apartmentCopy.description}
-                  </p>
-                  <div className="space-y-3 pt-4">
-                    {highlightItems.map((highlight, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <div className="bg-gold-warm/20 rounded-full p-1 mt-0.5">
-                          <CheckCircle2 className="h-4 w-4 text-gold-warm" />
-                        </div>
-                        <p className="text-brown-dark/80 text-sm">
-                          {highlight}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className={statCardBaseClasses}>
-                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
-                      {infoLabels.size}
-                    </p>
-                    <p className="text-lg font-semibold text-brown-dark">
-                      {formatSizeRange(activeApartmentConfig.sizeSqftRange)}
-                    </p>
-                  </div>
-                  <div className={statCardBaseClasses}>
-                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
-                      {infoLabels.price}
-                    </p>
-                    <p className="text-lg font-semibold text-brown-dark">
-                      {activeApartmentPrice}
-                    </p>
-                  </div>
-                  <div className={statCardBaseClasses}>
-                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
-                      {infoLabels.bedrooms}
-                    </p>
-                    <p className="text-lg font-semibold text-brown-dark">
-                      {formatBedroomValue(activeApartmentConfig.bedrooms)}
-                    </p>
-                  </div>
-                  <div className={statCardBaseClasses}>
-                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
-                      {infoLabels.bathrooms}
-                    </p>
-                    <p className="text-lg font-semibold text-brown-dark">
-                      {formatBathroomValue(activeApartmentConfig.bathrooms)}
-                    </p>
-                  </div>
-                  <div className={`${statCardBaseClasses} sm:col-span-2`}>
-                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
-                      {infoLabels.parking}
-                    </p>
-                    <p className="text-lg font-semibold text-brown-dark">
-                      {apartmentCopy.parking}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      {/* ==================== INVESTMENT_3: RESPALDADO POR LÍDERES & NOTICIAS ==================== */}
       {/* Trust & Credibility */}
       <section
         ref={trustRef}
@@ -2831,6 +2482,361 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
+      {/* ==================== CARACTERÍSTICAS ==================== */}
+      {/* Features */}
+      <section
+        id="features"
+        ref={featuresRef}
+        className="relative py-24 bg-cream-light"
+        style={{
+          opacity: visibleSections.features ? 1 : 0,
+          transform: visibleSections.features
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
+              {t.features.title}
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {t.features.items.map((item, index) => (
+              <div
+                key={index}
+                className="text-center p-6 bg-white/50 rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+                style={{
+                  opacity: visibleSections.features ? 1 : 0,
+                  transform: visibleSections.features
+                    ? "translateY(0px)"
+                    : "translateY(30px)",
+                  transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+                    index * 0.1
+                  }s`,
+                }}
+              >
+                <div className="flex justify-center mb-4">
+                  <item.icon className="h-12 w-12 text-gold-warm" />
+                </div>
+                <h3 className="text-xl font-semibold text-brown-dark mb-3">
+                  {item.title}
+                </h3>
+                <p className="text-taupe-warm leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== MENÚ: GALERÍA ==================== */}
+      {/* Gallery */}
+      <section
+        id="gallery"
+        ref={galleryRef}
+        className="relative py-24 bg-white"
+        style={{
+          opacity: visibleSections.gallery ? 1 : 0,
+          transform: visibleSections.gallery
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12 max-w-4xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-light text-brown-dark mb-6">
+              {t.gallery.title}
+            </h2>
+            <h3 className="text-2xl text-gold-warm mb-6">
+              {t.gallery.subtitle}
+            </h3>
+            <p className="text-taupe-warm text-base md:text-lg leading-relaxed">
+              {t.gallery.description}
+            </p>
+          </div>
+
+          {/* Gallery Tabs */}
+          <div className="flex justify-center gap-4 mb-12 flex-wrap">
+            <button
+              onClick={() => setActiveGalleryTab("servicios")}
+              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                activeGalleryTab === "servicios"
+                  ? "bg-gold-warm text-brown-dark shadow-lg"
+                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+              }`}
+            >
+              {language === "es"
+                ? "Servicios e Instalaciones"
+                : "Services & Facilities"}
+            </button>
+            <button
+              onClick={() => setActiveGalleryTab("interior")}
+              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                activeGalleryTab === "interior"
+                  ? "bg-gold-warm text-brown-dark shadow-lg"
+                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+              }`}
+            >
+              {language === "es" ? "Interiores" : "Interiors"}
+            </button>
+            <button
+              onClick={() => setActiveGalleryTab("sitios")}
+              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                activeGalleryTab === "sitios"
+                  ? "bg-gold-warm text-brown-dark shadow-lg"
+                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+              }`}
+            >
+              {language === "es" ? "Sitios de Interés" : "Points of Interest"}
+            </button>
+            <button
+              onClick={() => setActiveGalleryTab("video")}
+              className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                activeGalleryTab === "video"
+                  ? "bg-gold-warm text-brown-dark shadow-lg"
+                  : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+              }`}
+            >
+              {language === "es" ? "Video" : "Video"}
+            </button>
+          </div>
+
+          {/* Servicios e Instalaciones */}
+          {activeGalleryTab === "servicios" && (
+            <div className="max-w-6xl mx-auto">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
+                <Image
+                  src="/assets/imagenes/Collage-servicios-instalaciones.png"
+                  alt="Servicios e Instalaciones - Playa Viva"
+                  className="w-full h-auto"
+                  width={1210}
+                  height={968}
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 75vw"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Interior */}
+          {activeGalleryTab === "interior" && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+              {[
+                {
+                  src: "/assets/imagenes/studio.webp",
+                  span: "md:col-span-2 md:row-span-2",
+                },
+                { src: "/assets/imagenes/1-bedroom.webp", span: "" },
+                { src: "/assets/imagenes/2-bedroom.webp", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%201.jpg", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%202.jpg", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%203.jpg", span: "" },
+              ].map((image, index) => (
+                <div
+                  key={index}
+                  className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
+                >
+                  <div className="aspect-square relative">
+                    <Image
+                      src={image.src}
+                      alt={`Interior ${index + 1}`}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-linear-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Sitios de Interés */}
+          {activeGalleryTab === "sitios" && (
+            <div className="max-w-6xl mx-auto">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
+                <Image
+                  src="/assets/imagenes/Collage_sitios_interes.png"
+                  alt="Sitios de interes cercanos a Playa Viva"
+                  className="w-full h-auto"
+                  width={1210}
+                  height={968}
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 75vw"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Video */}
+          {activeGalleryTab === "video" && (
+            <div className="max-w-6xl mx-auto">
+              <div className="relative rounded-3xl overflow-hidden border-2 border-gold-warm/40 shadow-2xl bg-black aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/KbazzvTtRkY?rel=0&modestbranding=1"
+                  title="Playa Viva Overview"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+                <div className="absolute inset-0 pointer-events-none bg-linear-to-t from-black/20 via-transparent to-transparent" />
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ==================== MENÚ: APARTAMENTOS ==================== */}
+      {/* Apartments */}
+      <section
+        id="apartments"
+        ref={apartmentsRef}
+        className="relative py-24 bg-linear-to-br from-cream-light via-white to-cream-light"
+        style={{
+          opacity: visibleSections.apartments ? 1 : 0,
+          transform: visibleSections.apartments
+            ? "translateY(0px)"
+            : "translateY(50px)",
+          transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-5xl font-light text-brown-dark mb-4">
+                {t.apartments.title}
+              </h2>
+              <h3 className="text-xl text-gold-warm mb-4">
+                {t.apartments.subtitle}
+              </h3>
+              <p className="text-taupe-warm text-base md:text-lg max-w-3xl mx-auto">
+                {t.apartments.description}
+              </p>
+            </div>
+
+            <div className="flex justify-center gap-4 mb-12 flex-wrap">
+              {(["studio", "oneBed", "twoBed", "threeBed"] as const).map(
+                (key) => (
+                  <button
+                    key={key}
+                    onClick={() => setActiveApartment(key)}
+                    className={`px-6 py-3 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 ${
+                      activeApartment === key
+                        ? "bg-gold-warm text-brown-dark shadow-lg"
+                        : "bg-cream-light text-brown-dark/70 hover:bg-cream-light/80 hover:text-brown-dark"
+                    }`}
+                  >
+                    {t.apartments.tabs[key].label}
+                  </button>
+                )
+              )}
+            </div>
+
+            <div className="space-y-10">
+              <div
+                className="relative max-w-5xl mx-auto rounded-3xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_30px_60px_rgba(0,0,0,0.25)]"
+                style={{
+                  opacity: visibleSections.apartments ? 1 : 0,
+                  transform: visibleSections.apartments
+                    ? undefined
+                    : "translateY(30px)",
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+              >
+                <Image
+                  src={activeApartmentConfig.image}
+                  alt={apartmentCopy.headline}
+                  width={1600}
+                  height={1000}
+                  className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                  sizes="(max-width: 768px) 100vw, 75vw"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 via-black/10 to-transparent p-6">
+                  <p className="text-sm text-white uppercase tracking-[0.3em]">
+                    {apartmentCopy.label}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 md:p-10 shadow-2xl border border-brown-dark/10 max-w-5xl mx-auto flex flex-col lg:flex-row gap-10">
+                <div className="flex-1 space-y-4">
+                  <p className="text-xs uppercase tracking-[0.4em] text-brown-dark/60">
+                    {apartmentCopy.label}
+                  </p>
+                  <h3 className="text-2xl md:text-4xl font-light text-brown-dark">
+                    {apartmentCopy.headline}
+                  </h3>
+                  <p className="text-brown-dark/80 text-base md:text-lg">
+                    {apartmentCopy.description}
+                  </p>
+                  <div className="space-y-3 pt-4">
+                    {highlightItems.map((highlight, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="bg-gold-warm/20 rounded-full p-1 mt-0.5">
+                          <CheckCircle2 className="h-4 w-4 text-gold-warm" />
+                        </div>
+                        <p className="text-brown-dark/80 text-sm">
+                          {highlight}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className={statCardBaseClasses}>
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.size}
+                    </p>
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {formatSizeRange(activeApartmentConfig.sizeSqftRange)}
+                    </p>
+                  </div>
+                  <div className={statCardBaseClasses}>
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.price}
+                    </p>
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {activeApartmentPrice}
+                    </p>
+                  </div>
+                  <div className={statCardBaseClasses}>
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.bedrooms}
+                    </p>
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {formatBedroomValue(activeApartmentConfig.bedrooms)}
+                    </p>
+                  </div>
+                  <div className={statCardBaseClasses}>
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.bathrooms}
+                    </p>
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {formatBathroomValue(activeApartmentConfig.bathrooms)}
+                    </p>
+                  </div>
+                  <div className={`${statCardBaseClasses} sm:col-span-2`}>
+                    <p className="text-xs uppercase tracking-[0.3em] text-brown-dark/50 mb-1">
+                      {infoLabels.parking}
+                    </p>
+                    <p className="text-lg font-semibold text-brown-dark">
+                      {apartmentCopy.parking}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== MENÚ: UBICACIÓN ==================== */}
       {/* Location */}
       <section
         id="location"
@@ -2910,6 +2916,7 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
+      {/* ==================== MENÚ: PREGUNTAS FRECUENTES ==================== */}
       {/* FAQ */}
       <section
         id="faq"
@@ -2984,6 +2991,7 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
+      {/* ==================== FORMULARIO: DOSSIER EXCLUSIVO ==================== */}
       {/* Lead Magnet - Exclusive Dossier Form */}
       <section
         id="dossier"
@@ -3294,6 +3302,7 @@ const orchestrateLeadAutomation = async (
         </div>
       </section>
 
+      {/* ==================== PIE DE PÁGINA: FOOTER ==================== */}
       {/* Uniestate Section */}
       <section
         ref={footerRef}
