@@ -392,26 +392,26 @@ export default function PlayaVivaLanding() {
           cards: [
             {
               title: "Studios",
-              size: "27.87-42.9 m² (300-462 SqFt)",
-              price: "Desde €170,000",
+              size: "27.87-42.9 m²",
+              price: "Desde 170.000€",
               features: "Cocina integrada, baño premium, balcón privado"
             },
             {
               title: "1 Dormitorio",
-              size: "55.74-78.97 m² (600-850 SqFt)",
-              price: "Desde €285,000",
+              size: "55.74-78.97 m²",
+              price: "Desde 285.000€",
               features: "Suite en-suite, vestidor, zona de lavandería"
             },
             {
               title: "2 Dormitorios",
-              size: "102.19-111.48 m² (1100-1200 SqFt)",
-              price: "Desde €450,000",
+              size: "102.19-111.48 m²",
+              price: "Desde 450.000€",
               features: "Dos suites, cocina isla, balcones duales"
             },
             {
               title: "3 Dormitorios",
-              size: "157.94-167.22 m² (1700-1800 SqFt)",
-              price: "Desde €650,000",
+              size: "157.94-167.22 m²",
+              price: "Desde 650.000€",
               features: "Master suite, cuarto de servicio, terraza 25m²"
             }
           ]
@@ -427,7 +427,7 @@ export default function PlayaVivaLanding() {
               description: "Comunidad exclusiva en primera línea de playa"
             },
             {
-              label: "Diseño Inspirado",
+              label: "Diseño Inspirador",
               image: "/assets/imagenes/view2.jpg",
               description: "Arquitectura que captura la esencia del Mediterráneo"
             },
@@ -559,7 +559,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "7 Noviembre 2025",
-            image: "/assets/imagenes/news_5.png",
+            image: "/assets/imagenes/news_2.webp",
             alt: "The National - Escape to Dubai",
             source: "The National",
             title: "Escape to Dubai from high-tax Britain more tempting as 75% fear higher rates",
@@ -569,7 +569,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "3 Julio 2025",
-            image: "/assets/imagenes/news_2.webp",
+            image: "/assets/imagenes/news_3.png",
             alt: "Gulf News - Wynn Resort",
             source: "Gulf News",
             title: "Ras Al Khaimah sees new luxury hotel at Wynn Al Marjan",
@@ -579,7 +579,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "30 Abril 2025",
-            image: "/assets/imagenes/news_3.png",
+            image: "/assets/imagenes/news_4.png",
             alt: "The National - Gaming resort RAK",
             source: "The National",
             title: "UAE's first gaming resort set to 'open up RAK to the world'",
@@ -589,7 +589,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "18 Marzo 2025",
-            image: "/assets/imagenes/news_4.png",
+            image: "/assets/imagenes/news_5.png",
             alt: "Arabian Business - Property prices",
             source: "Arabian Business",
             title: "Property prices rise 20% amid supply-demand gap",
@@ -737,7 +737,7 @@ export default function PlayaVivaLanding() {
         title: "Al Marjan Island",
         subtitle: "El futuro de la vida de lujo en los EAU",
         description:
-          "Situada en las costas de Ras Al Khaimah, Al Marjan Island es una nueva joya arquitectónica que redefine el concepto de vida de lujo. Con más de 7 kilómetros de playas vírgenes, esta isla artificial combina belleza natural con sofisticación moderna.",
+          "Situada en las costas de Ras Al Khaimah, Al Marjan Island es una nueva joya arquitectónica que redefine el concepto de vida de lujo. Con más de 7 kilómetros de playas vírgenes, esta isla sin igual combina belleza natural con sofisticación moderna.",
       },
       faq: {
         eyebrow: "Preguntas estratégicas",
@@ -871,25 +871,25 @@ export default function PlayaVivaLanding() {
           cards: [
             {
               title: "Studios",
-              size: "27.87-42.9 m² (300-462 SqFt)",
+              size: "300-462 SqFt",
               price: "From £146,200",
               features: "Integrated kitchen, premium bathroom, private balcony"
             },
             {
               title: "1 Bedroom",
-              size: "55.74-78.97 m² (600-850 SqFt)",
+              size: "600-850 SqFt",
               price: "From £245,100",
               features: "En-suite bedroom, walk-in closet, laundry area"
             },
             {
               title: "2 Bedrooms",
-              size: "102.19-111.48 m² (1100-1200 SqFt)",
+              size: "1100-1200 SqFt",
               price: "From £387,000",
               features: "Two suites, island kitchen, dual balconies"
             },
             {
               title: "3 Bedrooms",
-              size: "157.94-167.22 m² (1700-1800 SqFt)",
+              size: "1700-1800 SqFt",
               price: "From £559,000",
               features: "Master suite, maid's room, 25m² terrace"
             }
@@ -1038,7 +1038,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "November 7, 2025",
-            image: "/assets/imagenes/news_5.png",
+            image: "/assets/imagenes/news_2.webp",
             alt: "The National - Escape to Dubai",
             source: "The National",
             title: "Escape to Dubai from high-tax Britain more tempting as 75% fear higher rates",
@@ -1048,7 +1048,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "July 3, 2025",
-            image: "/assets/imagenes/news_2.webp",
+            image: "/assets/imagenes/news_3.png",
             alt: "Gulf News - Wynn Resort",
             source: "Gulf News",
             title: "Ras Al Khaimah sees new luxury hotel at Wynn Al Marjan",
@@ -1058,7 +1058,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "April 30, 2025",
-            image: "/assets/imagenes/news_3.png",
+            image: "/assets/imagenes/news_4.png",
             alt: "The National - Gaming resort RAK",
             source: "The National",
             title: "UAE's first gaming resort set to 'open up RAK to the world'",
@@ -1068,7 +1068,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "March 18, 2025",
-            image: "/assets/imagenes/news_4.png",
+            image: "/assets/imagenes/news_5.png",
             alt: "Arabian Business - Property prices",
             source: "Arabian Business",
             title: "Property prices rise 20% amid supply-demand gap",
@@ -1216,7 +1216,7 @@ export default function PlayaVivaLanding() {
         title: "Al Marjan Island",
         subtitle: "The future of luxury living in the UAE",
         description:
-          "Located on the coast of Ras Al Khaimah, Al Marjan Island is a new architectural jewel that redefines the concept of luxury living. With over 7 kilometers of pristine beaches, this artificial island combines natural beauty with modern sophistication.",
+          "Located on the coast of Ras Al Khaimah, Al Marjan Island is a new architectural jewel that redefines the concept of luxury living. With over 7 kilometers of pristine beaches, this unparalleled island combines natural beauty with modern sophistication.",
       },
       faq: {
         eyebrow: "Strategic Questions",
