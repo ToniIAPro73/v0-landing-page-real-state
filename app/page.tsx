@@ -737,7 +737,29 @@ export default function PlayaVivaLanding() {
         title: "Al Marjan Island",
         subtitle: "El futuro de la vida de lujo en los EAU",
         description:
-          "Situada en las costas de Ras Al Khaimah, Al Marjan Island es una nueva joya arquitectónica que redefine el concepto de vida de lujo. Con más de 7 kilómetros de playas vírgenes, esta isla sin igual combina belleza natural con sofisticación moderna.",
+          "Situada en las costas de Ras Al Khaimah, Al Marjan Island es una nueva joya arquitectónica que redefine el concepto de vida de lujo. Esta isla sin igual combina belleza natural con sofisticación moderna.",
+        stats: [
+          {
+            number: "4",
+            label: "Islas Únicas",
+            labelEn: "Unique Islands"
+          },
+          {
+            number: "7.8",
+            label: "Kilómetros de Playas Vírgenes",
+            labelEn: "Kilometers of Pristine Beaches"
+          },
+          {
+            number: "2.7",
+            label: "Millones SqM de Tierra Recuperada",
+            labelEn: "Million SqM of Reclaimed Land"
+          },
+          {
+            number: "3",
+            label: "Hoteles de Clase Mundial Totalmente Operativos",
+            labelEn: "Fully Operational World-Class Hotels"
+          }
+        ]
       },
       faq: {
         eyebrow: "Preguntas estratégicas",
@@ -1216,7 +1238,29 @@ export default function PlayaVivaLanding() {
         title: "Al Marjan Island",
         subtitle: "The future of luxury living in the UAE",
         description:
-          "Located on the coast of Ras Al Khaimah, Al Marjan Island is a new architectural jewel that redefines the concept of luxury living. With over 7 kilometers of pristine beaches, this unparalleled island combines natural beauty with modern sophistication.",
+          "Located on the coast of Ras Al Khaimah, Al Marjan Island is a new architectural jewel that redefines the concept of luxury living. This unparalleled island combines natural beauty with modern sophistication.",
+        stats: [
+          {
+            number: "4",
+            label: "Islas Únicas",
+            labelEn: "Unique Islands"
+          },
+          {
+            number: "7.8",
+            label: "Kilómetros de Playas Vírgenes",
+            labelEn: "Kilometers of Pristine Beaches"
+          },
+          {
+            number: "2.7",
+            label: "Millones SqM de Tierra Recuperada",
+            labelEn: "Million SqM of Reclaimed Land"
+          },
+          {
+            number: "3",
+            label: "Hoteles de Clase Mundial Totalmente Operativos",
+            labelEn: "Fully Operational World-Class Hotels"
+          }
+        ]
       },
       faq: {
         eyebrow: "Strategic Questions",
@@ -1750,15 +1794,19 @@ const orchestrateLeadAutomation = async (
           <div className="landing-nav__bar flex items-center justify-between h-14 md:h-16">
             {/* Logo Uniestate */}
             <div className="shrink-0">
-              <span
-                className="text-brown-dark text-base md:text-lg font-bold tracking-tight"
+              <button
+                onClick={() => scrollToSection("uniestate")}
+                className="group relative text-brown-dark text-base md:text-lg font-bold tracking-tight transition-all duration-300 hover:text-gold-warm py-2 px-3 rounded-lg"
                 style={{
                   fontFamily: "system-ui, -apple-system, sans-serif",
                   letterSpacing: "0.02em",
                 }}
               >
-                UNIESTATE
-              </span>
+                <span className="relative">
+                  UNIESTATE
+                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-gold-warm via-[#8B7355] to-transparent group-hover:w-full transition-all duration-500 ease-out" />
+                </span>
+              </button>
             </div>
 
             {/* Desktop Menu - Centered (shows on tablet landscape and up) */}
@@ -3226,6 +3274,35 @@ const orchestrateLeadAutomation = async (
               </p>
             </div>
 
+            {/* Premium Statistics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+              {t.location.stats.map((stat, index) => (
+                <div
+                  key={index}
+                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] p-6 md:p-8 border border-gold-warm/40 shadow-lg transition-all duration-500 hover:shadow-2xl hover:border-gold-warm/60"
+                >
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-gold-warm/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  {/* Top accent line */}
+                  <div className="absolute top-0 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-transparent via-gold-warm/50 to-transparent group-hover:via-gold-warm transition-all duration-500" />
+
+                  {/* Content */}
+                  <div className="relative z-10 text-center">
+                    <div className="text-4xl md:text-5xl font-light text-gold-warm mb-3 group-hover:text-[#8B7355] transition-colors duration-300">
+                      {stat.number}
+                    </div>
+                    <p className="text-sm md:text-base font-medium text-brown-dark leading-snug">
+                      {language === "es" ? stat.label : stat.labelEn}
+                    </p>
+                  </div>
+
+                  {/* Bottom accent line */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[1px] rounded-full bg-gradient-to-r from-transparent via-gold-warm/30 to-transparent group-hover:via-gold-warm/60 transition-all duration-500" />
+                </div>
+              ))}
+            </div>
+
             {/* Botones de navegación */}
             <div className="flex justify-center gap-4 mb-8">
               <button
@@ -3667,6 +3744,7 @@ const orchestrateLeadAutomation = async (
       {/* ==================== PIE DE PÁGINA: FOOTER ==================== */}
       {/* Uniestate Section */}
       <section
+        id="uniestate"
         ref={footerRef}
         className="relative py-16 md:py-20 bg-[#f8f5f0]"
         style={{
