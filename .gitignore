@@ -104,3 +104,5 @@ junit.xml
 # ──────────────────────────────
 scripts/promotion_log.txt
 scripts/*.log
+
+logs/
