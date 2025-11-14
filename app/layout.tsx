@@ -43,12 +43,9 @@ export const metadata: Metadata = {
     images: ["/assets/imagenes/hero-image.webp"],
   },
   icons: {
-    icon: [
-      { url: "/favicon_playa_viva.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon_playa_viva.png", sizes: "192x192", type: "image/png" },
-    ],
-    shortcut: "/favicon_playa_viva.png",
-    apple: "/favicon_playa_viva.png",
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
   },
 };
 
