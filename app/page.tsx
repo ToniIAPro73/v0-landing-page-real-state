@@ -3642,13 +3642,18 @@ const orchestrateLeadAutomation = async (
                       </div>
                     </div>
                     <div>
-                      <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
+                      <label
+                        htmlFor="lead-email"
+                        className="block text-brown-dark/80 font-medium mb-1.5 text-xs"
+                      >
                         {t.leadForm.form.emailPlaceholder}
                         <span className="text-brown-dark/80">*</span>
                       </label>
                       <input
                         ref={emailRef}
                         type="email"
+                        name="email"
+                        id="lead-email"
                         required
                         value={formData.email}
                         onChange={(e) => {
