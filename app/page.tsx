@@ -504,7 +504,7 @@ export default function PlayaVivaLanding() {
             description:
               "Distribución abierta con cocina integrada, ventanales de piso a techo y balcón privado hacia el Golfo.",
             highlights: [
-              "Entrega totalmente amueblada con domótica y electrodomésticos premium",
+              "Totalmente amueblados con domótica y electrodomésticos premium",
               "Baño hotelero con acabados de piedra natural",
               "Ideal para renta corporativa o pied-à-terre en Ras Al Khaimah",
             ],
@@ -674,6 +674,14 @@ export default function PlayaVivaLanding() {
           "Esquema flexible para inversores internacionales",
           "Maximiza tu liquidez durante el periodo de construcción",
         ],
+        cards: [
+          {
+            text: "Accede a la propiedad sin complicaciones: tu inversión se ajusta a ti.",
+          },
+          {
+            text: "Empieza a vivir tu sueño ahora y paga cómodamente a lo largo del tiempo.",
+          }
+        ]
       },
       investment: {
         title: "Oportunidad de Inversión",
@@ -709,7 +717,7 @@ export default function PlayaVivaLanding() {
         benefits: [
           "Márgenes de beneficio operativo cercanos al 8%",
           "Proximidad al Wynn Resort ($5.1B)",
-          "Entrega totalmente amueblado y con Smart Home",
+          "Completamente amueblados y con Smart Home",
           "Potencial de apreciación después de la apertura de Wynn Resort",
         ],
       },
@@ -1003,7 +1011,7 @@ export default function PlayaVivaLanding() {
             description:
               "Open-plan living with integrated kitchen, floor-to-ceiling glazing, and a private balcony overlooking the Gulf.",
             highlights: [
-              "Fully furnished features with smart-home package and premium appliances",
+              "Fully furnished with smart-home package and premium appliances",
               "Hotel-inspired bathroom wrapped in natural stone",
               "Perfect for corporate leasing or a pied-à-terre in Ras Al Khaimah",
             ],
@@ -1173,6 +1181,14 @@ export default function PlayaVivaLanding() {
           "Flexible scheme for international investors",
           "Maximize your liquidity during construction period",
         ],
+        cards: [
+          {
+            text: "Unlock the door to effortless ownership—your investment adapts to you.",
+          },
+          {
+            text: "Start living your dream today, pay comfortably over time.",
+          }
+        ]
       },
       investment: {
         title: "Investment Opportunity",
@@ -1208,7 +1224,7 @@ export default function PlayaVivaLanding() {
         benefits: [
           "Operating profit margins close to 8%",
           "Proximity to Wynn Resort ($5.1B)",
-          "Fully furnished delivery with Smart Home",
+          "Fully furnished and with Smart Home",
           "Potential for appreciation after opening of Wynn Resort",
         ],
       },
@@ -2468,28 +2484,36 @@ const orchestrateLeadAutomation = async (
             <div className="max-w-4xl mx-auto mb-16">
               {/* 40% / 60% Display */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div className="text-center p-8 bg-white rounded-2xl border-2 border-gold-warm/30 hover:border-gold-warm transition-all duration-300">
-                  <div className="text-6xl md:text-7xl font-bold text-gold-warm mb-2">
-                    {t.paymentPlan.mainPayment}
+                <div className="group relative overflow-hidden text-center p-8 bg-gradient-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] rounded-3xl border-2 border-gold-warm/40 shadow-lg hover:shadow-2xl hover:border-gold-warm/60 transition-all duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gold-warm/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute top-0 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-transparent via-gold-warm/50 to-transparent group-hover:via-gold-warm transition-all duration-500" />
+                  <div className="relative z-10">
+                    <div className="text-6xl md:text-7xl font-light text-gold-warm mb-2 group-hover:text-[#8B7355] transition-colors duration-300">
+                      {t.paymentPlan.mainPayment}
+                    </div>
+                    <p className="text-taupe-warm text-sm md:text-base mb-4 font-medium">
+                      {t.paymentPlan.mainLabel}
+                    </p>
+                    <p className="text-brown-dark text-xs md:text-sm leading-relaxed">
+                      {t.paymentPlan.description}
+                    </p>
                   </div>
-                  <p className="text-taupe-warm text-sm md:text-base mb-4">
-                    {t.paymentPlan.mainLabel}
-                  </p>
-                  <p className="text-brown-dark text-xs md:text-sm">
-                    {t.paymentPlan.description}
-                  </p>
                 </div>
 
-                <div className="text-center p-8 bg-white rounded-2xl border-2 border-gold-warm/30 hover:border-gold-warm transition-all duration-300">
-                  <div className="text-6xl md:text-7xl font-bold text-gold-warm mb-2">
-                    {t.paymentPlan.postHandover}
+                <div className="group relative overflow-hidden text-center p-8 bg-gradient-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] rounded-3xl border-2 border-gold-warm/40 shadow-lg hover:shadow-2xl hover:border-gold-warm/60 transition-all duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gold-warm/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute top-0 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-transparent via-gold-warm/50 to-transparent group-hover:via-gold-warm transition-all duration-500" />
+                  <div className="relative z-10">
+                    <div className="text-6xl md:text-7xl font-light text-gold-warm mb-2 group-hover:text-[#8B7355] transition-colors duration-300">
+                      {t.paymentPlan.postHandover}
+                    </div>
+                    <p className="text-taupe-warm text-sm md:text-base mb-4 font-medium">
+                      {t.paymentPlan.postLabel}
+                    </p>
+                    <p className="text-brown-dark text-xs md:text-sm leading-relaxed">
+                      {t.paymentPlan.postDetails}
+                    </p>
                   </div>
-                  <p className="text-taupe-warm text-sm md:text-base mb-4">
-                    {t.paymentPlan.postLabel}
-                  </p>
-                  <p className="text-brown-dark text-xs md:text-sm">
-                    {t.paymentPlan.postDetails}
-                  </p>
                 </div>
               </div>
 
@@ -2506,11 +2530,11 @@ const orchestrateLeadAutomation = async (
               </div>
 
               {/* Features List */}
-              <div className="space-y-4">
+              <div className="space-y-4 mb-12">
                 {t.paymentPlan.features.map((feature, index) => (
                   <div
                     key={index}
-                    className="flex items-start p-6 bg-white rounded-xl border border-gold-warm/20 hover:bg-cream-light hover:border-gold-warm/40 transition-all duration-300"
+                    className="group relative overflow-hidden flex items-start p-6 bg-gradient-to-r from-[#f5f1ea] to-[#ede8df] rounded-2xl border border-gold-warm/30 hover:border-gold-warm/60 shadow-md hover:shadow-lg transition-all duration-300"
                     style={{
                       opacity: visibleSections.investment ? 1 : 0,
                       transform: visibleSections.investment
@@ -2521,10 +2545,29 @@ const orchestrateLeadAutomation = async (
                       }s`,
                     }}
                   >
-                    <CheckCircle2 className="h-6 w-6 text-gold-warm mr-4 shrink-0 mt-0.5" />
-                    <span className="text-brown-dark text-left text-sm md:text-base">
+                    <div className="absolute inset-0 bg-gradient-to-r from-gold-warm/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <CheckCircle2 className="h-6 w-6 text-gold-warm mr-4 shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110" />
+                    <span className="text-brown-dark text-left text-sm md:text-base relative z-10">
                       {feature}
                     </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* New Premium Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {t.paymentPlan.cards && t.paymentPlan.cards.map((card, index) => (
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden p-8 bg-gradient-to-br from-[#f5f1ea] via-[#ede8df] to-[#e8e3d8] rounded-3xl border-2 border-gold-warm/40 shadow-lg hover:shadow-2xl hover:border-gold-warm/60 transition-all duration-500"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-gold-warm/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute top-0 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-transparent via-gold-warm/50 to-transparent group-hover:via-gold-warm transition-all duration-500" />
+                    <div className="relative z-10">
+                      <p className="text-center text-brown-dark text-base md:text-lg font-medium leading-relaxed italic">
+                        &ldquo;{card.text}&rdquo;
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -2885,7 +2928,7 @@ const orchestrateLeadAutomation = async (
                 {t.features.amenities.items.map((item, index) => (
                   <div
                     key={index}
-                    className="flex-none w-80 snap-center bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-2"
+                    className="flex-none w-64 snap-center bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/10 transition-all duration-300 hover:-translate-y-2"
                     style={{
                       opacity: visibleSections.features ? 1 : 0,
                       transform: visibleSections.features
@@ -2894,13 +2937,13 @@ const orchestrateLeadAutomation = async (
                       transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15}s`,
                     }}
                   >
-                    <div className="relative h-64 overflow-hidden">
+                    <div className="relative h-48 overflow-hidden">
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
                         className="object-cover filter grayscale hover:grayscale-0 transition-all duration-300"
-                        sizes="320px"
+                        sizes="256px"
                       />
                     </div>
                     <div className="p-6">
