@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef, FormEvent } from "react";
+import Head from "next/head";
 import Script from "next/script";
 import Image from "next/image";
+import HubSpotScript from "./HubSpotScript";
 import { Button } from "@/components/ui/button";
 import {
   Globe,
@@ -133,6 +135,7 @@ export default function PlayaVivaLanding() {
     userName: string;
   } | null>(null);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [hasLoadedHubSpotScript, setHasLoadedHubSpotScript] = useState(false);
   const [validationMessage, setValidationMessage] = useState<{
     field: LeadFieldKey;
     message: string;
@@ -307,6 +310,12 @@ export default function PlayaVivaLanding() {
       cancelled = true;
     };
   }, [language]);
+
+  useEffect(() => {
+    if (privacyAccepted && !hasLoadedHubSpotScript) {
+      setHasLoadedHubSpotScript(true);
+    }
+  }, [privacyAccepted, hasLoadedHubSpotScript]);
 
   const wynnEffectRef = useRef<HTMLDivElement>(null);
   const investmentRef = useRef<HTMLDivElement>(null);
@@ -1732,6 +1741,13 @@ const orchestrateLeadAutomation = async (
 
   return (
     <div className="min-h-screen bg-cream-light">
+      <Head>
+        <link rel="preconnect" href="https://js-eu1.hs-scripts.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://js-eu1.hscollectedforms.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://js-eu1.hs-analytics.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://track-eu1.hubspot.com" crossOrigin="anonymous" />
+        <link rel="preload" href="/hero-background.png" as="image" />
+      </Head>
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -1743,6 +1759,7 @@ const orchestrateLeadAutomation = async (
         strategy="afterInteractive"
         crossOrigin="anonymous"
       />
+      {hasLoadedHubSpotScript && <HubSpotScript />}
       {/* Navigation and Language Toggle - Fixed Bottom Right */}
       <div className="fixed bottom-6 right-6 z-100 flex flex-col items-end gap-3">
         {/* Scroll Navigation Buttons */}
@@ -2000,6 +2017,7 @@ const orchestrateLeadAutomation = async (
             fill
             priority
             sizes="100vw"
+            quality={60}
             className="object-cover"
             onError={(e) => {
               e.currentTarget.src = "/fixed-hero-background.png";
@@ -2041,6 +2059,7 @@ const orchestrateLeadAutomation = async (
                     width={640}
                     height={256}
                     priority
+                    quality={60}
                     className="w-auto h-36 sm:h-48 md:h-56 lg:h-64 xl:h-72 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110 object-contain"
                     sizes="(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 30vw"
                   />
