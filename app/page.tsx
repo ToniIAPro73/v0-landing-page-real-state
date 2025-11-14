@@ -2033,15 +2033,18 @@ const orchestrateLeadAutomation = async (
             transition: "opacity 0.1s linear",
           }}
         >
-          <div
-            ref={heroStackRef}
-            className="hero-container container max-w-6xl mx-auto"
-            style={{
-              transform: heroScale < 1 ? `scale(${heroScale})` : undefined,
-              transformOrigin: "top center",
-            }}
-          >
-            <div className="hero-stack flex flex-col items-center justify-center text-center space-y-2 mt-0">
+              <div
+                ref={heroStackRef}
+                className="hero-container container max-w-6xl mx-auto"
+                style={{
+                  transform: heroScale < 1 ? `scale(${heroScale})` : undefined,
+                  transformOrigin: "top center",
+                }}
+              >
+                <div
+                  translate="no"
+                  className="hero-stack flex flex-col items-center justify-center text-center space-y-2 mt-0"
+                >
               {/* Logo */}
               <div
                 className="transition-all ease-out mt-12"
@@ -2329,6 +2332,7 @@ const orchestrateLeadAutomation = async (
       <section
         id="investment"
         ref={investmentRef}
+        translate="no"
         className="relative py-24 bg-white"
         style={{
           opacity: visibleSections.investment ? 1 : 0,
@@ -2728,6 +2732,7 @@ const orchestrateLeadAutomation = async (
       <section
         id="features"
         ref={featuresRef}
+        translate="no"
         className="relative py-24 bg-cream-light space-y-24"
         style={{
           opacity: visibleSections.features ? 1 : 0,
@@ -3125,6 +3130,7 @@ const orchestrateLeadAutomation = async (
       <section
         id="apartments"
         ref={apartmentsRef}
+        translate="no"
         className="relative py-24 bg-linear-to-br from-cream-light via-white to-cream-light"
         style={{
           opacity: visibleSections.apartments ? 1 : 0,
@@ -3379,6 +3385,7 @@ const orchestrateLeadAutomation = async (
       <section
         id="faq"
         ref={faqRef}
+        translate="no"
         className="relative py-12 md:py-16 bg-[#d4c5a8]"
         style={{
           opacity: visibleSections.faq ? 1 : 0,

@@ -55,8 +55,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
+      <html lang="es" suppressHydrationWarning>
       <head>
+        <meta name="google" content="notranslate" />
         <meta
           name="description"
           content="Residencias frente al mar en Al Marjan Island con planes de pago flexibles desde £172K. Descarga el dossier de Playa Viva y descubre precios, amenities y la conexión con el nuevo Wynn Resort."
@@ -70,7 +71,7 @@ export default function RootLayout({
           content="Residencias boutique en Al Marjan Island con vista al mar y planes 1% mensual. Descarga el dossier y conoce la inversión Playa Viva."
         />
       </head>
-      <body className={`font-sans antialiased`} suppressHydrationWarning>
+      <body className={`font-sans antialiased`} translate="no" suppressHydrationWarning>
         {children}
       </body>
     </html>
