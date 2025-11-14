@@ -270,6 +270,8 @@ async function uploadToS3WithFailover(
 
 async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
   const language = payload.language || "es";
+  console.info(`[personalizePDF] RECEIVED LANGUAGE: "${language}" (type: ${typeof language})`);
+  console.info(`[personalizePDF] PAYLOAD KEYS:`, Object.keys(payload));
   const basePdfPath = await resolveBasePdfPath(language);
   if (!basePdfPath) {
     console.error(`[personalizePDF] Base PDF not found for language: ${language}`);
@@ -869,6 +871,10 @@ export async function POST(request: NextRequest) {
     const payload = (await request.json()) as LeadSubmitPayload & {
       altcha_payload?: string;
     };
+
+    console.info(`[POST /api/submit-lead] REQUEST RECEIVED`);
+    console.info(`[POST /api/submit-lead] Language from payload: "${payload.language}"`);
+    console.info(`[POST /api/submit-lead] Email: "${payload.email}"`);
 
     if (
       !payload.firstName ||
