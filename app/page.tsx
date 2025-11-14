@@ -1701,7 +1701,6 @@ const orchestrateLeadAutomation = async (
     setValidationMessage(null);
 
     try {
-      console.log(`[handleLeadSubmit] Current language state: "${language}"`);
       const leadData: LeadAutomationPayload = {
         firstName: trimmedFirstName,
         lastName: trimmedLastName,
@@ -1711,7 +1710,6 @@ const orchestrateLeadAutomation = async (
         utm: utmData,
         altchaPayload,
       };
-      console.log(`[handleLeadSubmit] Sending leadData with language: "${leadData.language}"`);
 
       const result = await orchestrateLeadAutomation(leadData);
 

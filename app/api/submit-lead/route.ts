@@ -151,24 +151,20 @@ const sanitizeFileName = (value: string) =>
     .slice(0, 60) || "lead";
 
 async function resolveBasePdfPath(language: "es" | "en"): Promise<string | null> {
-  console.info(`[resolveBasePdfPath] Called with language: "${language}" (type: ${typeof language})`);
-  console.info(`[resolveBasePdfPath] PDF_BASE_FILES:`, JSON.stringify(PDF_BASE_FILES));
   const fileName = PDF_BASE_FILES[language];
-  console.info(`[resolveBasePdfPath] fileName from map: "${fileName}"`);
   if (!fileName) {
     console.error(`[resolveBasePdfPath] No PDF configured for language: ${language}`);
     return null;
   }
 
   const pdfPath = path.join(PDF_BASE_DIR, fileName);
-  console.info(`[resolveBasePdfPath] Full path will be: ${pdfPath}`);
 
   try {
     await fs.access(pdfPath);
-    console.info(`[resolveBasePdfPath] ✓ Using PDF for language '${language}': ${fileName}`);
+    console.info(`[resolveBasePdfPath] Using PDF for language '${language}': ${fileName}`);
     return pdfPath;
   } catch (error) {
-    console.error(`[resolveBasePdfPath] ✗ PDF not found for language '${language}': ${pdfPath}`, error);
+    console.error(`[resolveBasePdfPath] PDF not found for language '${language}': ${pdfPath}`, error);
     return null;
   }
 }
@@ -274,8 +270,6 @@ async function uploadToS3WithFailover(
 
 async function personalizePDF(payload: LeadSubmitPayload): Promise<PdfResult> {
   const language = payload.language || "es";
-  console.info(`[personalizePDF] RECEIVED LANGUAGE: "${language}" (type: ${typeof language})`);
-  console.info(`[personalizePDF] PAYLOAD KEYS:`, Object.keys(payload));
   const basePdfPath = await resolveBasePdfPath(language);
   if (!basePdfPath) {
     console.error(`[personalizePDF] Base PDF not found for language: ${language}`);
@@ -617,16 +611,6 @@ async function sendDossierEmail(
     return;
   }
 
-  console.info("[sendDossierEmail] ===== EMAIL DEBUG START =====");
-  console.info("[sendDossierEmail] Recipient:", payload.email);
-  console.info("[sendDossierEmail] Language:", payload.language);
-  console.info("[sendDossierEmail] Language Type:", typeof payload.language);
-  console.info("[sendDossierEmail] Language === 'es':", payload.language === "es");
-  console.info("[sendDossierEmail] Language === 'en':", payload.language === "en");
-  console.info("[sendDossierEmail] PDF URL:", absoluteUrl);
-  console.info("[sendDossierEmail] SMTP Host:", smtpHost);
-  console.info("[sendDossierEmail] SMTP Port:", smtpPort);
-
   // HubSpot Meetings URLs (configurar en .env.local)
   const hubspotMeetingsUrl = payload.language === "es"
     ? (process.env.HUBSPOT_MEETINGS_URL_ES || "https://meetings.hubspot.com/PLACEHOLDER_TONY")
@@ -878,10 +862,6 @@ export async function POST(request: NextRequest) {
     const payload = (await request.json()) as LeadSubmitPayload & {
       altcha_payload?: string;
     };
-
-    console.info(`[POST /api/submit-lead] REQUEST RECEIVED`);
-    console.info(`[POST /api/submit-lead] Language from payload: "${payload.language}"`);
-    console.info(`[POST /api/submit-lead] Email: "${payload.email}"`);
 
     if (
       !payload.firstName ||
