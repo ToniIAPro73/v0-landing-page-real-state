@@ -372,7 +372,7 @@ export default function PlayaVivaLanding() {
           {
             icon: Calendar,
             value: "Q2 2027",
-            label: "Apertura del Casino",
+            label: "Apertura del Wynn Resort",
             sublabel: "Momento de máxima revalorización",
           },
         ],
@@ -671,8 +671,6 @@ export default function PlayaVivaLanding() {
         postLabel: "Post-Entrega",
         postDetails: "1% mensual durante 60 meses",
         features: [
-          "40% durante construcción antes de entrega",
-          "Balance 60% a 1% mensual durante 60 meses post-entrega",
           "Esquema flexible para inversores internacionales",
           "Maximiza tu liquidez durante el periodo de construcción",
         ],
@@ -712,7 +710,7 @@ export default function PlayaVivaLanding() {
           "Márgenes de beneficio operativo cercanos al 8%",
           "Proximidad al Wynn Resort ($5.1B)",
           "Entrega totalmente amueblado y con Smart Home",
-          "Potencial de revalorización post-apertura casino",
+          "Potencial de apreciación después de la apertura de Wynn Resort",
         ],
       },
       leadForm: {
@@ -873,7 +871,7 @@ export default function PlayaVivaLanding() {
           {
             icon: Calendar,
             value: "Q2 2027",
-            label: "Casino Opening",
+            label: "Wynn Resort Opening",
             sublabel: "Peak appreciation moment",
           },
         ],
@@ -1005,7 +1003,7 @@ export default function PlayaVivaLanding() {
             description:
               "Open-plan living with integrated kitchen, floor-to-ceiling glazing, and a private balcony overlooking the Gulf.",
             highlights: [
-              "Fully furnished delivery with smart-home package and premium appliances",
+              "Fully furnished features with smart-home package and premium appliances",
               "Hotel-inspired bathroom wrapped in natural stone",
               "Perfect for corporate leasing or a pied-à-terre in Ras Al Khaimah",
             ],
@@ -1172,8 +1170,6 @@ export default function PlayaVivaLanding() {
         postLabel: "Post-Handover",
         postDetails: "1% per month for 60 months",
         features: [
-          "40% during construction before handover",
-          "Balance 60% at 1% per month for 60 months post-handover",
           "Flexible scheme for international investors",
           "Maximize your liquidity during construction period",
         ],
@@ -1200,7 +1196,7 @@ export default function PlayaVivaLanding() {
             icon: Award,
             value: "Q2 2026",
             label: "Project delivery",
-            description: "12 months before Wynn opening",
+            description: "12 months before Wynn opens",
           },
           {
             icon: DollarSign,
@@ -1213,7 +1209,7 @@ export default function PlayaVivaLanding() {
           "Operating profit margins close to 8%",
           "Proximity to Wynn Resort ($5.1B)",
           "Fully furnished delivery with Smart Home",
-          "Post-casino opening appreciation potential",
+          "Potential for appreciation after opening of Wynn Resort",
         ],
       },
       leadForm: {
