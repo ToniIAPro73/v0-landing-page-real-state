@@ -59,6 +59,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        <meta
+          name="description"
+          content="Residencias frente al mar en Al Marjan Island con planes de pago flexibles desde £172K. Descarga el dossier de Playa Viva y descubre precios, amenities y la conexión con el nuevo Wynn Resort."
+        />
+        <meta
+          property="og:description"
+          content="Residencias frente al mar en Al Marjan Island con planes de pago flexibles desde £172K. Descarga el dossier oficial de Playa Viva y descubre la inversión junto al Wynn Resort."
+        />
+        <meta
+          name="twitter:description"
+          content="Residencias boutique en Al Marjan Island con vista al mar y planes 1% mensual. Descarga el dossier y conoce la inversión Playa Viva."
+        />
+      </head>
       <body className={`font-sans antialiased`} suppressHydrationWarning>
         {children}
       </body>
