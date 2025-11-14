@@ -151,20 +151,24 @@ const sanitizeFileName = (value: string) =>
     .slice(0, 60) || "lead";
 
 async function resolveBasePdfPath(language: "es" | "en"): Promise<string | null> {
+  console.info(`[resolveBasePdfPath] Called with language: "${language}" (type: ${typeof language})`);
+  console.info(`[resolveBasePdfPath] PDF_BASE_FILES:`, JSON.stringify(PDF_BASE_FILES));
   const fileName = PDF_BASE_FILES[language];
+  console.info(`[resolveBasePdfPath] fileName from map: "${fileName}"`);
   if (!fileName) {
     console.error(`[resolveBasePdfPath] No PDF configured for language: ${language}`);
     return null;
   }
 
   const pdfPath = path.join(PDF_BASE_DIR, fileName);
+  console.info(`[resolveBasePdfPath] Full path will be: ${pdfPath}`);
 
   try {
     await fs.access(pdfPath);
-    console.info(`[resolveBasePdfPath] Using PDF for language '${language}': ${fileName}`);
+    console.info(`[resolveBasePdfPath] ✓ Using PDF for language '${language}': ${fileName}`);
     return pdfPath;
   } catch (error) {
-    console.error(`[resolveBasePdfPath] PDF not found for language '${language}': ${pdfPath}`, error);
+    console.error(`[resolveBasePdfPath] ✗ PDF not found for language '${language}': ${pdfPath}`, error);
     return null;
   }
 }
@@ -616,6 +620,9 @@ async function sendDossierEmail(
   console.info("[sendDossierEmail] ===== EMAIL DEBUG START =====");
   console.info("[sendDossierEmail] Recipient:", payload.email);
   console.info("[sendDossierEmail] Language:", payload.language);
+  console.info("[sendDossierEmail] Language Type:", typeof payload.language);
+  console.info("[sendDossierEmail] Language === 'es':", payload.language === "es");
+  console.info("[sendDossierEmail] Language === 'en':", payload.language === "en");
   console.info("[sendDossierEmail] PDF URL:", absoluteUrl);
   console.info("[sendDossierEmail] SMTP Host:", smtpHost);
   console.info("[sendDossierEmail] SMTP Port:", smtpPort);
