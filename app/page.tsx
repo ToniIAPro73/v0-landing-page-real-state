@@ -3649,12 +3649,13 @@ const orchestrateLeadAutomation = async (
                         {t.leadForm.form.emailPlaceholder}
                         <span className="text-brown-dark/80">*</span>
                       </label>
-                      <input
-                        ref={emailRef}
-                        type="email"
-                        name="email"
-                        id="lead-email"
-                        required
+                        <input
+                          ref={emailRef}
+                          type="email"
+                          name="email"
+                          id="lead-email"
+                          required
+                          autoComplete="email"
                         value={formData.email}
                         onChange={(e) => {
                           setFormData({ ...formData, email: e.target.value });
