@@ -214,7 +214,7 @@
 ```bash
 NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 HUBSPOT_FORM_GUID=34afefab-a031-4516-838e-f0edf0b98bc7
-NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
+NEXT_PUBLIC_SITE_URL=https://playaviva-uniestate.vercel.app
 ```
 
 **HubSpot + reCAPTCHA:**
@@ -222,7 +222,7 @@ NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
 # HubSpot
 NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 HUBSPOT_FORM_GUID=34afefab-a031-4516-838e-f0edf0b98bc7
-NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
+NEXT_PUBLIC_SITE_URL=https://playaviva-uniestate.vercel.app
 
 # reCAPTCHA Enterprise (NUEVO)
 RECAPTCHA_API_KEY=AIzaSyBxxxxxxxxxxxxxxxxxxxxxx

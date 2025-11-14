@@ -2,7 +2,7 @@ import type React from "react";
 import type { Metadata } from "next";
 import "./globals.css";
 
-const siteUrl = "https://landing-page-playa-viva.vercel.app";
+const siteUrl = "https://playaviva-uniestate.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

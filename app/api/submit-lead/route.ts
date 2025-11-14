@@ -41,7 +41,7 @@ const FORM_GUID =
 const HUB_API_URL = `https://api.hsforms.com/submissions/v3/integration/submit/${HUB_ID}/${FORM_GUID}`;
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://landing-page-playa-viva.vercel.app";
+  "https://playaviva-uniestate.vercel.app";
 const resendClient = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
@@ -853,7 +853,7 @@ async function sendMissingBaseAlert(payload: LeadSubmitPayload) {
           <li><strong>Nombre:</strong> ${leadName}</li>
           <li><strong>Email:</strong> ${payload.email}</li>
           <li><strong>Idioma:</strong> ${language === "en" ? "English" : "Español"}</li>
-          <li><strong>Página:</strong> ${payload.pageUri || "https://landing-page-playa-viva.vercel.app"}</li>
+          <li><strong>Página:</strong> ${payload.pageUri || "https://playaviva-uniestate.vercel.app"}</li>
         </ul>
         <p>${footer}</p>
         <p>Cualquiera de los dos PDFs debe estar disponible para que el lead reciba su dossier.</p>

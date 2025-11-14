@@ -61,7 +61,7 @@ declare global {
   }
 }
 
-const SITE_URL = "https://landing-page-playa-viva.vercel.app";
+const SITE_URL = "https://playaviva-uniestate.vercel.app";
 
 type LeadAutomationPayload = {
   firstName: string;

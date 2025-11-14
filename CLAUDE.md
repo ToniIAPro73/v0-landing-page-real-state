@@ -285,7 +285,7 @@ The main landing page manages multiple state concerns:
 
 ### Vercel URLs
 
-**Production (stable)**: <https://landing-page-playa-viva.vercel.app/>
+**Production (stable)**: <https://playaviva-uniestate.vercel.app/>
 
 - This URL never changes
 - User promotes from `preview` → `production` when ready
@@ -314,7 +314,7 @@ NEXT_PUBLIC_HUBSPOT_PORTAL_ID=147219365
 HUBSPOT_FORM_GUID=34afefab-a031-4516-838e-f0edf0b98bc7
 
 # Site URL
-NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
+NEXT_PUBLIC_SITE_URL=https://playaviva-uniestate.vercel.app
 
 # SMTP Configuration
 SMTP_HOST=mail.uniestate.co.uk

@@ -149,7 +149,7 @@ production (Usuario promueve cuando valida)
 - Claude Code **SOLO** trabaja en rama `development`
 - Usuario es responsable de promover cambios a `preview` y `production`
 - URLs de Vercel:
-  - Production (fija): <https://landing-page-playa-viva.vercel.app/>
+  - Production (fija): <https://playaviva-uniestate.vercel.app/>
   - Preview (cambia): `https://eslatamlandingpageplayavivauniestate-xxxxx.vercel.app/`
 
 ### Comandos esenciales
@@ -178,7 +178,7 @@ HUBSPOT_MEETINGS_URL_ES=https://meetings-eu1.hubspot.com/toni-ballesteros-alonso
 HUBSPOT_MEETINGS_URL_EN=https://meetings-eu1.hubspot.com/toni-ballesteros-alonso
 
 # Site URL
-NEXT_PUBLIC_SITE_URL=https://landing-page-playa-viva.vercel.app
+NEXT_PUBLIC_SITE_URL=https://playaviva-uniestate.vercel.app
 
 # SMTP
 SMTP_HOST=mail.uniestate.co.uk
