@@ -3583,13 +3583,18 @@ const orchestrateLeadAutomation = async (
                     )}
                     <div className="grid md:grid-cols-[0.7fr_1.3fr] gap-3">
                       <div>
-                        <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
+                          <label
+                            htmlFor="lead-first-name"
+                            className="block text-brown-dark/80 font-medium mb-1.5 text-xs"
+                          >
                           {t.leadForm.form.firstNamePlaceholder}
                           <span className="text-brown-dark/80">*</span>
                         </label>
-                        <input
-                          ref={firstNameRef}
-                          type="text"
+                          <input
+                            ref={firstNameRef}
+                            id="lead-first-name"
+                            name="firstName"
+                            type="text"
                           value={formData.firstName}
                           onChange={(e) => {
                             setFormData({ ...formData, firstName: e.target.value });
@@ -3607,13 +3612,18 @@ const orchestrateLeadAutomation = async (
                         />
                       </div>
                       <div>
-                        <label className="block text-brown-dark/80 font-medium mb-1.5 text-xs">
+                          <label
+                            htmlFor="lead-last-name"
+                            className="block text-brown-dark/80 font-medium mb-1.5 text-xs"
+                          >
                           {t.leadForm.form.lastNamePlaceholder}
                           <span className="text-brown-dark/80">*</span>
                         </label>
-                        <input
-                          ref={lastNameRef}
-                          type="text"
+                          <input
+                            ref={lastNameRef}
+                            id="lead-last-name"
+                            name="lastName"
+                            type="text"
                           value={formData.lastName}
                           onChange={(e) => {
                             setFormData({ ...formData, lastName: e.target.value });
@@ -3699,9 +3709,14 @@ const orchestrateLeadAutomation = async (
                           : "border-brown-dark/20"
                       }`}
                     >
-                      <label className="flex items-start gap-3 cursor-pointer">
-                        <input
-                          ref={privacyRef}
+                        <label
+                          htmlFor="lead-privacy"
+                          className="flex items-start gap-3 cursor-pointer"
+                        >
+                          <input
+                            ref={privacyRef}
+                            id="lead-privacy"
+                            name="privacy"
                           type="checkbox"
                           checked={privacyAccepted}
                           onChange={(e) => {
