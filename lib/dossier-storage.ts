@@ -1,5 +1,5 @@
-import os from "os";
-import path from "path";
+import * as os from "os";
+import * as path from "path";
 
 /**
  * Detecta automáticamente la ruta correcta para almacenar PDFs según el entorno
@@ -35,7 +35,7 @@ export type S3Region = {
   name: string; // Human-readable name for logging
 };
 
-const normalizeBucketName = (value?: string | null) => {
+export const normalizeBucketName = (value?: string | null) => {
   if (!value) return undefined;
   const trimmed = value.trim().replace(/(^\/+|\/+$)/g, "");
   if (!trimmed) return undefined;
@@ -46,7 +46,7 @@ const normalizeBucketName = (value?: string | null) => {
     .toLowerCase();
 };
 
-const splitEndpoint = (rawEndpoint?: string, bucket?: string) => {
+export const splitEndpoint = (rawEndpoint?: string, bucket?: string) => {
   if (!rawEndpoint) {
     return { endpoint: undefined, bucket };
   }
@@ -56,9 +56,7 @@ const splitEndpoint = (rawEndpoint?: string, bucket?: string) => {
 
     // Path-style endpoint e.g. https://s3.example.com/my-bucket
     if (!bucket && url.pathname && url.pathname !== "/") {
-      const [firstSegment] = url.pathname
-        .replace(/^\/+/, "")
-        .split("/");
+      const [firstSegment] = url.pathname.replace(/^\/+/, "").split("/");
       if (firstSegment) {
         return {
           endpoint: `${url.protocol}//${url.host}`,
@@ -94,6 +92,18 @@ const splitEndpoint = (rawEndpoint?: string, bucket?: string) => {
 };
 
 export const resolveS3Config = (): ResolvedS3Config => {
+  // PRIORIZAR R2 si está configurado
+  if (process.env.R2_ACCOUNT_ID && process.env.R2_BUCKET_NAME) {
+    return {
+      endpoint: `${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+      bucket: process.env.R2_BUCKET_NAME,
+      region: "auto",
+      accessKeyId: process.env.R2_ACCESS_KEY_ID,
+      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+    };
+  }
+
+  // Fallback a configuración S3 anterior (iDrive)
   const rawEndpoint = process.env.S3_Endpoint ?? process.env.S3_ENDPOINT;
   const bucketEnv =
     process.env.S3_Bucket ??
@@ -102,29 +112,27 @@ export const resolveS3Config = (): ResolvedS3Config => {
 
   const { endpoint, bucket } = splitEndpoint(
     rawEndpoint,
-    normalizeBucketName(bucketEnv),
+    normalizeBucketName(bucketEnv)
   );
 
   return {
     endpoint,
     bucket,
     region: process.env.S3_Region_Code ?? process.env.S3_REGION_CODE,
-    accessKeyId:
-      process.env.S3_Access_Key_ID ?? process.env.S3_ACCESS_KEY_ID,
+    accessKeyId: process.env.S3_Access_Key_ID ?? process.env.S3_ACCESS_KEY_ID,
     secretAccessKey:
-      process.env.S3_Secret_Access_Key ??
-      process.env.S3_SECRET_ACCESS_KEY,
+      process.env.S3_Secret_Access_Key ?? process.env.S3_SECRET_ACCESS_KEY,
   };
 };
 
-export const isS3Enabled = (config?: ResolvedS3Config) => {
-  const resolved = config ?? resolveS3Config();
+export const isS3Enabled = (config: ResolvedS3Config): boolean => {
+  // Check if essential S3 configuration is present
+  // We need at least: endpoint, bucket, and both access credentials
   return Boolean(
-    resolved.endpoint &&
-      resolved.bucket &&
-      resolved.region &&
-      resolved.accessKeyId &&
-      resolved.secretAccessKey,
+    config.endpoint &&
+      config.bucket &&
+      config.accessKeyId &&
+      config.secretAccessKey
   );
 };
 
@@ -134,8 +142,7 @@ export const shouldUseS3Storage = (config?: ResolvedS3Config) => {
     (process.env.DISABLE_S3_STORAGE ?? "").toLowerCase() === "true";
   if (disabled) return false;
 
-  const enabled =
-    (process.env.FORCE_S3_STORAGE ?? "").toLowerCase() === "true";
+  const enabled = (process.env.FORCE_S3_STORAGE ?? "").toLowerCase() === "true";
   const hasConfig = isS3Enabled(resolved);
   if (enabled) return hasConfig;
 
@@ -156,7 +163,23 @@ export const shouldUseS3Storage = (config?: ResolvedS3Config) => {
  * Primary: Frankfurt (eu-west-4)
  * Fallback: Paris (eu-central-2)
  */
+/**
+ * Returns R2 regions (solo Cloudflare R2)
+ */
+
 export const getS3Regions = (): S3Region[] => {
+  // Si R2 está configurado, usa SOLO Cloudflare R2 (un solo endpoint)
+  if (process.env.R2_ACCOUNT_ID) {
+    return [
+      {
+        endpoint: `${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+        region: "auto",
+        name: "Cloudflare R2",
+      },
+    ];
+  }
+
+  // Fallback a iDrive E2 (tu configuración anterior)
   return [
     {
       endpoint: "s3.eu-west-4.idrivee2.com",
